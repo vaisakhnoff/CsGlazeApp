@@ -193,20 +193,20 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
             <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           <linearGradient id="scanGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#fff" stopOpacity="0"/>
-            <stop offset="50%" stopColor="#fff" stopOpacity="0.9"/>
-            <stop offset="100%" stopColor="#fff" stopOpacity="0"/>
+            <stop offset="0%" stopColor="#000" stopOpacity="0"/>
+            <stop offset="50%" stopColor="#000" stopOpacity="0.9"/>
+            <stop offset="100%" stopColor="#000" stopOpacity="0"/>
           </linearGradient>
         </defs>
 
         {/* ── BACKGROUND GRID ── */}
         {vGrid.map((x, i) => (
           <line key={`vg${i}`} className="grid-line" x1={x} y1={0} x2={x} y2={H}
-            stroke="#fff" strokeWidth="0.4"/>
+            stroke="#000" strokeWidth="0.4"/>
         ))}
         {hGrid.map((y, i) => (
           <line key={`hg${i}`} className="grid-line" x1={0} y1={y} x2={W} y2={y}
-            stroke="#fff" strokeWidth="0.4"/>
+            stroke="#000" strokeWidth="0.4"/>
         ))}
 
         {/* ── SCAN LINE ── */}
@@ -216,30 +216,30 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
         {/* ── GLOW OVERLAY ── */}
         <rect className="glow-overlay" x={leftX-30} y={roofY-30}
           width={buildW+60} height={groundY - roofY + 60}
-          fill="white" filter="url(#softGlow)" opacity={0}/>
+          fill="black" filter="url(#softGlow)" opacity={0}/>
 
         {/* ── HUD: corner brackets ── */}
         {([
           [30, 30, 1,1], [W-30, 30, -1,1], [30, H-30, 1,-1], [W-30, H-30, -1,-1]
         ] as [number,number,number,number][]).map(([x,y,sx,sy], i) => (
           <g key={`hud${i}`} className="hud-el" opacity={0}>
-            <line x1={x} y1={y} x2={x+sx*38} y2={y}   stroke="#fff" strokeWidth="1.5"/>
-            <line x1={x} y1={y} x2={x}       y2={y+sy*38} stroke="#fff" strokeWidth="1.5"/>
-            <circle cx={x} cy={y} r="2.5" fill="#fff" opacity="0.5"/>
+            <line x1={x} y1={y} x2={x+sx*38} y2={y}   stroke="#000" strokeWidth="1.5"/>
+            <line x1={x} y1={y} x2={x}       y2={y+sy*38} stroke="#000" strokeWidth="1.5"/>
+            <circle cx={x} cy={y} r="2.5" fill="#000" opacity="0.5"/>
           </g>
         ))}
 
         {/* ── COORD LABELS ── */}
-        <text className="coord-label" x={54} y={24} fontSize="9" fill="#fff" fontFamily="monospace" opacity={0}>
+        <text className="coord-label" x={54} y={24} fontSize="9" fill="#000" fontFamily="monospace" opacity={0}>
           LAT 25.2048°N  LON 55.2708°E
         </text>
-        <text className="coord-label" x={W-180} y={24} fontSize="9" fill="#fff" fontFamily="monospace" opacity={0}>
+        <text className="coord-label" x={W-180} y={24} fontSize="9" fill="#000" fontFamily="monospace" opacity={0}>
           CS GLAZE  REV 4.2
         </text>
-        <text className="coord-label" x={54} y={H-14} fontSize="9" fill="#fff" fontFamily="monospace" opacity={0}>
+        <text className="coord-label" x={54} y={H-14} fontSize="9" fill="#000" fontFamily="monospace" opacity={0}>
           ELEV: FRONT  SCALE 1:100
         </text>
-        <text className="coord-label" x={W-190} y={H-14} fontSize="9" fill="#fff" fontFamily="monospace" opacity={0}>
+        <text className="coord-label" x={W-190} y={H-14} fontSize="9" fill="#000" fontFamily="monospace" opacity={0}>
           DRG-2025-CSG-FACADE
         </text>
 
@@ -247,33 +247,33 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
         {([[leftX, roofY],[rightX, roofY],[leftX, groundY],[rightX, groundY]] as [number,number][])
           .map(([cx, cy], i) => (
             <g key={`cm${i}`} className="corner-marker" opacity={0}>
-              <line x1={cx-10} y1={cy} x2={cx+10} y2={cy} stroke="#fff" strokeWidth="1"/>
-              <line x1={cx} y1={cy-10} x2={cx} y2={cy+10} stroke="#fff" strokeWidth="1"/>
-              <circle cx={cx} cy={cy} r="3" stroke="#fff" strokeWidth="0.75" fill="none"/>
+              <line x1={cx-10} y1={cy} x2={cx+10} y2={cy} stroke="#000" strokeWidth="1"/>
+              <line x1={cx} y1={cy-10} x2={cx} y2={cy+10} stroke="#000" strokeWidth="1"/>
+              <circle cx={cx} cy={cy} r="3" stroke="#000" strokeWidth="0.75" fill="none"/>
             </g>
         ))}
 
         {/* ══ SCENE 1: DIMENSION LINES ══════════════════════════════════════ */}
         {/* Vertical height indicator */}
         <path className="dim-line" d={`M${leftX-55} ${roofY} L${leftX-55} ${groundY}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="3 4"/>
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="3 4"/>
         <path className="dim-line" d={`M${leftX-65} ${roofY} L${leftX-45} ${roofY}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3"/>
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3"/>
         <path className="dim-line" d={`M${leftX-65} ${groundY} L${leftX-45} ${groundY}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3"/>
-        <text x={leftX-52} y={(roofY+groundY)/2 + 3} fontSize="8" fill="#fff" fillOpacity="0.35"
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3"/>
+        <text x={leftX-52} y={(roofY+groundY)/2 + 3} fontSize="8" fill="#000" fillOpacity="0.35"
           fontFamily="monospace" transform={`rotate(-90,${leftX-52},${(roofY+groundY)/2})`}>
           42.0 M HT
         </text>
 
         {/* Horizontal width indicator */}
         <path className="dim-line" d={`M${leftX} ${roofY-35} L${rightX} ${roofY-35}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="3 4"/>
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="3 4"/>
         <path className="dim-line" d={`M${leftX} ${roofY-45} L${leftX} ${roofY-25}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3"/>
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3"/>
         <path className="dim-line" d={`M${rightX} ${roofY-45} L${rightX} ${roofY-25}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3"/>
-        <text x={(leftX+rightX)/2 - 20} y={roofY-27} fontSize="8" fill="#fff" fillOpacity="0.35"
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3"/>
+        <text x={(leftX+rightX)/2 - 20} y={roofY-27} fontSize="8" fill="#000" fillOpacity="0.35"
           fontFamily="monospace">
           34.0 M WIDTH
         </text>
@@ -282,33 +282,33 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
         {colXs.map((x, i) => (
           <path key={`dimtick${i}`} className="dim-line"
             d={`M${x} ${groundY+45} L${x} ${groundY+55}`}
-            stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3"/>
+            stroke="#000" strokeWidth="0.6" strokeOpacity="0.3"/>
         ))}
         <path className="dim-line" d={`M${colXs[0]} ${groundY+50} L${colXs[5]} ${groundY+50}`}
-          stroke="#fff" strokeWidth="0.4" strokeOpacity="0.25" strokeDasharray="2 3"/>
+          stroke="#000" strokeWidth="0.4" strokeOpacity="0.25" strokeDasharray="2 3"/>
 
         {/* ══ SCENE 2: FOUNDATION ══════════════════════════════════════════ */}
         {/* Ground line */}
         <path className="foundation"
           d={`M${leftX-40} ${groundY} L${rightX+40} ${groundY}`}
-          stroke="#fff" strokeWidth="2.5" filter="url(#ledGlow)"/>
+          stroke="#000" strokeWidth="2.5" filter="url(#ledGlow)"/>
         {/* Sub-grade baseline */}
         <path className="foundation"
           d={`M${leftX-20} ${groundY+18} L${rightX+20} ${groundY+18}`}
-          stroke="#fff" strokeWidth="0.8" strokeOpacity="0.35" strokeDasharray="6 4"/>
+          stroke="#000" strokeWidth="0.8" strokeOpacity="0.35" strokeDasharray="6 4"/>
         {/* Foundation pads under each column */}
         {colXs.map((x, i) => (
           <React.Fragment key={`fd${i}`}>
             <path className="foundation"
               d={`M${x-14} ${groundY} L${x-14} ${groundY+30} L${x+14} ${groundY+30} L${x+14} ${groundY}`}
-              stroke="#fff" strokeWidth="1.5"/>
+              stroke="#000" strokeWidth="1.5"/>
             {/* Foundation cross hatch */}
             <path className="foundation"
               d={`M${x-14} ${groundY+8} L${x+14} ${groundY+22}`}
-              stroke="#fff" strokeWidth="0.5" strokeOpacity="0.3"/>
+              stroke="#000" strokeWidth="0.5" strokeOpacity="0.3"/>
             <path className="foundation"
               d={`M${x+14} ${groundY+8} L${x-14} ${groundY+22}`}
-              stroke="#fff" strokeWidth="0.5" strokeOpacity="0.3"/>
+              stroke="#000" strokeWidth="0.5" strokeOpacity="0.3"/>
           </React.Fragment>
         ))}
 
@@ -318,16 +318,16 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
             {/* Main column */}
             <path className="column"
               d={`M${x} ${groundY} L${x} ${roofY}`}
-              stroke="#fff"
+              stroke="#000"
               strokeWidth={i === 0 || i === colXs.length-1 ? 2.5 : 1.8}
               filter="url(#ledGlow)"/>
             {/* Column flange detail (I-beam hint) */}
             <path className="column"
               d={`M${x-4} ${groundY-30} L${x+4} ${groundY-30}`}
-              stroke="#fff" strokeWidth="0.8" strokeOpacity="0.45"/>
+              stroke="#000" strokeWidth="0.8" strokeOpacity="0.45"/>
             <path className="column"
               d={`M${x-4} ${roofY+30} L${x+4} ${roofY+30}`}
-              stroke="#fff" strokeWidth="0.8" strokeOpacity="0.45"/>
+              stroke="#000" strokeWidth="0.8" strokeOpacity="0.45"/>
           </React.Fragment>
         ))}
 
@@ -336,14 +336,14 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
           <React.Fragment key={`fl${i}`}>
             <path className="floor"
               d={`M${leftX} ${y} L${rightX} ${y}`}
-              stroke="#fff" strokeWidth={i === floorYs.length-1 ? 2 : 1.2}
+              stroke="#000" strokeWidth={i === floorYs.length-1 ? 2 : 1.2}
               strokeOpacity={0.75}/>
             {/* Slab thickness hint */}
             <path className="floor"
               d={`M${leftX} ${y+6} L${rightX} ${y+6}`}
-              stroke="#fff" strokeWidth="0.4" strokeOpacity="0.25"/>
+              stroke="#000" strokeWidth="0.4" strokeOpacity="0.25"/>
             {/* Floor number label */}
-            <text x={leftX-32} y={y + floorH/2 + 3} fontSize="7" fill="#fff" fillOpacity="0.3"
+            <text x={leftX-32} y={y + floorH/2 + 3} fontSize="7" fill="#000" fillOpacity="0.3"
               fontFamily="monospace">
               {String(numFloors - i).padStart(2, "0")}F
             </text>
@@ -359,11 +359,11 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
             <React.Fragment key={`acpL${fi}`}>
               <path className="acp-frame"
                 d={`M${x1+3} ${y+3} L${x2-3} ${y+3} L${x2-3} ${y2-3} L${x1+3} ${y2-3} Z`}
-                stroke="#fff" strokeWidth="0.9" strokeOpacity="0.5" fill="none"/>
+                stroke="#000" strokeWidth="0.9" strokeOpacity="0.5" fill="none"/>
               {/* Horizontal seam */}
               <path className="acp-frame"
                 d={`M${x1+6} ${(y+y2)/2} L${x2-6} ${(y+y2)/2}`}
-                stroke="#fff" strokeWidth="0.4" strokeOpacity="0.22" strokeDasharray="4 5"/>
+                stroke="#000" strokeWidth="0.4" strokeOpacity="0.22" strokeDasharray="4 5"/>
             </React.Fragment>
           );
         })}
@@ -375,10 +375,10 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
             <React.Fragment key={`acpR${fi}`}>
               <path className="acp-frame"
                 d={`M${x1+3} ${y+3} L${x2-3} ${y+3} L${x2-3} ${y2-3} L${x1+3} ${y2-3} Z`}
-                stroke="#fff" strokeWidth="0.9" strokeOpacity="0.5" fill="none"/>
+                stroke="#000" strokeWidth="0.9" strokeOpacity="0.5" fill="none"/>
               <path className="acp-frame"
                 d={`M${x1+6} ${(y+y2)/2} L${x2-6} ${(y+y2)/2}`}
-                stroke="#fff" strokeWidth="0.4" strokeOpacity="0.22" strokeDasharray="4 5"/>
+                stroke="#000" strokeWidth="0.4" strokeOpacity="0.22" strokeDasharray="4 5"/>
             </React.Fragment>
           );
         })}
@@ -393,25 +393,25 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
               {[x1, x1 + (x2-x1)*0.33, x1 + (x2-x1)*0.66, x2].map((mx, mi) => (
                 <path key={`vmul${bi}${mi}`} className="glass-line"
                   d={`M${mx} ${roofY} L${mx} ${groundY}`}
-                  stroke="#fff" strokeWidth="0.7" strokeOpacity="0.4"/>
+                  stroke="#000" strokeWidth="0.7" strokeOpacity="0.4"/>
               ))}
               {/* Horizontal transoms per floor */}
               {floorYs.map((y, fi) => (
                 <path key={`trans${bi}${fi}`} className="glass-line"
                   d={`M${x1} ${y} L${x2} ${y}`}
-                  stroke="#fff" strokeWidth="0.7" strokeOpacity="0.35"/>
+                  stroke="#000" strokeWidth="0.7" strokeOpacity="0.35"/>
               ))}
               {/* Reflection diagonal */}
               <path className="glass-line"
                 d={`M${x1+6} ${roofY+30} L${midX} ${groundY-20}`}
-                stroke="#fff" strokeWidth="0.4" strokeOpacity="0.1"/>
+                stroke="#000" strokeWidth="0.4" strokeOpacity="0.1"/>
               {/* Glass panel spandrel fill hint */}
               {floorYs.map((y, fi) => {
                 const y2 = fi === 0 ? groundY : floorYs[fi-1];
                 return (
                   <path key={`spandrel${bi}${fi}`} className="glass-line"
                     d={`M${x1+8} ${y+8} L${x2-8} ${y2-8}`}
-                    stroke="#fff" strokeWidth="0.3" strokeOpacity="0.1"/>
+                    stroke="#000" strokeWidth="0.3" strokeOpacity="0.1"/>
                 );
               })}
             </React.Fragment>
@@ -421,13 +421,12 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
         {/* ══ SCENE 6b: DETAILS (balcony rails, louvers) ═════════════════ */}
         {/* Thin louvre lines on ACP bays, every other floor */}
         {floorYs.filter((_, i) => i % 2 === 0).map((y, i) => {
-          const y2 = floorYs[i*2] ?? groundY;
           return (
             <React.Fragment key={`louv${i}`}>
               {[3,5,7,9,11,13].map(k => (
                 <path key={`lv${i}${k}`} className="detail-line"
                   d={`M${colXs[0]+k*4} ${y+12} L${colXs[1]-4} ${y+12}`}
-                  stroke="#fff" strokeWidth="0.35" strokeOpacity="0.2"/>
+                  stroke="#000" strokeWidth="0.35" strokeOpacity="0.2"/>
               ))}
             </React.Fragment>
           );
@@ -435,43 +434,43 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
         {/* Entry canopy at ground level */}
         <path className="detail-line"
           d={`M${W/2-90} ${groundY-5} L${W/2-90} ${groundY-32} L${W/2+90} ${groundY-32} L${W/2+90} ${groundY-5}`}
-          stroke="#fff" strokeWidth="1.4" strokeOpacity="0.8"/>
+          stroke="#000" strokeWidth="1.4" strokeOpacity="0.8"/>
         <path className="detail-line"
           d={`M${W/2-90} ${groundY-32} L${W/2} ${groundY-48} L${W/2+90} ${groundY-32}`}
-          stroke="#fff" strokeWidth="0.8" strokeOpacity="0.5"/>
+          stroke="#000" strokeWidth="0.8" strokeOpacity="0.5"/>
 
         {/* ══ SCENE 7: ROOF ══════════════════════════════════════════════ */}
         {/* Main roof edge */}
         <path className="roof-line"
           d={`M${leftX-20} ${roofY} L${rightX+20} ${roofY}`}
-          stroke="#fff" strokeWidth="3" filter="url(#ledGlow)"/>
+          stroke="#000" strokeWidth="3" filter="url(#ledGlow)"/>
         {/* Parapet coping */}
         <path className="roof-line"
           d={`M${leftX} ${roofY-14} L${rightX} ${roofY-14}`}
-          stroke="#fff" strokeWidth="1" strokeOpacity="0.45"/>
+          stroke="#000" strokeWidth="1" strokeOpacity="0.45"/>
         {/* Penthouse box */}
         <path className="roof-line"
           d={`M${leftX+buildW*0.28} ${roofY} L${leftX+buildW*0.28} ${roofY-52}
               L${leftX+buildW*0.72} ${roofY-52} L${leftX+buildW*0.72} ${roofY}`}
-          stroke="#fff" strokeWidth="1.6" strokeOpacity="0.75"/>
+          stroke="#000" strokeWidth="1.6" strokeOpacity="0.75"/>
         {/* Penthouse louvre grill */}
         {Array.from({length:5},(_,i) => (
           <path key={`pgrill${i}`} className="roof-line"
             d={`M${leftX+buildW*0.28+i*24+10} ${roofY-14} L${leftX+buildW*0.28+i*24+10} ${roofY-46}`}
-            stroke="#fff" strokeWidth="0.5" strokeOpacity="0.35"/>
+            stroke="#000" strokeWidth="0.5" strokeOpacity="0.35"/>
         ))}
         {/* Antenna mast */}
         <path className="roof-line"
           d={`M${W/2} ${roofY-52} L${W/2} ${roofY-100}`}
-          stroke="#fff" strokeWidth="1" strokeOpacity="0.55" strokeDasharray="4 3"/>
+          stroke="#000" strokeWidth="1" strokeOpacity="0.55" strokeDasharray="4 3"/>
         {/* Antenna crossbar */}
         <path className="roof-line"
           d={`M${W/2-18} ${roofY-82} L${W/2+18} ${roofY-82}`}
-          stroke="#fff" strokeWidth="0.8" strokeOpacity="0.4"/>
+          stroke="#000" strokeWidth="0.8" strokeOpacity="0.4"/>
         {/* Rooftop railing */}
         <path className="roof-line"
           d={`M${leftX+8} ${roofY-14} L${leftX+8} ${roofY-28} L${rightX-8} ${roofY-28} L${rightX-8} ${roofY-14}`}
-          stroke="#fff" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="5 5"/>
+          stroke="#000" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="5 5"/>
       </svg>
 
       {/* ── CAMERA HUD OVERLAY (HTML over SVG, responsive) ──────────────── */}
@@ -481,20 +480,20 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
           className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-red-500 flex-shrink-0 transition-opacity duration-200"
           style={{ opacity: recBlink ? 1 : 0.15 }}
         />
-        <span className="font-mono text-[9px] sm:text-[11px] text-white/70 tracking-widest">
+        <span className="font-mono text-[9px] sm:text-[11px] text-black/70 tracking-widest">
           REC
         </span>
-        <span className="font-mono text-[9px] sm:text-[11px] text-white/50 tracking-wider ml-1">
+        <span className="font-mono text-[9px] sm:text-[11px] text-black/50 tracking-wider ml-1">
           {phaseInfo.time}
         </span>
       </div>
 
       {/* Top-right: zoom + date */}
       <div className="absolute top-0 right-0 p-3 sm:p-4 flex flex-col items-end gap-0.5 pointer-events-none z-10">
-        <span className="font-mono text-[9px] sm:text-[11px] text-white/55 tracking-wider">
+        <span className="font-mono text-[9px] sm:text-[11px] text-black/55 tracking-wider">
           ZOOM  1×
         </span>
-        <span className="font-mono text-[9px] sm:text-[11px] text-white/35 tracking-wider">
+        <span className="font-mono text-[9px] sm:text-[11px] text-black/35 tracking-wider">
           2025-06-07
         </span>
       </div>
@@ -502,8 +501,8 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
       {/* Bottom-left: phase label */}
       <div className="absolute bottom-10 sm:bottom-12 left-0 p-3 sm:p-4 pointer-events-none z-10">
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 bg-white/60 rounded-full flex-shrink-0" />
-          <span className="font-mono text-[8px] sm:text-[10px] text-white/60 tracking-[0.18em] uppercase">
+          <span className="w-1.5 h-1.5 bg-black/60 rounded-full flex-shrink-0" />
+          <span className="font-mono text-[8px] sm:text-[10px] text-black/60 tracking-[0.18em] uppercase">
             {phaseInfo.label}
           </span>
         </div>
@@ -513,14 +512,14 @@ export const BlueprintAnimation = ({ onComplete }: BlueprintAnimationProps) => {
       <div className="absolute bottom-3 sm:bottom-4 left-0 right-0 px-3 sm:px-4 pointer-events-none z-10">
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Bar track */}
-          <div className="flex-1 h-[2px] bg-white/10 relative overflow-hidden">
+          <div className="flex-1 h-[2px] bg-black/10 relative overflow-hidden">
             <div
-              className="absolute left-0 top-0 h-full bg-white/70 transition-all duration-500 ease-out"
+              className="absolute left-0 top-0 h-full bg-black/70 transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
           {/* Percentage */}
-          <span className="font-mono text-[9px] sm:text-[11px] text-white/50 tabular-nums w-8 text-right">
+          <span className="font-mono text-[9px] sm:text-[11px] text-black/50 tabular-nums w-8 text-right">
             {progress}%
           </span>
         </div>

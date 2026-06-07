@@ -35,10 +35,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#ededed] flex">
+    <div className="min-h-screen bg-white text-black flex">
       {/* Sidebar */}
-      <aside className="w-64 border-r border-[#222] bg-[#0a0a0a] hidden md:flex flex-col">
-        <div className="h-16 flex items-center px-6 border-b border-[#222]">
+      <aside className="w-64 border-r border-[#d6d6d6] bg-white hidden md:flex flex-col">
+        <div className="h-16 flex items-center px-6 border-b border-[#d6d6d6]">
           <span className="font-montserrat font-bold text-lg tracking-tight">CS Glaze OS</span>
         </div>
         
@@ -53,8 +53,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive 
-                    ? "bg-[#222] text-white" 
-                    : "text-[#888] hover:text-[#ededed] hover:bg-[#111]"
+                    ? "bg-[#eeeeee] text-black" 
+                    : "text-[#888] hover:text-black hover:bg-[#f6f6f6]"
                 }`}
               >
                 <Icon size={18} />
@@ -64,10 +64,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-4 border-t border-[#222]">
+        <div className="p-4 border-t border-[#d6d6d6]">
           <Link
             href="/admin/settings"
-            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-[#888] hover:text-[#ededed] hover:bg-[#111] transition-colors"
+            className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-[#888] hover:text-black hover:bg-[#f6f6f6] transition-colors"
           >
             <Settings size={18} />
             Settings
@@ -77,7 +77,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <main className="min-w-0 flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-[#222] bg-[#0a0a0a]">
+        <header className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-[#d6d6d6] bg-white">
           <div className="font-medium text-sm text-[#888]">
             {navigation.find(n => n.href === pathname)?.name || "Settings"}
           </div>
@@ -85,13 +85,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="hidden sm:inline text-xs px-2 py-1 bg-green-500/10 text-green-500 rounded-full border border-green-500/20">
               System Online
             </span>
-            <div className="w-8 h-8 rounded-full bg-[#222] border border-[#333] flex items-center justify-center text-xs">
+            <div className="w-8 h-8 rounded-full bg-[#eeeeee] border border-[#c7c7c7] flex items-center justify-center text-xs">
               AD
             </div>
           </div>
         </header>
 
-        <nav className="md:hidden border-b border-[#222] bg-[#090909] overflow-x-auto">
+        <nav className="md:hidden border-b border-[#d6d6d6] bg-white overflow-x-auto">
           <div className="flex min-w-max gap-1 px-3 py-2">
             {mobileNavigation.map((item) => {
               const isActive = pathname === item.href;
@@ -103,8 +103,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   href={item.href}
                   className={`flex h-10 items-center gap-2 rounded-md px-3 text-xs font-medium transition-colors ${
                     isActive
-                      ? "bg-[#222] text-white"
-                      : "text-[#888] hover:bg-[#111] hover:text-[#ededed]"
+                      ? "bg-[#eeeeee] text-black"
+                      : "text-[#888] hover:bg-[#f6f6f6] hover:text-black"
                   }`}
                 >
                   <Icon size={15} />

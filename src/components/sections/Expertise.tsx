@@ -45,7 +45,7 @@ export const Expertise = () => {
     >
       {/* Blueprint scanline sweep — plays once on section enter */}
       <motion.div
-        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-black/20 to-transparent"
         initial={{ top: 0, opacity: 0 }}
         animate={inView ? { top: ["0%", "100%"], opacity: [0, 0.6, 0] } : {}}
         transition={{ duration: 1.4, ease: "linear", delay: 0.1 }}
@@ -54,14 +54,14 @@ export const Expertise = () => {
       {/* Corner HUD bracket — top-right */}
       <div className="absolute top-6 right-6 pointer-events-none opacity-20">
         <svg width="40" height="40" fill="none">
-          <line x1="40" y1="0" x2="18" y2="0"  stroke="white" strokeWidth="1.5"/>
-          <line x1="40" y1="0" x2="40" y2="22" stroke="white" strokeWidth="1.5"/>
+          <line x1="40" y1="0" x2="18" y2="0"  stroke="black" strokeWidth="1.5"/>
+          <line x1="40" y1="0" x2="40" y2="22" stroke="black" strokeWidth="1.5"/>
         </svg>
       </div>
       <div className="absolute bottom-6 left-6 pointer-events-none opacity-20">
         <svg width="40" height="40" fill="none">
-          <line x1="0" y1="40" x2="22" y2="40" stroke="white" strokeWidth="1.5"/>
-          <line x1="0" y1="40" x2="0"  y2="18" stroke="white" strokeWidth="1.5"/>
+          <line x1="0" y1="40" x2="22" y2="40" stroke="black" strokeWidth="1.5"/>
+          <line x1="0" y1="40" x2="0"  y2="18" stroke="black" strokeWidth="1.5"/>
         </svg>
       </div>
 
@@ -102,9 +102,9 @@ export const Expertise = () => {
               >
                 {/* Glass glow on hover */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(142,205,248,0.12) 0%, transparent 70%)" }}/>
+                  style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.05) 0%, transparent 70%)" }}/>
                 {/* Top edge highlight */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"/>
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none"/>
 
                 <div className="font-montserrat text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface mb-3 group-hover:text-tertiary transition-colors tabular-nums">
                   <Counter target={stat.value} suffix={stat.suffix} />

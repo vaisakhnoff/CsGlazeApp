@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useState, useEffect } from "react";
 import { UploadCloud, Image as ImageIcon, Copy, Trash2 } from "lucide-react";
 import Image from "next/image";
 
@@ -60,7 +60,7 @@ export default function MediaLibraryPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-white tracking-tight">Media Library</h1>
+          <h1 className="text-3xl font-semibold text-black tracking-tight">Media Library</h1>
           <p className="text-[#888] mt-2">Manage all your uploaded images and assets.</p>
         </div>
         
@@ -72,7 +72,7 @@ export default function MediaLibraryPage() {
             onChange={handleFileUpload}
             disabled={isUploading}
           />
-          <div className="flex items-center gap-2 px-4 py-2 bg-white text-black text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+          <div className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors">
             <UploadCloud size={16} />
             {isUploading ? "Uploading..." : "Upload Image"}
           </div>
@@ -80,9 +80,9 @@ export default function MediaLibraryPage() {
       </div>
 
       {isUploading && (
-        <div className="w-full bg-[#111] rounded-full h-1.5 mb-4 overflow-hidden">
+        <div className="w-full bg-[#f6f6f6] rounded-full h-1.5 mb-4 overflow-hidden">
           <div 
-            className="bg-white h-1.5 rounded-full transition-all duration-300" 
+            className="bg-black h-1.5 rounded-full transition-all duration-300" 
             style={{ width: `${uploadProgress}%` }}
           />
         </div>
@@ -90,13 +90,13 @@ export default function MediaLibraryPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {images.length === 0 ? (
-          <div className="col-span-full py-12 text-center text-[#666] border border-dashed border-[#333] rounded-xl flex flex-col items-center gap-2">
+          <div className="col-span-full py-12 text-center text-[#666] border border-dashed border-[#c7c7c7] rounded-xl flex flex-col items-center gap-2">
             <ImageIcon size={32} />
             <p>No media files uploaded yet.</p>
           </div>
         ) : (
           images.map((img) => (
-            <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden bg-[#111] border border-[#222]">
+            <div key={img.id} className="group relative aspect-square rounded-xl overflow-hidden bg-[#f6f6f6] border border-[#d6d6d6]">
               <Image 
                 src={img.url} 
                 alt={img.altText || "Uploaded image"} 

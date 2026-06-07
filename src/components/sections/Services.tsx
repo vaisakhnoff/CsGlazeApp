@@ -6,10 +6,10 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { DetailModal } from "@/components/ui/DetailModal";
 import { ArrowRight, Layers, LayoutGrid, Box, Zap } from "lucide-react";
 
-const GLASS_GLOW = "rgba(142,205,248,0.18)";
-const METAL_GLOW = "rgba(216,196,143,0.16)";
-const GLASS_ACCENT = "#8ecdf8";
-const METAL_ACCENT = "#d8c48f";
+const GLASS_GLOW = "rgba(0,0,0,0.08)";
+const METAL_GLOW = "rgba(0,0,0,0.06)";
+const GLASS_ACCENT = "#000000";
+const METAL_ACCENT = "#000000";
 
 const services = [
   {
@@ -124,7 +124,7 @@ export const Services = () => {
                     onClick={() => setSelected(service)}
                   >
                     <div
-                      className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-4 sm:mb-6 border border-white/10"
+                      className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-4 sm:mb-6 border border-black/10"
                       style={{ background: service.glow, boxShadow: `0 0 16px ${service.glow}` }}
                     >
                       <Icon size={16} style={{ color: service.accent }} className="sm:hidden" />
@@ -139,7 +139,7 @@ export const Services = () => {
                     </p>
 
                     <div className="mb-3 sm:mb-6">
-                      <div className="w-full h-[1px] bg-white/10 mb-3 sm:mb-4" />
+                      <div className="w-full h-[1px] bg-black/10 mb-3 sm:mb-4" />
                       <ul className="flex flex-col gap-1.5 sm:gap-2">
                         {service.specs.map((spec) => (
                           <li key={spec} className="font-geist text-[10px] sm:text-xs text-on-surface-variant flex items-center gap-1.5 sm:gap-2">
@@ -167,7 +167,7 @@ export const Services = () => {
           <div className="mt-6 flex justify-center md:hidden">
             <button
               onClick={() => setShowAll(true)}
-              className="flex items-center gap-2 px-6 py-2.5 border border-white/15 text-white/60 font-geist text-xs uppercase tracking-widest backdrop-blur-md bg-white/5 hover:bg-white/10 hover:text-white transition-all rounded-full"
+              className="flex items-center gap-2 px-6 py-2.5 border border-black/15 text-black/60 font-geist text-xs uppercase tracking-widest backdrop-blur-md bg-black/5 hover:bg-black/10 hover:text-black transition-all rounded-full"
             >
               Show More <ArrowRight size={12} />
             </button>
@@ -182,22 +182,22 @@ export const Services = () => {
             {/* Header */}
             <div className="flex items-center gap-4 mb-6">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 flex-shrink-0"
+                className="w-12 h-12 rounded-xl flex items-center justify-center border border-black/10 flex-shrink-0"
                 style={{ background: selected.glow, boxShadow: `0 0 20px ${selected.glow}` }}
               >
                 <selected.icon size={22} style={{ color: selected.accent }} />
               </div>
               <div>
-                <p className="font-mono text-[9px] tracking-widest text-white/30 uppercase mb-0.5">Service Detail</p>
-                <h2 className="font-montserrat text-xl sm:text-2xl font-bold text-white">{selected.title}</h2>
+                <p className="font-mono text-[9px] tracking-widest text-black/35 uppercase mb-0.5">Service Detail</p>
+                <h2 className="font-montserrat text-xl sm:text-2xl font-bold text-black">{selected.title}</h2>
               </div>
             </div>
 
             {/* Divider */}
-            <div className="w-full h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent mb-6" />
+            <div className="w-full h-px bg-gradient-to-r from-black/20 via-black/10 to-transparent mb-6" />
 
             {/* Overview */}
-            <p className="font-inter text-white/65 text-sm leading-relaxed mb-8">{selected.detail.overview}</p>
+            <p className="font-inter text-black/65 text-sm leading-relaxed mb-8">{selected.detail.overview}</p>
 
             {/* Features */}
             <div className="mb-8">
@@ -206,7 +206,7 @@ export const Services = () => {
               </h4>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {selected.detail.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 font-inter text-sm text-white/70">
+                  <li key={f} className="flex items-center gap-2.5 font-inter text-sm text-black/70">
                     <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: selected.accent }} />
                     {f}
                   </li>
@@ -223,7 +223,7 @@ export const Services = () => {
                 {selected.detail.applications.map((a) => (
                   <span
                     key={a}
-                    className="px-3 py-1 rounded-full text-xs font-geist backdrop-blur-md bg-white/8 border border-white/10 text-white/60"
+                    className="px-3 py-1 rounded-full text-xs font-geist backdrop-blur-md bg-black/5 border border-black/10 text-black/60"
                   >
                     {a}
                   </span>
@@ -232,11 +232,11 @@ export const Services = () => {
             </div>
 
             {/* CTA */}
-            <div className="mt-8 pt-6 border-t border-white/10">
+            <div className="mt-8 pt-6 border-t border-black/10">
               <a
                 href="#contact"
                 onClick={() => setSelected(null)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 font-geist text-xs uppercase tracking-widest text-on-primary bg-primary shadow-[0_14px_34px_rgba(216,196,143,0.16)] hover:bg-on-primary-container transition-colors rounded-sm font-semibold"
+                className="inline-flex items-center gap-2 px-6 py-2.5 font-geist text-xs uppercase tracking-widest text-on-primary bg-primary shadow-[0_14px_34px_rgba(0,0,0,0.14)] hover:bg-primary-container transition-colors rounded-sm font-semibold"
               >
                 Request Proposal <ArrowRight size={13} />
               </a>

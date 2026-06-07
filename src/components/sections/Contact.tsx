@@ -70,17 +70,17 @@ export const Contact = () => {
     >
       {/* Scanline sweep */}
       <motion.div
-        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/15 to-transparent"
+        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-black/15 to-transparent"
         initial={{ top: 0, opacity: 0 }}
         animate={inView ? { top: ["0%", "100%"], opacity: [0, 0.5, 0] } : {}}
         transition={{ duration: 1.6, ease: "linear", delay: 0.2 }}
       />
       {/* HUD corners */}
       <div className="absolute top-6 left-6 pointer-events-none opacity-20">
-        <svg width="36" height="36" fill="none"><line x1="0" y1="0" x2="22" y2="0" stroke="white" strokeWidth="1.5"/><line x1="0" y1="0" x2="0" y2="22" stroke="white" strokeWidth="1.5"/></svg>
+        <svg width="36" height="36" fill="none"><line x1="0" y1="0" x2="22" y2="0" stroke="black" strokeWidth="1.5"/><line x1="0" y1="0" x2="0" y2="22" stroke="black" strokeWidth="1.5"/></svg>
       </div>
       <div className="absolute bottom-6 right-6 pointer-events-none opacity-20">
-        <svg width="36" height="36" fill="none"><line x1="36" y1="36" x2="14" y2="36" stroke="white" strokeWidth="1.5"/><line x1="36" y1="36" x2="36" y2="14" stroke="white" strokeWidth="1.5"/></svg>
+        <svg width="36" height="36" fill="none"><line x1="36" y1="36" x2="14" y2="36" stroke="black" strokeWidth="1.5"/><line x1="36" y1="36" x2="36" y2="14" stroke="black" strokeWidth="1.5"/></svg>
       </div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
@@ -116,16 +116,16 @@ export const Contact = () => {
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="relative bg-surface-container p-8 md:p-12 border border-outline-variant/20 overflow-hidden"
           >
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"/>
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% -10%, rgba(216,196,143,0.08) 0%, rgba(142,205,248,0.035) 38%, transparent 66%)" }}/>
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none"/>
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% -10%, rgba(0,0,0,0.05) 0%, transparent 66%)" }}/>
 
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full min-h-[300px] gap-4 text-center">
                 <CheckCircle2 size={48} className="text-primary" />
-                <h3 className="font-montserrat text-2xl font-semibold text-white">Proposal Request Sent</h3>
-                <p className="font-inter text-white/50 text-sm max-w-xs">Our engineering team will reach out within 1 business day.</p>
+                <h3 className="font-montserrat text-2xl font-semibold text-black">Proposal Request Sent</h3>
+                <p className="font-inter text-black/55 text-sm max-w-xs">Our engineering team will reach out within 1 business day.</p>
                 <button onClick={() => { setSubmitted(false); setFields({ name: "", company: "", email: "", message: "" }); setTouched({}); setErrors({}); }}
-                  className="mt-4 text-xs font-geist uppercase tracking-widest text-white/40 hover:text-white transition-colors">
+                  className="mt-4 text-xs font-geist uppercase tracking-widest text-black/45 hover:text-black transition-colors">
                   Send Another
                 </button>
               </div>

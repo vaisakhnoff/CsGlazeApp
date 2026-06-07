@@ -81,18 +81,18 @@ export const Navbar = () => {
           className="md:hidden fixed inset-0 top-0 bg-surface/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center pt-20 overflow-hidden"
         >
           {/* top edge glow */}
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"/>
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none"/>
           {/* HUD corner brackets */}
           <div className="absolute top-6 left-6 pointer-events-none opacity-20">
             <svg width="32" height="32" fill="none">
-              <line x1="0" y1="0" x2="20" y2="0"  stroke="white" strokeWidth="1.5"/>
-              <line x1="0" y1="0" x2="0"  y2="20" stroke="white" strokeWidth="1.5"/>
+              <line x1="0" y1="0" x2="20" y2="0"  stroke="black" strokeWidth="1.5"/>
+              <line x1="0" y1="0" x2="0"  y2="20" stroke="black" strokeWidth="1.5"/>
             </svg>
           </div>
           <div className="absolute bottom-6 right-6 pointer-events-none opacity-20">
             <svg width="32" height="32" fill="none">
-              <line x1="32" y1="32" x2="12" y2="32" stroke="white" strokeWidth="1.5"/>
-              <line x1="32" y1="32" x2="32" y2="12" stroke="white" strokeWidth="1.5"/>
+              <line x1="32" y1="32" x2="12" y2="32" stroke="black" strokeWidth="1.5"/>
+              <line x1="32" y1="32" x2="32" y2="12" stroke="black" strokeWidth="1.5"/>
             </svg>
           </div>
 
@@ -124,7 +124,7 @@ export const Navbar = () => {
           </nav>
 
           {/* blueprint coord label bottom */}
-          <span className="absolute bottom-4 font-mono text-[9px] text-white/15 tracking-widest">
+          <span className="absolute bottom-4 font-mono text-[9px] text-black/20 tracking-widest">
             CS GLAZE  NAV v1.0
           </span>
         </motion.div>

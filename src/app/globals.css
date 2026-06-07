@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+html { scroll-behavior: auto; }
+
+
 @theme {
   /* Typography */
   --font-sans: var(--font-inter);
@@ -7,41 +10,41 @@
   --font-geist: var(--font-geist);
 
   /* Colors */
-  --color-surface: #121416;
-  --color-surface-dim: #0b0c0d;
-  --color-surface-bright: #34383a;
-  --color-surface-container-lowest: #08090a;
-  --color-surface-container-low: #101214;
-  --color-surface-container: #16191b;
-  --color-surface-container-high: #1d2124;
-  --color-surface-container-highest: #272c2f;
-  --color-on-surface: #f1f3f2;
-  --color-on-surface-variant: #a8afb2;
-  --color-inverse-surface: #f1f3f2;
-  --color-inverse-on-surface: #121416;
-  --color-outline: #8b9497;
-  --color-outline-variant: #31383b;
-  --color-surface-tint: #d8c48f;
-  --color-primary: #d8c48f;
-  --color-on-primary: #15130d;
-  --color-primary-container: #2a2518;
-  --color-on-primary-container: #f0dfaa;
-  --color-inverse-primary: #6b5b2e;
-  --color-secondary: #c9d1d5;
-  --color-on-secondary: #111619;
-  --color-secondary-container: #293036;
-  --color-on-secondary-container: #d9e2e6;
-  --color-tertiary: #8ecdf8;
-  --color-on-tertiary: #071a27;
-  --color-tertiary-container: #102b3f;
-  --color-on-tertiary-container: #b8e3ff;
+  --color-surface: #ffffff;
+  --color-surface-dim: #f4f4f4;
+  --color-surface-bright: #ffffff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fafafa;
+  --color-surface-container: #f6f6f6;
+  --color-surface-container-high: #eeeeee;
+  --color-surface-container-highest: #e6e6e6;
+  --color-on-surface: #000000;
+  --color-on-surface-variant: #4a4a4a;
+  --color-inverse-surface: #000000;
+  --color-inverse-on-surface: #ffffff;
+  --color-outline: #111111;
+  --color-outline-variant: #d6d6d6;
+  --color-surface-tint: #000000;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #222222;
+  --color-on-primary-container: #ffffff;
+  --color-inverse-primary: #ffffff;
+  --color-secondary: #111111;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #eeeeee;
+  --color-on-secondary-container: #000000;
+  --color-tertiary: #000000;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #eeeeee;
+  --color-on-tertiary-container: #000000;
   --color-error: #ffb4ab;
   --color-on-error: #690005;
   --color-error-container: #93000a;
   --color-on-error-container: #ffdad6;
-  --color-background: #0b0c0d;
-  --color-on-background: #f1f3f2;
-  --color-surface-variant: #1d2124;
+  --color-background: #ffffff;
+  --color-on-background: #000000;
+  --color-surface-variant: #eeeeee;
 
   /* Shapes & Spacing */
   --radius-none: 0px;
@@ -65,19 +68,19 @@
 
 @layer utilities {
   .heavy-glass {
-    background-color: rgba(241, 243, 242, 0.035);
+    background-color: rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(0, 0, 0, 0.16);
+    border-left: 1px solid rgba(0, 0, 0, 0.16);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
   }
 
   .ambient-shadow {
-    box-shadow: 0 40px 40px -20px rgba(4, 6, 7, 0.55);
+    box-shadow: 0 40px 40px -20px rgba(0, 0, 0, 0.14);
   }
   
   .glass-border-gradient {
-    border-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) 1;
+    border-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.06)) 1;
   }
 }

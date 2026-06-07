@@ -11,7 +11,7 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
 }
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
-  ({ className, children, tiltOnHover = true, glowColor = "rgba(142,205,248,0.15)", ...props }, ref) => {
+  ({ className, children, tiltOnHover = true, glowColor = "rgba(0,0,0,0.08)", ...props }, ref) => {
     const cardRef = useRef<HTMLDivElement>(null);
 
     const mouseX = useMotionValue(0);
@@ -52,11 +52,11 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
         className={cn(
           // Core glass layers
           "relative overflow-hidden",
-          "bg-gradient-to-br from-white/10 via-white/5 to-transparent",
+          "bg-gradient-to-br from-white via-white to-surface-container-low",
           "backdrop-blur-xl",
           // Multi-layered border
-          "border border-white/15",
-          "shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.15),inset_0_-1px_0_rgba(0,0,0,0.3)]",
+          "border border-black/10",
+          "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.06)]",
           "rounded-xl",
           className
         )}
@@ -67,12 +67,12 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
           <motion.div
             className="pointer-events-none absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             style={{
-              background: `radial-gradient(circle at ${sheenX} ${sheenY}, rgba(255,255,255,0.12) 0%, transparent 70%)`,
+              background: `radial-gradient(circle at ${sheenX} ${sheenY}, rgba(0,0,0,0.06) 0%, transparent 70%)`,
             }}
           />
         )}
         {/* Top edge inner highlight */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
         {/* Glow behind on hover */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500"

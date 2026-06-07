@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${montserrat.variable} ${geist.variable} h-full antialiased dark`}
+      className={`${inter.variable} ${montserrat.variable} ${geist.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-on-surface font-sans selection:bg-tertiary selection:text-on-tertiary">
         <SmoothScroll>{children}</SmoothScroll>

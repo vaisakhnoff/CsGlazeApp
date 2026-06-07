@@ -3,7 +3,7 @@
 import { createSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
-export async function loginAction(prevState: any, formData: FormData) {
+export async function loginAction(_prevState: { error?: string } | null, formData: FormData) {
   const password = formData.get("password") as string;
   const adminPassword = process.env.ADMIN_PASSWORD || "admin123";
 

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { verifySession } from "@/lib/session";
 import { cookies } from "next/headers";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("admin_session")?.value;
@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json({ images });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch media" }, { status: 500 });
   }
 }

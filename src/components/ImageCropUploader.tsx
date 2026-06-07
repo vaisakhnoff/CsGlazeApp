@@ -104,16 +104,16 @@ export function ImageCropUploader({ onImagesChange }: Props) {
       {uploaded.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {uploaded.map((img, idx) => (
-            <div key={img.id} className="relative group w-20 h-20 rounded-lg overflow-hidden border border-[#333]">
+            <div key={img.id} className="relative group w-20 h-20 rounded-lg overflow-hidden border border-[#c7c7c7]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={img.url} alt={`upload-${idx}`} className="w-full h-full object-cover" />
               {idx === 0 && (
-                <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-white/70 py-0.5">Cover</span>
+                <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-black/70 py-0.5">Cover</span>
               )}
               <button
                 type="button"
                 onClick={() => remove(img.id)}
-                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <X size={10} />
               </button>
@@ -125,12 +125,12 @@ export function ImageCropUploader({ onImagesChange }: Props) {
       {/* Crop modal */}
       {cropSrc && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#111] border border-[#333] rounded-xl p-5 w-full max-w-xl space-y-4">
+          <div className="bg-[#f6f6f6] border border-[#c7c7c7] rounded-xl p-5 w-full max-w-xl space-y-4">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-white font-medium text-sm">
+              <span className="flex items-center gap-2 text-black font-medium text-sm">
                 <CropIcon size={15} /> Crop Image
               </span>
-              <button type="button" onClick={() => { setCropSrc(null); setPendingFile(null); }} className="text-[#888] hover:text-white">
+              <button type="button" onClick={() => { setCropSrc(null); setPendingFile(null); }} className="text-[#888] hover:text-black">
                 <X size={18} />
               </button>
             </div>
@@ -146,7 +146,7 @@ export function ImageCropUploader({ onImagesChange }: Props) {
               <button
                 type="button"
                 onClick={() => { setCropSrc(null); setPendingFile(null); }}
-                className="px-4 py-2 text-sm text-[#888] hover:text-white transition-colors"
+                className="px-4 py-2 text-sm text-[#888] hover:text-black transition-colors"
               >
                 Cancel
               </button>
@@ -154,7 +154,7 @@ export function ImageCropUploader({ onImagesChange }: Props) {
                 type="button"
                 onClick={confirmCrop}
                 disabled={uploading}
-                className="px-4 py-2 text-sm bg-white text-black rounded-md font-medium flex items-center gap-2 hover:bg-gray-200 disabled:opacity-50"
+                className="px-4 py-2 text-sm bg-black text-white rounded-md font-medium flex items-center gap-2 hover:bg-[#222] disabled:opacity-50"
               >
                 {uploading ? "Uploading…" : <><Check size={14} /> Use This Crop</>}
               </button>
@@ -168,7 +168,7 @@ export function ImageCropUploader({ onImagesChange }: Props) {
         type="button"
         onClick={openFile}
         disabled={!!cropSrc}
-        className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#444] rounded-lg text-[#888] hover:text-white hover:border-[#666] transition-colors text-sm disabled:opacity-40"
+        className="flex items-center gap-2 px-4 py-2.5 border border-dashed border-[#999] rounded-lg text-[#888] hover:text-black hover:border-black transition-colors text-sm disabled:opacity-40"
       >
         <ImagePlus size={16} />
         {uploaded.length === 0 ? "Add Images" : "Add Another Image"}

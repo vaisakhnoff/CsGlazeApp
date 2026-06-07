@@ -14,21 +14,21 @@ export default async function ProjectsPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-white tracking-tight">Projects</h1>
+          <h1 className="text-3xl font-semibold text-black tracking-tight">Projects</h1>
           <p className="text-[#888] mt-2">Manage your portfolio projects.</p>
         </div>
         <Link 
           href="/admin/projects/new" 
-          className="flex items-center gap-2 px-4 py-2 bg-white text-black text-sm font-medium rounded-md hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors"
         >
           <Plus size={16} />
           New Project
         </Link>
       </div>
 
-      <div className="rounded-xl border border-[#222] bg-[#0a0a0a] overflow-hidden">
+      <div className="rounded-xl border border-[#d6d6d6] bg-white overflow-hidden">
         <table className="w-full text-left text-sm text-[#888]">
-          <thead className="bg-[#111] text-xs uppercase text-[#666] border-b border-[#222]">
+          <thead className="bg-[#f6f6f6] text-xs uppercase text-[#666] border-b border-[#d6d6d6]">
             <tr>
               <th className="px-6 py-4 font-medium">Title</th>
               <th className="px-6 py-4 font-medium">Category</th>
@@ -46,8 +46,8 @@ export default async function ProjectsPage() {
               </tr>
             ) : (
               projects.map((project) => (
-                <tr key={project.id} className="hover:bg-[#111] transition-colors">
-                  <td className="px-6 py-4 font-medium text-white">{project.title}</td>
+                <tr key={project.id} className="hover:bg-[#f6f6f6] transition-colors">
+                  <td className="px-6 py-4 font-medium text-black">{project.title}</td>
                   <td className="px-6 py-4">{project.category}</td>
                   <td className="px-6 py-4">{project.location || "-"}</td>
                   <td className="px-6 py-4">
@@ -59,7 +59,7 @@ export default async function ProjectsPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-3">
-                      <Link href={`/admin/projects/${project.id}/edit`} className="text-[#888] hover:text-white transition-colors">
+                      <Link href={`/admin/projects/${project.id}/edit`} className="text-[#888] hover:text-black transition-colors">
                         <Edit2 size={16} />
                       </Link>
                       <button className="text-[#888] hover:text-red-500 transition-colors">

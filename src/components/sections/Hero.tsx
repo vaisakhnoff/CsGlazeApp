@@ -20,7 +20,7 @@ export const Hero = () => {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-screen w-full overflow-hidden bg-black"
+      className="relative min-h-screen w-full overflow-hidden bg-white"
       aria-label="Hero"
     >
       {/* Full-screen blueprint animation canvas */}
@@ -33,12 +33,12 @@ export const Hero = () => {
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.62) 45%, transparent 100%)",
+            "linear-gradient(to right, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.66) 45%, transparent 100%)",
         }}
       />
       <div
         className="absolute bottom-0 left-0 right-0 h-40 z-10 pointer-events-none"
-        style={{ background: "linear-gradient(to top, #000 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(to top, #fff 0%, transparent 100%)" }}
       />
 
       {/* ── HERO CONTENT — visible immediately ── */}
@@ -53,8 +53,8 @@ export const Hero = () => {
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="flex items-center gap-3 mb-6"
         >
-          <div className="w-10 h-[1px] bg-white/60" />
-          <span className="font-geist text-[10px] font-semibold tracking-[0.25em] uppercase text-white/50">
+          <div className="w-10 h-[1px] bg-black/60" />
+          <span className="font-geist text-[10px] font-semibold tracking-[0.25em] uppercase text-black/55">
             Foundation to Landmark
           </span>
         </motion.div>
@@ -64,7 +64,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="font-montserrat font-bold text-white leading-[1.05] tracking-[-0.025em] mb-5"
+          className="font-montserrat font-bold text-black leading-[1.05] tracking-[-0.025em] mb-5"
           style={{ fontSize: "clamp(36px, 5.5vw, 72px)" }}
         >
           Engineering Modern<br />Facades
@@ -75,7 +75,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.5, ease: "easeOut" }}
-          className="font-inter text-white/55 leading-relaxed mb-10 max-w-[520px]"
+          className="font-inter text-black/60 leading-relaxed mb-10 max-w-[520px]"
           style={{ fontSize: "clamp(15px, 1.4vw, 18px)" }}
         >
           Premium ACP Cladding, Structural Glazing, Glass Roofing, Glass Canopies and Architectural Glass Solutions.
@@ -94,10 +94,10 @@ export const Hero = () => {
             { value: "100%", label: "Satisfaction" },
           ].map(({ value, label }) => (
             <div key={label} className="flex flex-col gap-1">
-              <span className="font-montserrat font-bold text-white text-2xl sm:text-3xl leading-none">
+              <span className="font-montserrat font-bold text-black text-2xl sm:text-3xl leading-none">
                 {value}
               </span>
-              <span className="font-geist text-[10px] uppercase tracking-[0.18em] text-white/35">
+              <span className="font-geist text-[10px] uppercase tracking-[0.18em] text-black/45">
                 {label}
               </span>
             </div>
@@ -113,7 +113,7 @@ export const Hero = () => {
         >
           <a
             href="#projects"
-            className="inline-flex items-center justify-center px-7 py-3 bg-primary text-on-primary font-montserrat font-semibold text-sm tracking-wide shadow-[0_18px_44px_rgba(216,196,143,0.18)] hover:bg-on-primary-container transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 bg-primary text-on-primary font-montserrat font-semibold text-sm tracking-wide shadow-[0_18px_44px_rgba(0,0,0,0.16)] hover:bg-primary-container transition-colors"
           >
             View Projects
           </a>
@@ -121,13 +121,13 @@ export const Hero = () => {
             href="https://wa.me/"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center px-7 py-3 border border-white/25 text-white font-montserrat font-semibold text-sm tracking-wide hover:border-white/60 hover:bg-white/5 transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 border border-black/25 text-black font-montserrat font-semibold text-sm tracking-wide hover:border-black/60 hover:bg-black/5 transition-colors"
           >
             WhatsApp Us
           </a>
           <a
             href="tel:"
-            className="inline-flex items-center justify-center px-7 py-3 text-white/50 font-montserrat font-semibold text-sm tracking-wide hover:text-white transition-colors"
+            className="inline-flex items-center justify-center px-7 py-3 text-black/55 font-montserrat font-semibold text-sm tracking-wide hover:text-black transition-colors"
           >
             Call Now
           </a>
@@ -141,14 +141,14 @@ export const Hero = () => {
         transition={{ duration: 1, delay: 1.2 }}
         className="absolute bottom-10 left-6 sm:left-10 lg:left-20 z-20 flex items-center gap-3"
       >
-        <div className="relative h-14 w-[1px] bg-white/15 overflow-hidden">
+        <div className="relative h-14 w-[1px] bg-black/15 overflow-hidden">
           <motion.div
             animate={{ y: ["-100%", "100%"] }}
             transition={{ repeat: Infinity, duration: 1.4, ease: "linear" }}
-            className="absolute top-0 left-0 w-full h-1/2 bg-white/70"
+            className="absolute top-0 left-0 w-full h-1/2 bg-black/70"
           />
         </div>
-        <span className="font-geist text-[9px] tracking-[0.22em] text-white/35 uppercase">
+        <span className="font-geist text-[9px] tracking-[0.22em] text-black/45 uppercase">
           Scroll
         </span>
       </motion.div>

@@ -58,25 +58,25 @@ function ImageCarousel({ images, fallback }: { images: string[]; fallback: strin
 }
 
 const CATEGORY_GLOW: Record<string, string> = {
-  "Structural Glazing":   "rgba(142,205,248,0.22)",
-  "ACP Works":            "rgba(216,196,143,0.2)",
-  "Glass Works":          "rgba(142,205,248,0.22)",
-  "Spider Glazing":       "rgba(142,205,248,0.22)",
-  "Glass Roofing":        "rgba(142,205,248,0.22)",
-  "MS Structural Works":  "rgba(216,196,143,0.2)",
-  "Roofing Works":        "rgba(216,196,143,0.2)",
-  default:                "rgba(201,209,213,0.16)",
+  "Structural Glazing":   "rgba(0,0,0,0.08)",
+  "ACP Works":            "rgba(0,0,0,0.06)",
+  "Glass Works":          "rgba(0,0,0,0.08)",
+  "Spider Glazing":       "rgba(0,0,0,0.08)",
+  "Glass Roofing":        "rgba(0,0,0,0.08)",
+  "MS Structural Works":  "rgba(0,0,0,0.06)",
+  "Roofing Works":        "rgba(0,0,0,0.06)",
+  default:                "rgba(0,0,0,0.06)",
 };
 
 const CATEGORY_ACCENT: Record<string, string> = {
-  "Structural Glazing":   "#8ecdf8",
-  "ACP Works":            "#d8c48f",
-  "Glass Works":          "#8ecdf8",
-  "Spider Glazing":       "#8ecdf8",
-  "Glass Roofing":        "#8ecdf8",
-  "MS Structural Works":  "#d8c48f",
-  "Roofing Works":        "#d8c48f",
-  default:                "#c9d1d5",
+  "Structural Glazing":   "#000000",
+  "ACP Works":            "#000000",
+  "Glass Works":          "#000000",
+  "Spider Glazing":       "#000000",
+  "Glass Roofing":        "#000000",
+  "MS Structural Works":  "#000000",
+  "Roofing Works":        "#000000",
+  default:                "#000000",
 };
 
 const FALLBACK_IMAGE: Record<string, string> = {
@@ -216,7 +216,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           <div className="mt-6 flex justify-center md:hidden">
             <button
               onClick={() => setShowAll(true)}
-              className="flex items-center gap-2 px-6 py-2.5 border border-white/15 text-white/60 font-geist text-xs uppercase tracking-widest backdrop-blur-md bg-white/5 hover:bg-white/10 hover:text-white transition-all rounded-full"
+              className="flex items-center gap-2 px-6 py-2.5 border border-black/15 text-black/60 font-geist text-xs uppercase tracking-widest backdrop-blur-md bg-black/5 hover:bg-black/10 hover:text-black transition-all rounded-full"
             >
               Show More ({displayProjects.length - MOBILE_INITIAL} more)
               <ArrowUpRight size={12} />
@@ -248,7 +248,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   <p className="font-mono text-[9px] tracking-widest mb-1" style={{ color: accent }}>
                     {selected.category}
                   </p>
-                  <h2 className="font-montserrat text-xl sm:text-2xl font-bold text-white leading-tight">
+                  <h2 className="font-montserrat text-xl sm:text-2xl font-bold text-black leading-tight">
                     {selected.title}
                   </h2>
                 </div>
@@ -258,17 +258,17 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 />
               </div>
 
-              <div className="w-full h-px bg-gradient-to-r from-white/20 via-white/10 to-transparent mb-5" />
+              <div className="w-full h-px bg-gradient-to-r from-black/20 via-black/10 to-transparent mb-5" />
 
               {/* Meta chips */}
               <div className="flex flex-wrap gap-3 mb-6">
                 {selected.location && (
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 border border-white/10 font-geist text-xs text-white/60">
+                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 border border-black/10 font-geist text-xs text-black/60">
                     <MapPin size={11} /> {selected.location}
                   </span>
                 )}
                 {selected.completionYear && (
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 border border-white/10 font-geist text-xs text-white/60">
+                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/5 border border-black/10 font-geist text-xs text-black/60">
                     <Calendar size={11} /> Completed {selected.completionYear}
                   </span>
                 )}
@@ -281,7 +281,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
               </div>
 
               {/* Description placeholder — real projects can have a `description` field later */}
-              <p className="font-inter text-white/55 text-sm leading-relaxed mb-8">
+              <p className="font-inter text-black/60 text-sm leading-relaxed mb-8">
                 This project showcases CS Glaze&apos;s expertise in {selected.category.toLowerCase()} — delivering
                 precision-engineered facade solutions that balance structural integrity, thermal performance,
                 and architectural vision. Every element is designed, fabricated, and installed in-house to
@@ -293,7 +293,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 <a
                   href="#contact"
                   onClick={() => setSelected(null)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 font-geist text-xs uppercase tracking-widest text-on-primary bg-primary shadow-[0_14px_34px_rgba(216,196,143,0.16)] hover:bg-on-primary-container transition-colors rounded-sm font-semibold"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 font-geist text-xs uppercase tracking-widest text-on-primary bg-primary shadow-[0_14px_34px_rgba(0,0,0,0.14)] hover:bg-primary-container transition-colors rounded-sm font-semibold"
                 >
                   Enquire About This Project <ArrowUpRight size={13} />
                 </a>

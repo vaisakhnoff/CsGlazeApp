@@ -33,11 +33,11 @@ export default function NewProjectPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
       <div className="flex items-center gap-4">
-        <Link href="/admin/projects" className="p-2 rounded-full hover:bg-[#222] text-[#888] hover:text-white transition-colors">
+        <Link href="/admin/projects" className="p-2 rounded-full hover:bg-[#eeeeee] text-[#888] hover:text-black transition-colors">
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-3xl font-semibold text-white tracking-tight">Add New Project</h1>
+          <h1 className="text-3xl font-semibold text-black tracking-tight">Add New Project</h1>
           <p className="text-[#888] mt-1">Fill out the details for the new portfolio item.</p>
         </div>
       </div>
@@ -49,14 +49,14 @@ export default function NewProjectPage() {
         }}
         className="space-y-6"
       >
-        <div className="p-6 rounded-xl border border-[#222] bg-[#0a0a0a] space-y-6">
+        <div className="p-6 rounded-xl border border-[#d6d6d6] bg-white space-y-6">
 
           {/* Title */}
           <div className="space-y-1">
-            <label className="text-sm font-medium text-[#ededed]">Project Title <span className="text-red-400">*</span></label>
+            <label className="text-sm font-medium text-black">Project Title <span className="text-red-400">*</span></label>
             <input
               type="text" name="title" required
-              className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#666] transition-all"
+              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
               placeholder="e.g. Skyline Glass Tower"
             />
             <FieldError errors={state.errors} field="title" />
@@ -65,12 +65,12 @@ export default function NewProjectPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Category */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-[#ededed]">Category <span className="text-red-400">*</span></label>
+              <label className="text-sm font-medium text-black">Category <span className="text-red-400">*</span></label>
               <select
                 name="category" required
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#666] transition-all appearance-none cursor-pointer"
+                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all appearance-none cursor-pointer"
               >
                 <option value="" disabled>Select a category…</option>
                 {PRESET_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -81,10 +81,10 @@ export default function NewProjectPage() {
 
             {/* Completion Year */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-[#ededed]">Completion Year</label>
+              <label className="text-sm font-medium text-black">Completion Year</label>
               <input
                 type="text" name="completionYear" maxLength={4}
-                className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#666] transition-all"
+                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
                 placeholder="e.g. 2024"
               />
               <FieldError errors={state.errors} field="completionYear" />
@@ -93,10 +93,10 @@ export default function NewProjectPage() {
 
           {isCustom && (
             <div className="space-y-1">
-              <label className="text-sm font-medium text-[#ededed]">New Category Name <span className="text-red-400">*</span></label>
+              <label className="text-sm font-medium text-black">New Category Name <span className="text-red-400">*</span></label>
               <input
                 type="text" name="customCategory" required={isCustom} autoFocus
-                className="w-full bg-[#111] border border-amber-500/40 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-400 transition-all"
+                className="w-full bg-[#f6f6f6] border border-amber-500/40 rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-amber-400 transition-all"
                 placeholder="e.g. Pergola Glass Fittings"
               />
               <p className="text-xs text-amber-400/70">This will be saved as a new category.</p>
@@ -105,22 +105,22 @@ export default function NewProjectPage() {
 
           {/* Location */}
           <div className="space-y-1">
-            <label className="text-sm font-medium text-[#ededed]">Location</label>
+            <label className="text-sm font-medium text-black">Location</label>
             <input
               type="text" name="location"
-              className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#666] transition-all"
+              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
               placeholder="e.g. Dubai, UAE"
             />
           </div>
 
           {/* Short Description */}
           <div className="space-y-1">
-            <label className="text-sm font-medium text-[#ededed]">
+            <label className="text-sm font-medium text-black">
               Short Description <span className="text-[#666] font-normal ml-2 text-xs">(max 500 chars)</span>
             </label>
             <textarea
               name="shortDescription" rows={3} maxLength={500}
-              className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#666] transition-all resize-none"
+              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all resize-none"
               placeholder="A brief overview of the project scope and challenges."
             />
             <FieldError errors={state.errors} field="shortDescription" />
@@ -128,15 +128,15 @@ export default function NewProjectPage() {
 
           {/* Featured */}
           <div className="flex items-center gap-3 py-1">
-            <input type="checkbox" name="featured" id="featured" className="w-4 h-4 rounded border-[#444] bg-[#111] accent-white cursor-pointer" />
-            <label htmlFor="featured" className="text-sm font-medium text-[#ededed] cursor-pointer">Feature on Homepage</label>
+            <input type="checkbox" name="featured" id="featured" className="w-4 h-4 rounded border-[#999] bg-[#f6f6f6] accent-black cursor-pointer" />
+            <label htmlFor="featured" className="text-sm font-medium text-black cursor-pointer">Feature on Homepage</label>
           </div>
         </div>
 
         {/* Images */}
-        <div className="p-6 rounded-xl border border-[#222] bg-[#0a0a0a] space-y-3">
+        <div className="p-6 rounded-xl border border-[#d6d6d6] bg-white space-y-3">
           <div>
-            <label className="text-sm font-medium text-[#ededed]">Project Images</label>
+            <label className="text-sm font-medium text-black">Project Images</label>
             <p className="text-xs text-[#666] mt-0.5">Upload and crop images. The first image is the cover.</p>
           </div>
           <ImageCropUploader onImagesChange={setImageIds} />
@@ -155,12 +155,12 @@ export default function NewProjectPage() {
         )}
 
         <div className="flex justify-end gap-4">
-          <Link href="/admin/projects" className="px-6 py-2.5 bg-[#111] text-white border border-[#333] text-sm font-medium rounded-md hover:bg-[#222] transition-colors">
+          <Link href="/admin/projects" className="px-6 py-2.5 bg-[#f6f6f6] text-black border border-[#c7c7c7] text-sm font-medium rounded-md hover:bg-[#eeeeee] transition-colors">
             Cancel
           </Link>
           <button
             type="submit" disabled={isPending}
-            className="px-6 py-2.5 bg-white text-black text-sm font-medium rounded-md hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2.5 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? "Saving…" : "Save Project"}
           </button>

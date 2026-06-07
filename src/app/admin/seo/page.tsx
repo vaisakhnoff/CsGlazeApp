@@ -19,22 +19,22 @@ export default async function SEOPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
       <div>
-        <h1 className="text-3xl font-semibold text-white tracking-tight">SEO Settings</h1>
+        <h1 className="text-3xl font-semibold text-black tracking-tight">SEO Settings</h1>
         <p className="text-[#888] mt-2">Control how search engines and social platforms see your site.</p>
       </div>
 
       <form action={saveSeoAction} className="space-y-6">
-        <div className="p-6 rounded-xl border border-[#222] bg-[#0a0a0a] space-y-6">
-          <h2 className="text-lg font-medium text-white border-b border-[#222] pb-2">Homepage SEO</h2>
+        <div className="p-6 rounded-xl border border-[#d6d6d6] bg-white space-y-6">
+          <h2 className="text-lg font-medium text-black border-b border-[#d6d6d6] pb-2">Homepage SEO</h2>
           {SEO_KEYS.map(({ label, key, placeholder, rows }) => (
             <div key={key} className="space-y-2">
-              <label className="text-sm font-medium text-[#ededed]">{label}</label>
+              <label className="text-sm font-medium text-black">{label}</label>
               {rows ? (
                 <textarea name={key} defaultValue={map[key] || ""} rows={rows} placeholder={placeholder}
-                  className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-[#666] transition-all outline-none resize-none" />
+                  className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all outline-none resize-none" />
               ) : (
                 <input type="text" name={key} defaultValue={map[key] || ""} placeholder={placeholder}
-                  className="w-full bg-[#111] border border-[#333] rounded-lg px-4 py-2 text-white focus:border-[#666] transition-all outline-none" />
+                  className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all outline-none" />
               )}
             </div>
           ))}
@@ -42,7 +42,7 @@ export default async function SEOPage() {
 
         <div className="flex justify-end">
           <button type="submit"
-            className="px-8 py-3 bg-white text-black text-sm font-medium rounded-md hover:bg-gray-200 transition-colors">
+            className="px-8 py-3 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors">
             Save SEO Settings
           </button>
         </div>

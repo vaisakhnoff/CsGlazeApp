@@ -31,7 +31,7 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-white/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -51,30 +51,30 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
               className="relative w-full sm:max-w-2xl max-h-[92dvh] sm:max-h-[85vh] overflow-y-auto
                 rounded-t-2xl sm:rounded-2xl
                 bg-surface/95 backdrop-blur-2xl
-                border border-white/10
-                shadow-[0_0_60px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.12)]"
+                border border-black/10
+                shadow-[0_0_60px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.9)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top edge glow */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none rounded-t-2xl" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none rounded-t-2xl" />
               {/* HUD brackets */}
               <div className="absolute top-4 left-4 pointer-events-none opacity-20">
                 <svg width="24" height="24" fill="none">
-                  <line x1="0" y1="0" x2="14" y2="0" stroke="white" strokeWidth="1.5"/>
-                  <line x1="0" y1="0" x2="0" y2="14" stroke="white" strokeWidth="1.5"/>
+                  <line x1="0" y1="0" x2="14" y2="0" stroke="black" strokeWidth="1.5"/>
+                  <line x1="0" y1="0" x2="0" y2="14" stroke="black" strokeWidth="1.5"/>
                 </svg>
               </div>
               <div className="absolute top-4 right-12 pointer-events-none opacity-20">
                 <svg width="24" height="24" fill="none">
-                  <line x1="24" y1="0" x2="10" y2="0" stroke="white" strokeWidth="1.5"/>
-                  <line x1="24" y1="0" x2="24" y2="14" stroke="white" strokeWidth="1.5"/>
+                  <line x1="24" y1="0" x2="10" y2="0" stroke="black" strokeWidth="1.5"/>
+                  <line x1="24" y1="0" x2="24" y2="14" stroke="black" strokeWidth="1.5"/>
                 </svg>
               </div>
 
               {/* Close */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/8 border border-white/10 text-white/60 hover:text-white hover:bg-white/15 transition-colors"
+                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 border border-black/10 text-black/60 hover:text-black hover:bg-black/10 transition-colors"
                 aria-label="Close"
               >
                 <X size={15} />
@@ -82,7 +82,7 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
 
               {/* Mobile drag hint */}
               <div className="sm:hidden flex justify-center pt-3 pb-1">
-                <div className="w-10 h-1 rounded-full bg-white/20" />
+                <div className="w-10 h-1 rounded-full bg-black/20" />
               </div>
 
               <div className="p-6 sm:p-8">
