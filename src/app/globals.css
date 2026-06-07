@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography */
+  --font-sans: var(--font-inter);
+  --font-montserrat: var(--font-montserrat);
+  --font-geist: var(--font-geist);
+
+  /* Colors */
+  --color-surface: #121416;
+  --color-surface-dim: #0b0c0d;
+  --color-surface-bright: #34383a;
+  --color-surface-container-lowest: #08090a;
+  --color-surface-container-low: #101214;
+  --color-surface-container: #16191b;
+  --color-surface-container-high: #1d2124;
+  --color-surface-container-highest: #272c2f;
+  --color-on-surface: #f1f3f2;
+  --color-on-surface-variant: #a8afb2;
+  --color-inverse-surface: #f1f3f2;
+  --color-inverse-on-surface: #121416;
+  --color-outline: #8b9497;
+  --color-outline-variant: #31383b;
+  --color-surface-tint: #d8c48f;
+  --color-primary: #d8c48f;
+  --color-on-primary: #15130d;
+  --color-primary-container: #2a2518;
+  --color-on-primary-container: #f0dfaa;
+  --color-inverse-primary: #6b5b2e;
+  --color-secondary: #c9d1d5;
+  --color-on-secondary: #111619;
+  --color-secondary-container: #293036;
+  --color-on-secondary-container: #d9e2e6;
+  --color-tertiary: #8ecdf8;
+  --color-on-tertiary: #071a27;
+  --color-tertiary-container: #102b3f;
+  --color-on-tertiary-container: #b8e3ff;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-background: #0b0c0d;
+  --color-on-background: #f1f3f2;
+  --color-surface-variant: #1d2124;
+
+  /* Shapes & Spacing */
+  --radius-none: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
+  /* Custom Utilities */
+  --blur-glass: 20px;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-background);
+    color: var(--color-on-background);
+  }
+}
+
+@layer utilities {
+  .heavy-glass {
+    background-color: rgba(241, 243, 242, 0.035);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .ambient-shadow {
+    box-shadow: 0 40px 40px -20px rgba(4, 6, 7, 0.55);
+  }
+  
+  .glass-border-gradient {
+    border-image: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)) 1;
+  }
+}
