@@ -134,12 +134,13 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* CS Glaze logo video — right side, revealed after animations */}
+      {/* CS Glaze logo video — centered + shifted up on mobile, right-side on desktop */}
       <motion.div
         initial={{ opacity: 0, scale: 0.85 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute right-0 top-0 h-full w-1/2 z-10 flex items-center justify-center pointer-events-none select-none translate-x-[-45%]"
+        className="absolute inset-0 z-5 flex items-center justify-center pointer-events-none select-none translate-y-[-20%]
+                   md:inset-auto md:right-0 md:top-0 md:h-full md:w-1/2 md:z-10 md:translate-x-[-45%] md:translate-y-0"
       >
         <video
           src="/cs-glaze-logo-Picsart-BackgroundRemover.webm"
@@ -147,7 +148,8 @@ export const Hero = () => {
           loop
           muted
           playsInline
-          className="h-[90%] w-[90%] object-contain opacity-85"
+          className="w-[300vw] h-auto object-contain opacity-[0.88]
+                     md:w-[90%] md:h-[90%] md:opacity-70"
         />
       </motion.div>
 
