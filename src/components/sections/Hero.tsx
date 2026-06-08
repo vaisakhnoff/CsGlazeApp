@@ -148,7 +148,7 @@ export const Hero = () => {
           loop
           muted
           playsInline
-          className="w-[300vw] h-auto object-contain opacity-[0.88]
+          className="w-[400vw] h-auto object-contain opacity-[0.88]
                      md:w-[90%] md:h-[90%] md:opacity-70"
         />
       </motion.div>
