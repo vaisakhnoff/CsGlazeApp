@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -29,10 +30,14 @@ export const Footer = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <Link href="/" className="inline-block mb-6">
-            <span className="font-montserrat font-bold text-3xl tracking-tighter text-on-surface">
-              CS GLAZE
-            </span>
+          <Link href="/" className="relative mb-6 inline-flex h-36 w-24 items-center">
+            <Image
+              src="/cs-glaze-logo.png"
+              alt="CS Glaze"
+              width={314}
+              height={444}
+              className="h-full w-full object-contain"
+            />
           </Link>
           <p className="text-on-surface-variant max-w-md font-inter text-sm leading-relaxed mb-6">
             Engineered perfection in structural glazing and premium facade systems.
@@ -41,43 +46,47 @@ export const Footer = () => {
           </p>
         </motion.div>
 
-        {/* Services links */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <h4 className="font-geist font-semibold text-xs tracking-widest uppercase text-on-surface mb-6">Services</h4>
-          <ul className="flex flex-col gap-4">
-            {["Façades", "ACP Cladding", "Unitized Systems", "Spider Glazing"].map((item) => (
-              <li key={item}>
-                <Link href="#" className="text-on-surface-variant hover:text-tertiary transition-colors text-sm font-inter">
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
+        {/* Services + Company */}
+        <div className="relative col-span-1 md:col-span-2 grid grid-cols-2 gap-12">
 
-        {/* Company links */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.18 }}
-        >
-          <h4 className="font-geist font-semibold text-xs tracking-widest uppercase text-on-surface mb-6">Company</h4>
-          <ul className="flex flex-col gap-4">
-            {["Structural Glazing", "Sustainability", "Contact", "Careers"].map((item) => (
-              <li key={item}>
-                <Link href="#" className="text-on-surface-variant hover:text-tertiary transition-colors text-sm font-inter">
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
+          {/* Services links */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <h4 className="font-geist font-semibold text-xs tracking-widest uppercase text-on-surface mb-6">Services</h4>
+            <ul className="flex flex-col gap-4">
+              {["Façades", "ACP Cladding", "Unitized Systems", "Spider Glazing"].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-on-surface-variant hover:text-tertiary transition-colors text-sm font-inter">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Company links */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.18 }}
+          >
+            <h4 className="font-geist font-semibold text-xs tracking-widest uppercase text-on-surface mb-6">Company</h4>
+            <ul className="flex flex-col gap-4">
+              {["Structural Glazing", "Sustainability", "Contact", "Careers"].map((item) => (
+                <li key={item}>
+                  <Link href="#" className="text-on-surface-variant hover:text-tertiary transition-colors text-sm font-inter">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
       </div>
 
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row items-center justify-between gap-4">

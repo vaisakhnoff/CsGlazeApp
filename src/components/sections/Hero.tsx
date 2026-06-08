@@ -134,6 +134,23 @@ export const Hero = () => {
         </motion.div>
       </motion.div>
 
+      {/* CS Glaze logo video — right side, revealed after animations */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+        className="absolute right-0 top-0 h-full w-1/2 z-10 flex items-center justify-center pointer-events-none select-none translate-x-[-45%]"
+      >
+        <video
+          src="/cs-glaze-logo-Picsart-BackgroundRemover.webm"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-[90%] w-[90%] object-contain opacity-85"
+        />
+      </motion.div>
+
       {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -25,10 +26,15 @@ export const Navbar = () => {
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-6 lg:px-20 h-20 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 z-50">
-          <span className="font-montserrat font-bold text-2xl tracking-tighter text-on-surface">
-            CS GLAZE
-          </span>
+        <Link href="/" className="relative z-50 flex h-16 w-12 items-center">
+          <Image
+            src="/cs-glaze-logo.png"
+            alt="CS Glaze"
+            width={314}
+            height={444}
+            priority
+            className="h-full w-full object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
