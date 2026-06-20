@@ -11,14 +11,29 @@ interface GlassCardProps extends HTMLMotionProps<"div"> {
 }
 
 export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
-  ({ className, children, tiltOnHover = true, glowColor = "rgba(0,0,0,0.08)", ...props }, ref) => {
+  (
+    {
+      className,
+      children,
+      tiltOnHover = false,
+      glowColor = "rgba(252, 163, 17, 0.1)",
+      ...props
+    },
+    ref
+  ) => {
     const cardRef = useRef<HTMLDivElement>(null);
 
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), { stiffness: 400, damping: 30 });
-    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), { stiffness: 400, damping: 30 });
+    const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [2, -2]), {
+      stiffness: 400,
+      damping: 30,
+    });
+    const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-2, 2]), {
+      stiffness: 400,
+      damping: 30,
+    });
     const sheenX = useTransform(mouseX, [-0.5, 0.5], ["-30%", "130%"]);
     const sheenY = useTransform(mouseY, [-0.5, 0.5], ["-30%", "130%"]);
 
@@ -26,10 +41,8 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
       if (!tiltOnHover) return;
       const rect = cardRef.current?.getBoundingClientRect();
       if (!rect) return;
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      mouseX.set(x);
-      mouseY.set(y);
+      mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+      mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
     };
 
     const handleMouseLeave = () => {
@@ -44,46 +57,37 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
-        style={tiltOnHover ? { rotateX, rotateY, transformStyle: "preserve-3d" } : undefined}
+        style={
+          tiltOnHover ? { rotateX, rotateY, transformStyle: "preserve-3d" } : undefined
+        }
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        whileHover={{ y: -6, scale: 1.01 }}
         transition={{ type: "spring", stiffness: 280, damping: 22 }}
         className={cn(
-          // Core glass layers
-          "relative overflow-hidden",
-          "bg-gradient-to-br from-white via-white to-surface-container-low",
-          "backdrop-blur-xl",
-          // Multi-layered border
-          "border border-black/10",
-          "shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(0,0,0,0.06)]",
-          "rounded-xl",
+          "relative overflow-hidden rounded-xl",
+          "bg-white",
+          "border border-border",
+          "shadow-[0_4px_12px_rgba(0,0,0,0.05)]",
+          "hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)]",
+          "transition-shadow duration-300",
           className
         )}
         {...props}
       >
-        {/* Sheen / specular highlight layer */}
+        {/* Sheen layer on hover */}
         {tiltOnHover && (
           <motion.div
             className="pointer-events-none absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             style={{
-              background: `radial-gradient(circle at ${sheenX} ${sheenY}, rgba(0,0,0,0.06) 0%, transparent 70%)`,
+              background: `radial-gradient(circle at ${sheenX} ${sheenY}, ${glowColor} 0%, transparent 70%)`,
             }}
           />
         )}
-        {/* Top edge inner highlight */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
-        {/* Glow behind on hover */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500"
-          whileHover={{ opacity: 1 }}
-          style={{
-            background: `radial-gradient(ellipse at 50% 0%, ${glowColor} 0%, transparent 70%)`,
-          }}
-        />
+
         <div className="relative z-[1]">{children}</div>
       </motion.div>
     );
   }
 );
+
 GlassCard.displayName = "GlassCard";

@@ -13,7 +13,7 @@ export default async function HomepageEditorPage() {
   }, {} as Record<string, string>);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-3xl">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h1 className="text-3xl font-semibold text-black tracking-tight">Homepage Editor</h1>
         <p className="text-[#888] mt-2">Update the text content for the main landing page.</p>
@@ -85,6 +85,7 @@ export default async function HomepageEditorPage() {
         {/* CONTACT INFO */}
         <div className="p-6 rounded-xl border border-[#d6d6d6] bg-white space-y-6">
           <h2 className="text-lg font-medium text-black border-b border-[#d6d6d6] pb-2">Global Contact Info</h2>
+          <p className="text-xs text-[#888]">These values appear live on the homepage Hero and Contact sections immediately after saving.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -92,25 +93,38 @@ export default async function HomepageEditorPage() {
               <input 
                 type="text" 
                 name="contact_phone"
-                defaultValue={contentMap["contact_phone"] || "+971 50 123 4567"}
+                defaultValue={contentMap["contact_phone"] || ""}
+                placeholder="+91 98765 43210"
                 className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-black">WhatsApp</label>
+              <label className="text-sm font-medium text-black">WhatsApp Number</label>
               <input 
                 type="text" 
                 name="contact_whatsapp"
-                defaultValue={contentMap["contact_whatsapp"] || "+971 50 123 4567"}
+                defaultValue={contentMap["contact_whatsapp"] || ""}
+                placeholder="+91 98765 43210"
                 className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all"
               />
             </div>
-            <div className="space-y-2 md:col-span-2">
+            <div className="space-y-2">
               <label className="text-sm font-medium text-black">Email Address</label>
               <input 
                 type="email" 
                 name="contact_email"
-                defaultValue={contentMap["contact_email"] || "info@csglaze.com"}
+                defaultValue={contentMap["contact_email"] || ""}
+                placeholder="info@csglaze.com"
+                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-black">Office Location</label>
+              <input 
+                type="text" 
+                name="contact_location"
+                defaultValue={contentMap["contact_location"] || ""}
+                placeholder="e.g. Kochi, Kerala, India"
                 className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2 text-black focus:border-black transition-all"
               />
             </div>

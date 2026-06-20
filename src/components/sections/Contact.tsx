@@ -1,176 +1,295 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { Button } from "@/components/ui/Button";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import React, { useState, useActionState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { AlertCircle, CheckCircle2, Mail, MapPin, Phone } from "lucide-react";
+import { submitContactAction, type ContactFormState } from "@/app/actions/contact";
+import { ClipReveal } from "@/components/ui/ClipReveal";
 
-type Fields = { name: string; company: string; email: string; message: string };
-type Errors = Partial<Record<keyof Fields, string>>;
-
-function validate(f: Fields): Errors {
-  const e: Errors = {};
-  if (!f.name.trim()) e.name = "Full name is required.";
-  else if (f.name.trim().length < 2) e.name = "Name must be at least 2 characters.";
-  if (!f.email.trim()) e.email = "Email address is required.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) e.email = "Enter a valid email address.";
-  if (!f.message.trim()) e.message = "Please describe your project.";
-  else if (f.message.trim().length < 10) e.message = "Message must be at least 10 characters.";
-  return e;
-}
+const INITIAL_STATE: ContactFormState = { status: "idle" };
 
 function FieldErr({ msg }: { msg?: string }) {
   if (!msg) return null;
   return (
-    <p className="flex items-center gap-1.5 mt-1.5 text-xs text-red-400">
-      <AlertCircle size={11} className="flex-shrink-0" />{msg}
+    <p className="flex items-center gap-1.5 mt-1.5 text-xs text-error">
+      <AlertCircle size={12} className="flex-shrink-0" />
+      {msg}
     </p>
   );
 }
 
-export const Contact = () => {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+interface ContactProps {
+  /** Loaded from PageContent DB by the server parent */
+  location?: string;
+  email?: string;
+  phone?: string;
+  whatsapp?: string;
+}
 
-  const [fields, setFields]   = useState<Fields>({ name: "", company: "", email: "", message: "" });
-  const [errors, setErrors]   = useState<Errors>({});
-  const [touched, setTouched] = useState<Partial<Record<keyof Fields, boolean>>>({});
-  const [submitted, setSubmitted] = useState(false);
+export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
+  const [state, formAction, isPending] = useActionState(submitContactAction, INITIAL_STATE);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const v = e.target.value;
-    setFields(f => ({ ...f, [k]: v }));
-    if (touched[k]) setErrors(err => ({ ...err, [k]: validate({ ...fields, [k]: v })[k] }));
-  };
+  // Reset form on success
+  useEffect(() => {
+    if (state.status === "success") {
+      formRef.current?.reset();
+      setTouched({});
+    }
+  }, [state.status]);
 
-  const blur = (k: keyof Fields) => () => {
-    setTouched(t => ({ ...t, [k]: true }));
-    setErrors(err => ({ ...err, [k]: validate(fields)[k] }));
-  };
+  const blur = (k: string) => () => setTouched((t) => ({ ...t, [k]: true }));
 
-  const inputCls = (k: keyof Fields) =>
-    `bg-transparent border-b py-2 text-on-surface focus:outline-none transition-all font-inter w-full ${
-      touched[k] && errors[k] ? "border-red-500/60 focus:border-red-400" : "border-outline-variant/20 focus:border-tertiary focus:border-b-2"
-    }`;
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const allTouched = { name: true, company: true, email: true, message: true };
-    setTouched(allTouched);
-    const errs = validate(fields);
-    setErrors(errs);
-    if (Object.keys(errs).length === 0) setSubmitted(true);
-  };
+  const displayLocation = location || "Kerala, India";
+  const displayEmail    = email    || "info@csglaze.com";
+  const displayPhone    = phone    || whatsapp || null;
 
   return (
-    <section
-      id="contact"
-      ref={ref}
-      className="py-32 bg-surface-dim relative z-10 border-t border-outline-variant/10 overflow-hidden"
-    >
-      {/* Scanline sweep */}
-      <motion.div
-        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-black/15 to-transparent"
-        initial={{ top: 0, opacity: 0 }}
-        animate={inView ? { top: ["0%", "100%"], opacity: [0, 0.5, 0] } : {}}
-        transition={{ duration: 1.6, ease: "linear", delay: 0.2 }}
-      />
-      {/* HUD corners */}
-      <div className="absolute top-6 left-6 pointer-events-none opacity-20">
-        <svg width="36" height="36" fill="none"><line x1="0" y1="0" x2="22" y2="0" stroke="black" strokeWidth="1.5"/><line x1="0" y1="0" x2="0" y2="22" stroke="black" strokeWidth="1.5"/></svg>
-      </div>
-      <div className="absolute bottom-6 right-6 pointer-events-none opacity-20">
-        <svg width="36" height="36" fill="none"><line x1="36" y1="36" x2="14" y2="36" stroke="black" strokeWidth="1.5"/><line x1="36" y1="36" x2="36" y2="14" stroke="black" strokeWidth="1.5"/></svg>
-      </div>
+    <section id="contact" className="section-spacing bg-background relative overflow-hidden">
+      {/* Top line */}
+      <div className="line-h absolute top-0 left-0 right-0 opacity-25" />
 
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+      {/* Background glows */}
+      <div className="absolute top-20 right-0 w-96 h-96 bg-primary opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container-premium relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-12 lg:gap-16 items-start">
+
+          {/* ── LEFT: Content ── */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="font-montserrat text-4xl md:text-6xl font-bold tracking-tight text-on-surface mb-6">
-              Request a Technical Proposal
-            </h2>
-            <p className="font-inter text-on-surface-variant text-lg mb-12 max-w-md">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="line-accent animated" />
+              <span className="font-mono text-xs font-semibold text-accent uppercase tracking-widest">
+                Get in Touch
+              </span>
+            </div>
+
+            <ClipReveal>
+              <h2
+                className="font-heading font-bold text-primary leading-tight mb-4"
+                style={{ fontSize: "clamp(32px, 4vw, 56px)" }}
+              >
+                Request a Technical Proposal
+              </h2>
+            </ClipReveal>
+
+            {/* Animated underline */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{ transformOrigin: "left" }}
+              className="h-px bg-gradient-to-r from-accent via-accent/30 to-transparent mb-6 w-3/4"
+            />
+
+            <p className="text-base lg:text-lg text-text-secondary leading-relaxed mb-10 max-w-[480px]">
               Connect with our engineering team to discuss structural requirements, materiality, and project timelines.
             </p>
-            <div className="space-y-8">
-              {[{ label: "Location", value: "Global HQ, Dubai, UAE" }, { label: "Direct Inquiry", value: "engineering@csglaze.com" }]
-                .map((item, i) => (
-                  <motion.div key={item.label} initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}>
-                    <h4 className="font-geist text-xs uppercase tracking-widest text-on-surface-variant mb-2">{item.label}</h4>
-                    <p className="font-inter text-on-surface">{item.value}</p>
-                  </motion.div>
-                ))}
+
+            {/* Contact Info */}
+            <div className="space-y-5">
+              <div className="flex items-start gap-4 group">
+                <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <MapPin size={18} className="text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Location</h3>
+                  <p className="text-text-secondary text-sm">{displayLocation}</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 group">
+                <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <Mail size={18} className="text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Direct Inquiry</h3>
+                  <a
+                    href={`mailto:${displayEmail}`}
+                    className="text-text-secondary text-sm hover:text-accent transition-colors"
+                  >
+                    {displayEmail}
+                  </a>
+                </div>
+              </div>
+
+              {displayPhone && (
+                <div className="flex items-start gap-4 group">
+                  <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                    <Phone size={18} className="text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Phone</h3>
+                    <a
+                      href={`tel:${displayPhone.replace(/\s+/g, "")}`}
+                      className="text-text-secondary text-sm hover:text-accent transition-colors"
+                    >
+                      {displayPhone}
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Decorative vertical line accent */}
+            <div className="mt-10 flex items-center gap-4">
+              <div className="w-px h-16 bg-gradient-to-b from-transparent via-accent to-transparent opacity-60" />
+              <p className="text-xs text-text-tertiary font-mono">
+                Response within 1 business day
+              </p>
             </div>
           </motion.div>
 
+          {/* ── RIGHT: Form ── */}
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-surface-container p-8 md:p-12 border border-outline-variant/20 overflow-hidden"
           >
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none"/>
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% -10%, rgba(0,0,0,0.05) 0%, transparent 66%)" }}/>
+            <div className="card-premium p-7 lg:p-10 relative overflow-hidden">
+              {/* Corner line accents */}
+              <div className="line-corner-tl" />
+              <div className="line-corner-br" />
 
-            {submitted ? (
-              <div className="flex flex-col items-center justify-center h-full min-h-[300px] gap-4 text-center">
-                <CheckCircle2 size={48} className="text-primary" />
-                <h3 className="font-montserrat text-2xl font-semibold text-black">Proposal Request Sent</h3>
-                <p className="font-inter text-black/55 text-sm max-w-xs">Our engineering team will reach out within 1 business day.</p>
-                <button onClick={() => { setSubmitted(false); setFields({ name: "", company: "", email: "", message: "" }); setTouched({}); setErrors({}); }}
-                  className="mt-4 text-xs font-geist uppercase tracking-widest text-black/45 hover:text-black transition-colors">
-                  Send Another
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-8 relative" onSubmit={handleSubmit} noValidate>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="name" className="font-geist text-xs uppercase tracking-widest text-on-surface-variant">
-                      Full Name <span className="text-red-400">*</span>
+              {state.status === "success" ? (
+                <div className="flex flex-col items-center justify-center min-h-[360px] gap-4 text-center">
+                  <div className="w-14 h-14 rounded-full bg-success-light flex items-center justify-center mb-1">
+                    <CheckCircle2 size={28} className="text-success" />
+                  </div>
+                  <h3 className="text-2xl font-heading font-bold text-primary">
+                    Proposal Request Sent
+                  </h3>
+                  <p className="text-text-secondary text-sm max-w-xs">
+                    Our engineering team will reach out within 1 business day. We&apos;ve received your enquiry!
+                  </p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-3 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
+                  >
+                    Send Another Request
+                  </button>
+                </div>
+              ) : (
+                <form ref={formRef} className="space-y-5" action={formAction} noValidate>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Name — floating label */}
+                    <div className="floating-field">
+                      <input
+                        type="text"
+                        id="contact-name"
+                        name="name"
+                        placeholder=" "
+                        onBlur={blur("name")}
+                        className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                          touched.name && state.errors?.name
+                            ? "border-error focus:ring-error/20"
+                            : "border-border focus:ring-accent/20 focus:border-accent"
+                        }`}
+                      />
+                      <label htmlFor="contact-name">
+                        Full Name <span className="text-error">*</span>
+                      </label>
+                      {touched.name && <FieldErr msg={state.errors?.name} />}
+                    </div>
+
+                    {/* Company — floating label */}
+                    <div className="floating-field">
+                      <input
+                        type="text"
+                        id="contact-company"
+                        name="company"
+                        placeholder=" "
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-primary focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm"
+                      />
+                      <label htmlFor="contact-company">Company</label>
+                    </div>
+                  </div>
+
+                  {/* Email — floating label */}
+                  <div className="floating-field">
+                    <input
+                      type="email"
+                      id="contact-email"
+                      name="email"
+                      placeholder=" "
+                      onBlur={blur("email")}
+                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                        touched.email && state.errors?.email
+                          ? "border-error focus:ring-error/20"
+                          : "border-border focus:ring-accent/20 focus:border-accent"
+                      }`}
+                    />
+                    <label htmlFor="contact-email">
+                      Email Address <span className="text-error">*</span>
                     </label>
-                    <input type="text" id="name" value={fields.name} onChange={set("name")} onBlur={blur("name")}
-                      className={inputCls("name")} placeholder="John Smith" />
-                    <FieldErr msg={touched.name ? errors.name : undefined} />
+                    {touched.email && <FieldErr msg={state.errors?.email} />}
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label htmlFor="company" className="font-geist text-xs uppercase tracking-widest text-on-surface-variant">Company</label>
-                    <input type="text" id="company" value={fields.company} onChange={set("company")} onBlur={blur("company")}
-                      className={inputCls("company")} placeholder="Acme Corp" />
+
+                  {/* Phone — floating label */}
+                  <div className="floating-field">
+                    <input
+                      type="tel"
+                      id="contact-phone"
+                      name="phone"
+                      placeholder=" "
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-primary focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm"
+                    />
+                    <label htmlFor="contact-phone">Phone Number</label>
                   </div>
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="email" className="font-geist text-xs uppercase tracking-widest text-on-surface-variant">
-                    Email Address <span className="text-red-400">*</span>
-                  </label>
-                  <input type="email" id="email" value={fields.email} onChange={set("email")} onBlur={blur("email")}
-                    className={inputCls("email")} placeholder="you@company.com" />
-                  <FieldErr msg={touched.email ? errors.email : undefined} />
-                </div>
+                  {/* Message — floating label */}
+                  <div className="floating-field">
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      rows={4}
+                      placeholder=" "
+                      onBlur={blur("message")}
+                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all resize-none text-sm ${
+                        touched.message && state.errors?.message
+                          ? "border-error focus:ring-error/20"
+                          : "border-border focus:ring-accent/20 focus:border-accent"
+                      }`}
+                    />
+                    <label htmlFor="contact-message">
+                      Project Details <span className="text-error">*</span>
+                    </label>
+                    {touched.message && <FieldErr msg={state.errors?.message} />}
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="font-geist text-xs uppercase tracking-widest text-on-surface-variant">
-                    Project Details <span className="text-red-400">*</span>
-                  </label>
-                  <textarea id="message" rows={4} value={fields.message} onChange={set("message")} onBlur={blur("message")}
-                    className={inputCls("message")} placeholder="Describe your project scope, location, and timeline…" />
-                  <FieldErr msg={touched.message ? errors.message : undefined} />
-                </div>
+                  {/* Server-level error message */}
+                  {state.status === "error" && state.message && (
+                    <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-error-light border border-error/20 text-error text-sm">
+                      <AlertCircle size={16} className="flex-shrink-0" />
+                      {state.message}
+                    </div>
+                  )}
 
-                <Button type="submit" size="lg" className="w-full md:w-auto">Submit Specifications</Button>
-              </form>
-            )}
+                  <button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full px-8 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl hover:shadow-accent transition-all duration-300 hover-lift disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {isPending ? "Sending…" : "Submit Specifications"}
+                  </button>
+                </form>
+              )}
+            </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Bottom line */}
+      <div className="line-h absolute bottom-0 left-0 right-0 opacity-20" />
     </section>
   );
 };

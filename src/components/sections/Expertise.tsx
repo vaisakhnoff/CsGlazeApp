@@ -2,15 +2,15 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { ClipReveal } from "@/components/ui/ClipReveal";
 
 const stats = [
   { label: "Projects Completed", value: 150, suffix: "+" },
-  { label: "Years Experience",   value: 12,  suffix: "" },
-  { label: "Square Meters Glazed", value: 500, suffix: "k+" },
-  { label: "Safety Record",      value: 100, suffix: "%" },
+  { label: "Years Experience", value: 12, suffix: "+" },
+  { label: "Square Meters", value: 500, suffix: "k+" },
+  { label: "Safety Record", value: 100, suffix: "%" },
 ];
 
-// Animated counter that counts up when in view
 function Counter({ target, suffix }: { target: number; suffix: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
@@ -34,89 +34,91 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
 }
 
 export const Expertise = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-80px" });
-
   return (
-    <section
-      id="expertise"
-      ref={sectionRef}
-      className="py-32 bg-background relative z-10 border-t border-outline-variant/10 overflow-hidden"
-    >
-      {/* Blueprint scanline sweep — plays once on section enter */}
-      <motion.div
-        className="pointer-events-none absolute left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-black/20 to-transparent"
-        initial={{ top: 0, opacity: 0 }}
-        animate={inView ? { top: ["0%", "100%"], opacity: [0, 0.6, 0] } : {}}
-        transition={{ duration: 1.4, ease: "linear", delay: 0.1 }}
-      />
+    <section id="expertise" className="section-spacing bg-white relative overflow-hidden">
+      {/* Top line */}
+      <div className="line-h absolute top-0 left-0 right-0 opacity-25" />
 
-      {/* Corner HUD bracket — top-right */}
-      <div className="absolute top-6 right-6 pointer-events-none opacity-20">
-        <svg width="40" height="40" fill="none">
-          <line x1="40" y1="0" x2="18" y2="0"  stroke="black" strokeWidth="1.5"/>
-          <line x1="40" y1="0" x2="40" y2="22" stroke="black" strokeWidth="1.5"/>
-        </svg>
-      </div>
-      <div className="absolute bottom-6 left-6 pointer-events-none opacity-20">
-        <svg width="40" height="40" fill="none">
-          <line x1="0" y1="40" x2="22" y2="40" stroke="black" strokeWidth="1.5"/>
-          <line x1="0" y1="40" x2="0"  y2="18" stroke="black" strokeWidth="1.5"/>
-        </svg>
-      </div>
+      {/* Background glow */}
+      <div className="absolute top-20 left-10 w-80 h-80 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-[1440px] mx-auto px-6 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+      <div className="container-premium relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+          {/* Left: Content */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="mb-4 flex items-center gap-4">
-              <div className="h-[1px] w-8 bg-tertiary" />
-              <span className="font-geist text-xs font-semibold tracking-widest uppercase text-tertiary">
+            <div className="flex items-center gap-3 mb-5">
+              <span className="line-accent animated" />
+              <span className="font-mono text-xs font-semibold text-accent uppercase tracking-widest">
                 Why Choose Us
               </span>
             </div>
-            <h2 className="font-montserrat text-4xl md:text-5xl font-semibold tracking-tight text-on-surface mb-8">
-              Precision at scale.
-            </h2>
-            <p className="font-inter text-on-surface-variant text-lg leading-relaxed mb-8">
-              We bridge the gap between architectural vision and structural reality. Our dedicated engineering team ensures that every glass pane, composite panel, and structural element meets the highest standards of safety, performance, and aesthetic perfection.
+
+            <ClipReveal>
+              <h2
+                className="font-heading font-bold text-primary leading-tight mb-5"
+                style={{ fontSize: "clamp(32px, 4vw, 56px)" }}
+              >
+                Precision engineering at scale
+              </h2>
+            </ClipReveal>
+
+            {/* Animated line under heading */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{ transformOrigin: "left" }}
+              className="h-px bg-gradient-to-r from-accent via-accent/30 to-transparent mb-6 w-3/4"
+            />
+
+            <p className="text-base lg:text-lg text-text-secondary leading-relaxed mb-4 max-w-[560px]">
+              We bridge the gap between architectural vision and structural reality. Our dedicated
+              engineering team ensures every glass pane, composite panel, and structural element
+              meets the highest international standards.
             </p>
-            <p className="font-inter text-on-surface-variant text-lg leading-relaxed">
-              From conceptual design and 3D modeling to fabrication and rigorous on-site installation, we own the entire lifecycle of the facade.
+            <p className="text-base lg:text-lg text-text-secondary leading-relaxed max-w-[560px]">
+              From conceptual design and 3D modeling to fabrication and rigorous on-site
+              installation, we own the entire lifecycle of the facade.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 gap-[1px] bg-outline-variant/20 p-[1px]">
+          {/* Right: Stats Grid */}
+          <div className="grid grid-cols-2 gap-4">
             {stats.map((stat, idx) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="relative bg-surface p-8 sm:p-10 flex flex-col justify-center items-center text-center group hover:bg-surface-container-low transition-colors overflow-hidden"
+                className="card-premium p-6 lg:p-8 text-center group line-hover-bottom relative overflow-hidden"
               >
-                {/* Glass glow on hover */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(0,0,0,0.05) 0%, transparent 70%)" }}/>
-                {/* Top edge highlight */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none"/>
+                {/* Corner accent */}
+                <div className="line-corner-tl" />
 
-                <div className="font-montserrat text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface mb-3 group-hover:text-tertiary transition-colors tabular-nums">
+                <div
+                  className="font-heading font-bold text-gradient-accent mb-2 tabular-nums"
+                  style={{ fontSize: "clamp(32px, 3.5vw, 48px)" }}
+                >
                   <Counter target={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="font-geist text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-widest">
-                  {stat.label}
-                </div>
+                <div className="text-sm text-text-secondary font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Bottom line */}
+      <div className="line-h absolute bottom-0 left-0 right-0 opacity-20" />
     </section>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
-import { FolderOpen, Image as ImageIcon, MessageSquareQuote, FileText } from "lucide-react";
+import { FolderOpen, Image as ImageIcon, MessageSquareQuote, FileText, Wrench, Plus } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -8,11 +8,13 @@ export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   const [
     projectsCount,
+    servicesCount,
     imagesCount,
     testimonialsCount,
     contentItemsCount
   ] = await Promise.all([
     prisma.project.count(),
+    prisma.service.count(),
     prisma.image.count(),
     prisma.testimonial.count(),
     prisma.pageContent.count(),
@@ -20,9 +22,10 @@ export default async function AdminDashboard() {
 
   const stats = [
     { name: "Total Projects", value: projectsCount, icon: FolderOpen, href: "/admin/projects" },
+    { name: "Services", value: servicesCount, icon: Wrench, href: "/admin/services" },
     { name: "Gallery Images", value: imagesCount, icon: ImageIcon, href: "/admin/media" },
     { name: "Testimonials", value: testimonialsCount, icon: MessageSquareQuote, href: "/admin/testimonials" },
-    { name: "Content Keys Edited", value: contentItemsCount, icon: FileText, href: "/admin/homepage" },
+    { name: "Content Keys", value: contentItemsCount, icon: FileText, href: "/admin/homepage" },
   ];
 
   return (
@@ -55,16 +58,28 @@ export default async function AdminDashboard() {
 
       <div className="p-8 rounded-xl bg-white border border-[#d6d6d6]">
         <h2 className="text-lg font-medium text-black mb-4">Quick Actions</h2>
-        <div className="flex gap-4">
-          <Link 
-            href="/admin/projects/new" 
-            className="px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors"
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/admin/projects/new"
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors"
           >
-            + Add New Project
+            <Plus size={14} /> Add Project
           </Link>
-          <Link 
-            href="/admin/media" 
-            className="px-4 py-2 bg-[#f6f6f6] border border-[#c7c7c7] text-black text-sm font-medium rounded-md hover:bg-[#eeeeee] transition-colors"
+          <Link
+            href="/admin/services/new"
+            className="flex items-center gap-2 px-4 py-2 bg-[#f6f6f6] border border-[#c7c7c7] text-black text-sm font-medium rounded-md hover:bg-[#eeeeee] transition-colors"
+          >
+            <Plus size={14} /> Add Service
+          </Link>
+          <Link
+            href="/admin/testimonials"
+            className="flex items-center gap-2 px-4 py-2 bg-[#f6f6f6] border border-[#c7c7c7] text-black text-sm font-medium rounded-md hover:bg-[#eeeeee] transition-colors"
+          >
+            <Plus size={14} /> Add Testimonial
+          </Link>
+          <Link
+            href="/admin/media"
+            className="flex items-center gap-2 px-4 py-2 bg-[#f6f6f6] border border-[#c7c7c7] text-black text-sm font-medium rounded-md hover:bg-[#eeeeee] transition-colors"
           >
             Upload Media
           </Link>

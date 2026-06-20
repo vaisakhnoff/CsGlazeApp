@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-// Inline the JWT check here — avoids Edge Runtime module resolution issues
-const secretKey = process.env.SESSION_SECRET || "default_super_secret_key_change_me_in_prod";
+// Middleware runs on Edge — read secret directly from env (no module-level throw on Edge)
+const secretKey = process.env.SESSION_SECRET ?? "";
 const encodedKey = new TextEncoder().encode(secretKey);
 
 const protectedRoutes = ["/admin"];

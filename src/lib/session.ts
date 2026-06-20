@@ -1,8 +1,16 @@
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 
-const secretKey = process.env.SESSION_SECRET || "default_super_secret_key_change_me_in_prod";
+if (!process.env.SESSION_SECRET) {
+  throw new Error(
+    "SESSION_SECRET environment variable is not set. " +
+    "Add it to your .env file: SESSION_SECRET=<a long random string>"
+  );
+}
+
+const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
+
 
 export async function createSession() {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days

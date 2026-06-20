@@ -49,3 +49,30 @@ model PageContent {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+model Service {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  specs        String   // JSON stringified array of strings
+  icon         String   // Lucide icon name
+  glow         String   
+  accent       String   
+  overview     String
+  features     String   // JSON stringified array of strings
+  applications String   // JSON stringified array of strings
+  imageUrl     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model ContactEnquiry {
+  id        String   @id @default(cuid())
+  name      String
+  company   String?
+  email     String
+  phone     String?
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

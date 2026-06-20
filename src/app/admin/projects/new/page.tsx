@@ -31,7 +31,7 @@ export default function NewProjectPage() {
   const isCustom = selectedCategory === "__custom__";
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-4">
         <Link href="/admin/projects" className="p-2 rounded-full hover:bg-[#eeeeee] text-[#888] hover:text-black transition-colors">
           <ArrowLeft size={20} />

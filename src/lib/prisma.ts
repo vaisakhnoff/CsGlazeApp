@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
+// Clear cache during hot reload if schema changed
+delete (globalThis as any).prisma;
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };

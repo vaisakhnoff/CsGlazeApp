@@ -11,7 +11,6 @@ interface DetailModalProps {
 }
 
 export function DetailModal({ open, onClose, children }: DetailModalProps) {
-  // Close on ESC
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -19,10 +18,11 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
-  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   return (
@@ -31,7 +31,7 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-50 bg-white/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-primary/20 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -39,7 +39,7 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
             onClick={onClose}
           />
 
-          {/* Panel */}
+          {/* Modal Panel */}
           <motion.div
             className="fixed inset-x-0 bottom-0 sm:inset-0 sm:flex sm:items-center sm:justify-center z-50 p-0 sm:p-6"
             initial={{ y: "100%", opacity: 0 }}
@@ -48,46 +48,24 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <div
-              className="relative w-full sm:max-w-2xl max-h-[92dvh] sm:max-h-[85vh] overflow-y-auto
-                rounded-t-2xl sm:rounded-2xl
-                bg-surface/95 backdrop-blur-2xl
-                border border-black/10
-                shadow-[0_0_60px_rgba(0,0,0,0.16),inset_0_1px_0_rgba(255,255,255,0.9)]"
+              className="relative w-full sm:max-w-3xl max-h-[92dvh] sm:max-h-[85vh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Top edge glow */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent pointer-events-none rounded-t-2xl" />
-              {/* HUD brackets */}
-              <div className="absolute top-4 left-4 pointer-events-none opacity-20">
-                <svg width="24" height="24" fill="none">
-                  <line x1="0" y1="0" x2="14" y2="0" stroke="black" strokeWidth="1.5"/>
-                  <line x1="0" y1="0" x2="0" y2="14" stroke="black" strokeWidth="1.5"/>
-                </svg>
-              </div>
-              <div className="absolute top-4 right-12 pointer-events-none opacity-20">
-                <svg width="24" height="24" fill="none">
-                  <line x1="24" y1="0" x2="10" y2="0" stroke="black" strokeWidth="1.5"/>
-                  <line x1="24" y1="0" x2="24" y2="14" stroke="black" strokeWidth="1.5"/>
-                </svg>
-              </div>
-
-              {/* Close */}
+              {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 border border-black/10 text-black/60 hover:text-black hover:bg-black/10 transition-colors"
+                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-border-light transition-colors"
                 aria-label="Close"
               >
-                <X size={15} />
+                <X size={20} className="text-text-secondary" />
               </button>
 
               {/* Mobile drag hint */}
               <div className="sm:hidden flex justify-center pt-3 pb-1">
-                <div className="w-10 h-1 rounded-full bg-black/20" />
+                <div className="w-10 h-1 bg-border rounded-full" />
               </div>
 
-              <div className="p-6 sm:p-8">
-                {children}
-              </div>
+              <div className="p-6 sm:p-8">{children}</div>
             </div>
           </motion.div>
         </>

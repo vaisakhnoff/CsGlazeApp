@@ -12,14 +12,15 @@ interface UploadedImage {
 
 interface Props {
   onImagesChange: (ids: string[]) => void;
+  initialImages?: UploadedImage[];
 }
 
 function centerAspectCrop(w: number, h: number) {
   return centerCrop(makeAspectCrop({ unit: "%", width: 90 }, 16 / 9, w, h), w, h);
 }
 
-export function ImageCropUploader({ onImagesChange }: Props) {
-  const [uploaded, setUploaded]         = useState<UploadedImage[]>([]);
+export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props) {
+  const [uploaded, setUploaded]         = useState<UploadedImage[]>(initialImages);
   const [cropSrc, setCropSrc]           = useState<string | null>(null);   // data URL of pending file
   const [pendingFile, setPendingFile]   = useState<File | null>(null);
   const [crop, setCrop]                 = useState<Crop>();
@@ -108,12 +109,12 @@ export function ImageCropUploader({ onImagesChange }: Props) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={img.url} alt={`upload-${idx}`} className="w-full h-full object-cover" />
               {idx === 0 && (
-                <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-black/70 py-0.5">Cover</span>
+                <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-white py-0.5">Cover</span>
               )}
               <button
                 type="button"
                 onClick={() => remove(img.id)}
-                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <X size={10} />
               </button>

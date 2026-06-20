@@ -1,21 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat, Geist } from "next/font/google";
+import { Inter, Outfit, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geist = Geist({
+const geistMono = Geist_Mono({
   variable: "--font-geist",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -33,6 +36,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { CustomCursor } from "@/components/ui/CustomCursor";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,9 +46,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${montserrat.variable} ${geist.variable} h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} ${geistMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-background text-on-surface font-sans selection:bg-tertiary selection:text-on-tertiary">
+      <body className="min-h-full flex flex-col font-sans">
+        <CustomCursor />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

@@ -1,13 +1,16 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Plus, Edit2, Trash2 } from "lucide-react";
+import { Plus, Edit2 } from "lucide-react";
+import { deleteProjectAction } from "./actions";
+import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
   const projects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
+    include: { images: true },
   });
 
   return (
@@ -34,13 +37,14 @@ export default async function ProjectsPage() {
               <th className="px-6 py-4 font-medium">Category</th>
               <th className="px-6 py-4 font-medium">Location</th>
               <th className="px-6 py-4 font-medium">Featured</th>
+              <th className="px-6 py-4 font-medium">Images</th>
               <th className="px-6 py-4 font-medium text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#222]">
+          <tbody className="divide-y divide-[#d6d6d6]">
             {projects.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-[#666]">
+                <td colSpan={6} className="px-6 py-8 text-center text-[#666]">
                   No projects found. Create your first project.
                 </td>
               </tr>
@@ -57,14 +61,24 @@ export default async function ProjectsPage() {
                       "-"
                     )}
                   </td>
+                  <td className="px-6 py-4 text-xs text-[#666]">
+                    {project.images.length > 0 ? (
+                      <span className="px-2 py-1 bg-[#f6f6f6] rounded-md border border-[#d6d6d6]">
+                        {project.images.length} photo{project.images.length !== 1 ? "s" : ""}
+                      </span>
+                    ) : (
+                      <span className="text-[#bbb]">No images</span>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-3">
                       <Link href={`/admin/projects/${project.id}/edit`} className="text-[#888] hover:text-black transition-colors">
                         <Edit2 size={16} />
                       </Link>
-                      <button className="text-[#888] hover:text-red-500 transition-colors">
-                        <Trash2 size={16} />
-                      </button>
+                      <AdminDeleteButton
+                        action={deleteProjectAction.bind(null, project.id)}
+                        label={project.title}
+                      />
                     </div>
                   </td>
                 </tr>

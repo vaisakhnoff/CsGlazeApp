@@ -1,8 +1,8 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
-import { Trash2 } from "lucide-react";
 import { NewTestimonialForm } from "./NewTestimonialForm";
 import { deleteTestimonialAction } from "./actions";
+import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -41,11 +41,10 @@ export default async function TestimonialsPage() {
                       {t.company && <span className="text-[#888] text-sm">, {t.company}</span>}
                     </div>
                   </div>
-                  <form action={deleteTestimonialAction.bind(null, t.id)}>
-                    <button type="submit" className="p-2 text-[#666] hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
-                      <Trash2 size={16} />
-                    </button>
-                  </form>
+                  <AdminDeleteButton
+                    action={deleteTestimonialAction.bind(null, t.id)}
+                    label={`${t.client}'s testimonial`}
+                  />
                 </div>
               </div>
             ))

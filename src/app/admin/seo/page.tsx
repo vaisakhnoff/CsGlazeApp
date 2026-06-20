@@ -17,7 +17,7 @@ export default async function SEOPage() {
   const map = records.reduce((a, r) => ({ ...a, [r.key]: r.value }), {} as Record<string, string>);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h1 className="text-3xl font-semibold text-black tracking-tight">SEO Settings</h1>
         <p className="text-[#888] mt-2">Control how search engines and social platforms see your site.</p>

@@ -8,7 +8,7 @@ export default function SettingsPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
         <h1 className="text-3xl font-semibold text-black tracking-tight">Settings</h1>
         <p className="text-[#888] mt-2">Admin account and system configuration.</p>
