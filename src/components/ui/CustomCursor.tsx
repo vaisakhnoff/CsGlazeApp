@@ -56,15 +56,26 @@ export function CustomCursor() {
     return null;
   }
 
-  const size = isHovering ? 64 : 16;
+  // Base size of the custom cursor dot
+  const size = 16;
+
+  // Hide the custom cursor completely when hovering an interactive element
+  // or when the mouse leaves the window
+  const currentOpacity = isHovering ? 0 : (isVisible ? 1 : 0);
 
   return (
     <>
-      {/* Hide default cursor on desktop when our cursor is active */}
+      {/* Hide default cursor on body, but restore native cursors for interactive elements */}
       <style dangerouslySetInnerHTML={{ __html: `
         @media (pointer: fine) {
-          body, a, button, input, select, textarea, [role="button"], .interactive-click {
-            cursor: none !important;
+          body {
+            cursor: none;
+          }
+          a, button, [role="button"], .interactive-click {
+            cursor: pointer !important;
+          }
+          input, select, textarea {
+            cursor: text !important;
           }
         }
       `}} />
@@ -74,7 +85,7 @@ export function CustomCursor() {
         style={{
           x: smoothX,
           y: smoothY,
-          opacity: isVisible ? 1 : 0,
+          opacity: currentOpacity,
         }}
       >
         <motion.div
@@ -86,13 +97,7 @@ export function CustomCursor() {
           }}
           transition={{ type: "spring", stiffness: 400, damping: 28 }}
           className="rounded-full bg-white flex items-center justify-center"
-        >
-          {isHovering && (
-            <span className="text-[10px] text-black font-bold uppercase tracking-widest font-mono scale-90">
-              View
-            </span>
-          )}
-        </motion.div>
+        />
       </motion.div>
     </>
   );
