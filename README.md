@@ -2,6 +2,24 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Create a `.env` file with the required application and Cloudinary variables:
+
+```bash
+DATABASE_URL="postgresql://..."
+SESSION_SECRET="replace-with-a-long-random-string"
+ADMIN_PASSWORD="replace-with-a-strong-password"
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+CLOUDINARY_FOLDER="cs-glaze"
+```
+
+After changing `prisma/schema.prisma`, apply the schema to your database:
+
+```bash
+npx prisma db push
+```
+
 First, run the development server:
 
 ```bash

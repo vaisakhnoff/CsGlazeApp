@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React, { Suspense, useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "./actions";
 
-export default function LoginPage() {
+function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get("next") ?? "/admin";
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
@@ -16,13 +19,14 @@ export default function LoginPage() {
           </div>
 
           <form action={formAction} className="space-y-5">
+            <input type="hidden" name="next" value={nextPath} />
             <div>
               <input
                 type="password"
                 name="password"
                 placeholder="Admin Password"
                 style={{ display: "block", width: "100%", boxSizing: "border-box" }}
-                className="bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-3 text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all text-base"
+                className={`bg-[#f6f6f6] border rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-1 transition-all text-base ${state?.error ? "border-red-400 focus:border-red-400 focus:ring-red-400/30" : "border-[#c7c7c7] focus:border-black focus:ring-black"}`}
                 required
               />
               {state?.error && (
@@ -42,5 +46,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

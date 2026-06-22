@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server";
-import { mkdir } from "fs/promises";
-import path from "path";
 import sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
+import { getAdminSession } from "@/lib/session";
+
+const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 export async function POST(req: Request) {
   try {
-    const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get("admin_session")?.value;
-    const session = await verifySession(sessionCookie);
-
-    if (!session?.auth) {
+    if (!(await getAdminSession())) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -27,43 +23,45 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
+    if (file.type && !ALLOWED_IMAGE_TYPES.has(file.type)) {
+      return NextResponse.json(
+        { error: "Only JPEG, PNG, or WebP images are allowed" },
+        { status: 400 }
+      );
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
-    const ext = path.extname(file.name) || ".jpg";
-    const filename = `${uuidv4()}${ext}`;
-    
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    await mkdir(uploadDir, { recursive: true });
-
-    const filepath = path.join(uploadDir, filename);
-
-    // Process image with Sharp
     let imageProcessor = sharp(buffer);
 
-    // If crop data is provided (from react-image-crop)
     if (cropData) {
-      const parsedCrop = JSON.parse(cropData as string);
-      // parsedCrop expected to have { x, y, width, height }
-      if (parsedCrop.width && parsedCrop.height) {
-        imageProcessor = imageProcessor.extract({
-          left: Math.round(parsedCrop.x),
-          top: Math.round(parsedCrop.y),
-          width: Math.round(parsedCrop.width),
-          height: Math.round(parsedCrop.height),
-        });
+      try {
+        const parsedCrop = JSON.parse(cropData as string);
+
+        if (parsedCrop.width && parsedCrop.height) {
+          imageProcessor = imageProcessor.extract({
+            left: Math.round(parsedCrop.x),
+            top: Math.round(parsedCrop.y),
+            width: Math.round(parsedCrop.width),
+            height: Math.round(parsedCrop.height),
+          });
+        }
+      } catch {
+        return NextResponse.json({ error: "Invalid crop data" }, { status: 400 });
       }
     }
 
-    // Optimize
-    await imageProcessor
-      .webp({ quality: 80 }) // convert to webp for better performance
-      .toFile(filepath.replace(ext, ".webp"));
+    const optimizedBuffer = await imageProcessor
+      .rotate()
+      .webp({ quality: 82 })
+      .toBuffer();
 
-    const finalUrl = `/uploads/${filename.replace(ext, ".webp")}`;
+    const uploadId = uuidv4();
+    const cloudinaryImage = await uploadImageToCloudinary(optimizedBuffer, uploadId);
 
-    // Save to DB
     const imageRecord = await prisma.image.create({
       data: {
-        url: finalUrl,
+        url: cloudinaryImage.secureUrl,
+        cloudinaryPublicId: cloudinaryImage.publicId,
         altText: altText || file.name,
         category: category || "Uncategorized",
       },
@@ -72,6 +70,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, image: imageRecord });
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+
+    const message =
+      error instanceof Error && error.message.includes("Cloudinary is not configured")
+        ? error.message
+        : "Failed to upload file";
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

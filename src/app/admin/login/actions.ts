@@ -20,6 +20,12 @@ interface AttemptRecord {
 
 const attemptsByIp = new Map<string, AttemptRecord>();
 
+function getSafeRedirectPath(value: FormDataEntryValue | null) {
+  if (typeof value !== "string") return "/admin";
+  if (!value.startsWith("/admin") || value.startsWith("/admin/login")) return "/admin";
+  return value;
+}
+
 async function getClientIp(): Promise<string> {
   // headers() is async in Next.js 16+
   const h = await headers();
@@ -92,6 +98,7 @@ export async function loginAction(_prevState: { error?: string } | null, formDat
   }
 
   const password = formData.get("password") as string;
+  const nextPath = getSafeRedirectPath(formData.get("next"));
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (!adminPassword) {
@@ -101,7 +108,7 @@ export async function loginAction(_prevState: { error?: string } | null, formDat
   if (password === adminPassword) {
     clearAttempts(ip);
     await createSession();
-    redirect("/admin");
+    redirect(nextPath);
   }
 
   // Wrong password — record the failure

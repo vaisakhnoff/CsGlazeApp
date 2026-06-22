@@ -1,11 +1,14 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/session";
 import { FolderOpen, Image as ImageIcon, MessageSquareQuote, FileText, Wrench, Plus } from "lucide-react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
+  await requireAdminSession();
+
   const [
     projectsCount,
     servicesCount,

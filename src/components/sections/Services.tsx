@@ -154,7 +154,7 @@ export const Services = ({ initialServices }: Props) => {
                 >
                   {/* Background image on hover */}
                   {service.imageUrl && (
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500">
+                    <div className="absolute inset-0 opacity-[0.95] transition-opacity duration-500">
                       <img src={service.imageUrl} alt="" className="w-full h-full object-cover" />
                     </div>
                   )}
@@ -169,27 +169,27 @@ export const Services = ({ initialServices }: Props) => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-[15px] lg:text-base font-heading font-semibold text-primary mb-2 leading-snug w-full">
+                    <h3 className="text-[15px] lg:text-base font-heading font-semibold text-black mb-2 leading-snug w-full">
                       {service.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-[13px] lg:text-sm text-text-secondary leading-relaxed mb-4 flex-grow w-full">
+                    <p className="text-[13px] lg:text-sm text-black/80 leading-relaxed mb-4 flex-grow w-full">
                       {service.description}
                     </p>
 
                     {/* Specs — top 2 */}
                     <div className="space-y-1.5 mb-4">
                       {service.specs.slice(0, 2).map((spec, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-text-secondary">
-                          <div className="w-1 h-1 rounded-full bg-accent flex-shrink-0" />
+                        <div key={i} className="flex items-center gap-2 text-xs text-black/70">
+                          <div className="w-1 h-1 rounded-full bg-black flex-shrink-0" />
                           <span>{spec}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* CTA */}
-                    <div className="flex items-center gap-1.5 text-accent font-medium text-xs group-hover:gap-2.5 transition-all">
+                    <div className="flex items-center gap-1.5 text-black font-medium text-xs group-hover:gap-2.5 transition-all">
                       Learn more
                       <ArrowRight size={14} />
                     </div>
@@ -233,7 +233,7 @@ export const Services = ({ initialServices }: Props) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 16 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full h-full md:h-auto md:w-[672px] md:max-w-[90vw] md:max-h-[90vh] bg-white rounded-none md:rounded-3xl shadow-lg z-50 overflow-hidden flex flex-col"
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[672px] md:max-w-[90vw] md:max-h-[88dvh] bg-white rounded-none md:rounded-3xl shadow-lg z-50 overflow-hidden flex flex-col"
             >
               <div className="flex-1 overflow-y-auto p-7 md:p-10 w-full">
                 {(() => {

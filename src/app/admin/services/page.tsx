@@ -1,5 +1,6 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/session";
 import Link from "next/link";
 import { Plus, Edit2 } from "lucide-react";
 import { deleteServiceAction } from "./actions";
@@ -9,6 +10,8 @@ import { ServiceIcon } from "@/components/admin/ServiceIcon";
 export const dynamic = "force-dynamic";
 
 export default async function ServicesPage() {
+  await requireAdminSession();
+
   const services = await prisma.service.findMany({
     orderBy: { createdAt: "desc" },
   });

@@ -14,20 +14,29 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+const DEFAULT_METADATA = {
+  title: "CS Glaze | Immersive Architectural Engineering",
+  description: "Premium ACP Cladding, Structural Glazing & Glass Solutions",
+};
+
 export async function generateMetadata(): Promise<Metadata> {
-  const records = await prisma.pageContent.findMany({
-    where: { key: { startsWith: "seo_" } },
-  });
+  let records: { key: string; value: string }[] = [];
+
+  try {
+    records = await prisma.pageContent.findMany({
+      where: { key: { startsWith: "seo_" } },
+    });
+  } catch (error) {
+    console.error("Failed to load SEO metadata:", error);
+  }
+
   const seo = records.reduce<Record<string, string>>((acc, r) => {
     acc[r.key] = r.value;
     return acc;
   }, {});
 
-  const title =
-    seo["seo_home_title"] || "CS Glaze | Immersive Architectural Engineering";
-  const description =
-    seo["seo_home_desc"] ||
-    "Premium ACP Cladding, Structural Glazing & Glass Solutions";
+  const title = seo["seo_home_title"] || DEFAULT_METADATA.title;
+  const description = seo["seo_home_desc"] || DEFAULT_METADATA.description;
   const ogTitle = seo["seo_home_og_title"] || title;
   const ogDesc  = seo["seo_home_og_desc"]  || description;
 
@@ -41,11 +50,24 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Home() {
-  const [services, testimonials, contentRows] = await Promise.all([
-    prisma.service.findMany({ orderBy: { createdAt: "asc" } }),
-    prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } }),
-    prisma.pageContent.findMany(),
-  ]);
+  let services: Record<string, unknown>[] = [];
+  let testimonials: {
+    id: string;
+    client: string;
+    company: string | null;
+    text: string;
+  }[] = [];
+  let contentRows: { key: string; value: string }[] = [];
+
+  try {
+    [services, testimonials, contentRows] = await Promise.all([
+      prisma.service.findMany({ orderBy: { createdAt: "asc" } }),
+      prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } }),
+      prisma.pageContent.findMany(),
+    ]);
+  } catch (error) {
+    console.error("Failed to load home page content:", error);
+  }
 
   const content = contentRows.reduce<Record<string, string>>((acc, row) => {
     acc[row.key] = row.value;

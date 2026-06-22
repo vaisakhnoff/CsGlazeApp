@@ -1,5 +1,6 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/session";
 import { NewTestimonialForm } from "./NewTestimonialForm";
 import { deleteTestimonialAction } from "./actions";
 import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
@@ -7,6 +8,8 @@ import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
 export const dynamic = "force-dynamic";
 
 export default async function TestimonialsPage() {
+  await requireAdminSession();
+
   const testimonials = await prisma.testimonial.findMany({ orderBy: { createdAt: "desc" } });
 
   return (

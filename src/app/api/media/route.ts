@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { deleteImageFromCloudinary } from "@/lib/cloudinary";
+import { getAdminSession } from "@/lib/session";
 import { unlink } from "fs/promises";
 import path from "path";
 
 async function authCheck() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("admin_session")?.value;
-  const session = await verifySession(sessionCookie);
-  return session?.auth ?? false;
+  return Boolean(await getAdminSession());
 }
 
 export async function GET() {
@@ -46,16 +43,19 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
 
-    // Delete from DB first
+    if (image.cloudinaryPublicId) {
+      await deleteImageFromCloudinary(image.cloudinaryPublicId);
+    }
+
     await prisma.image.delete({ where: { id } });
 
-    // Best-effort: remove file from disk (won't throw if missing)
+    // Legacy local uploads can still be removed if older records exist.
     if (image.url.startsWith("/uploads/")) {
       const filePath = path.join(process.cwd(), "public", image.url);
       try {
         await unlink(filePath);
       } catch {
-        // File may already be missing — that's fine
+        // File may already be missing.
       }
     }
 
@@ -65,4 +65,3 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Failed to delete image" }, { status: 500 });
   }
 }
-

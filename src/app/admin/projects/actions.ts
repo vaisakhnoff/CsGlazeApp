@@ -1,23 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { requireAdminSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
-// ---------------------------------------------------------------------------
-// Auth guard (same pattern as homepage/actions.ts)
-// ---------------------------------------------------------------------------
-async function checkAuth() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("admin_session")?.value;
-  const session = await verifySession(sessionCookie);
-  if (!session?.auth) {
-    redirect("/admin/login");
-  }
-}
 
 const ProjectSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(100),
@@ -41,7 +28,7 @@ export async function createProjectAction(
   prevState: ProjectFormState,
   formData: FormData
 ): Promise<ProjectFormState> {
-  await checkAuth();
+  await requireAdminSession();
 
   const rawData = {
     title: formData.get("title") as string,
@@ -91,7 +78,7 @@ export async function updateProjectAction(
   prevState: ProjectFormState,
   formData: FormData
 ): Promise<ProjectFormState> {
-  await checkAuth();
+  await requireAdminSession();
 
   const rawData = {
     title: formData.get("title") as string,
@@ -150,7 +137,7 @@ export async function updateProjectAction(
 }
 
 export async function deleteProjectAction(id: string) {
-  await checkAuth();
+  await requireAdminSession();
   await prisma.project.delete({ where: { id } });
   revalidatePath("/admin/projects");
   revalidatePath("/");

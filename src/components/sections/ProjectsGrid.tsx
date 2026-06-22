@@ -291,7 +291,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 16 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full h-full md:h-auto md:w-[768px] md:max-w-[90vw] md:max-h-[90vh] bg-white rounded-none md:rounded-3xl shadow-lg z-50 overflow-hidden flex flex-col"
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[768px] md:max-w-[90vw] md:max-h-[88dvh] bg-white rounded-none md:rounded-3xl shadow-lg z-50 overflow-hidden flex flex-col"
             >
               <div className="flex-1 overflow-y-auto p-7 md:p-10 w-full">
                 {/* Header */}

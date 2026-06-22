@@ -1,23 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { requireAdminSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-
-// ---------------------------------------------------------------------------
-// Auth guard
-// ---------------------------------------------------------------------------
-async function checkAuth() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("admin_session")?.value;
-  const session = await verifySession(sessionCookie);
-  if (!session?.auth) {
-    redirect("/admin/login");
-  }
-}
 
 const ServiceSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(100),
@@ -54,7 +41,7 @@ export async function createServiceAction(
   prevState: ServiceFormState,
   formData: FormData
 ): Promise<ServiceFormState> {
-  await checkAuth();
+  await requireAdminSession();
 
   const rawData = {
     title: formData.get("title") as string,
@@ -101,19 +88,19 @@ export async function updateServiceAction(
   prevState: ServiceFormState,
   formData: FormData
 ): Promise<ServiceFormState> {
-  await checkAuth();
+  await requireAdminSession();
 
   const rawData = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
     icon: formData.get("icon") as string,
-    glow: formData.get("glow") as string,
-    accent: formData.get("accent") as string,
+    glow: (formData.get("glow") as string) || "",
+    accent: (formData.get("accent") as string) || "",
     overview: formData.get("overview") as string,
     specs: formData.get("specs") as string,
     features: formData.get("features") as string,
     applications: formData.get("applications") as string,
-    imageUrl: formData.get("imageUrl") as string,
+    imageUrl: (formData.get("imageUrl") as string) || "",
   };
 
   const result = ServiceSchema.safeParse(rawData);
@@ -145,7 +132,7 @@ export async function updateServiceAction(
 }
 
 export async function deleteServiceAction(id: string) {
-  await checkAuth();
+  await requireAdminSession();
   await prisma.service.delete({ where: { id } });
   revalidatePath("/admin/services");
   revalidatePath("/");

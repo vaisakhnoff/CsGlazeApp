@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useRef, useCallback } from "react";
-import ReactCrop, { type Crop, centerCrop, makeAspectCrop } from "react-image-crop";
+import { createPortal } from "react-dom";
+import ReactCrop, {
+  type PercentCrop,
+  centerCrop,
+  convertToPixelCrop,
+  makeAspectCrop,
+} from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { X, Upload, Crop as CropIcon, Check, ImagePlus } from "lucide-react";
 
@@ -15,7 +21,7 @@ interface Props {
   initialImages?: UploadedImage[];
 }
 
-function centerAspectCrop(w: number, h: number) {
+function centerAspectCrop(w: number, h: number): PercentCrop {
   return centerCrop(makeAspectCrop({ unit: "%", width: 90 }, 16 / 9, w, h), w, h);
 }
 
@@ -23,7 +29,7 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
   const [uploaded, setUploaded]         = useState<UploadedImage[]>(initialImages);
   const [cropSrc, setCropSrc]           = useState<string | null>(null);   // data URL of pending file
   const [pendingFile, setPendingFile]   = useState<File | null>(null);
-  const [crop, setCrop]                 = useState<Crop>();
+  const [crop, setCrop]                 = useState<PercentCrop>();
   const [uploading, setUploading]       = useState(false);
   const [error, setError]               = useState<string | null>(null);
   const imgRef                          = useRef<HTMLImageElement>(null);
@@ -56,17 +62,21 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
     const img = imgRef.current;
     if (!img || !crop) return Promise.reject("No crop");
     const canvas  = document.createElement("canvas");
-    const scaleX  = img.naturalWidth  / img.width;
-    const scaleY  = img.naturalHeight / img.height;
-    // Convert % crop to pixels
-    const pixelCrop = crop.unit === "%"
-      ? { x: (crop.x / 100) * img.naturalWidth, y: (crop.y / 100) * img.naturalHeight,
-          width: (crop.width / 100) * img.naturalWidth, height: (crop.height / 100) * img.naturalHeight }
-      : { x: crop.x * scaleX, y: crop.y * scaleY, width: crop.width * scaleX, height: crop.height * scaleY };
-    canvas.width  = pixelCrop.width;
-    canvas.height = pixelCrop.height;
+    const pixelCrop = convertToPixelCrop(crop, img.naturalWidth, img.naturalHeight);
+    canvas.width  = Math.round(pixelCrop.width);
+    canvas.height = Math.round(pixelCrop.height);
     const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(img, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, pixelCrop.width, pixelCrop.height);
+    ctx.drawImage(
+      img,
+      Math.round(pixelCrop.x),
+      Math.round(pixelCrop.y),
+      Math.round(pixelCrop.width),
+      Math.round(pixelCrop.height),
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
     return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej("canvas empty"), "image/jpeg", 0.9));
   }, [crop]);
 
@@ -123,31 +133,48 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
         </div>
       )}
 
-      {/* Crop modal */}
-      {cropSrc && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#f6f6f6] border border-[#c7c7c7] rounded-xl p-5 w-full max-w-xl space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-black font-medium text-sm">
+      {/* Crop modal — rendered in document.body to escape overflow-hidden parents */}
+      {cropSrc && createPortal(
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-8">
+          <div className="flex max-h-[90dvh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-[#c7c7c7] bg-[#f6f6f6] shadow-2xl">
+            <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[#d6d6d6] px-4 sm:px-6">
+              <span className="flex min-w-0 items-center gap-2 text-sm font-medium text-black">
                 <CropIcon size={15} /> Crop Image
               </span>
-              <button type="button" onClick={() => { setCropSrc(null); setPendingFile(null); }} className="text-[#888] hover:text-black">
+              <button
+                type="button"
+                onClick={() => { setCropSrc(null); setPendingFile(null); }}
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md text-[#888] hover:bg-[#eeeeee] hover:text-black"
+                aria-label="Close crop dialog"
+              >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="max-h-[60vh] overflow-auto flex justify-center">
-              <ReactCrop crop={crop} onChange={c => setCrop(c)} aspect={16 / 9}>
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-[#222] p-4 sm:p-6">
+              <ReactCrop
+                crop={crop}
+                onChange={(_, percentCrop) => setCrop(percentCrop)}
+                aspect={16 / 9}
+                className="max-h-[70dvh] max-w-full"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img ref={imgRef} src={cropSrc} onLoad={onImageLoad} alt="crop-preview" className="max-w-full" />
+                <img
+                  ref={imgRef}
+                  src={cropSrc}
+                  onLoad={onImageLoad}
+                  alt="crop-preview"
+                  className="block max-h-[70dvh] max-w-full object-contain"
+                />
               </ReactCrop>
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-[#d6d6d6] bg-white px-4 py-3 sm:px-6">
               <button
                 type="button"
                 onClick={() => { setCropSrc(null); setPendingFile(null); }}
-                className="px-4 py-2 text-sm text-[#888] hover:text-black transition-colors"
+                disabled={uploading}
+                className="px-4 py-2 text-sm text-[#666] transition-colors hover:text-black disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -155,13 +182,14 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
                 type="button"
                 onClick={confirmCrop}
                 disabled={uploading}
-                className="px-4 py-2 text-sm bg-black text-white rounded-md font-medium flex items-center gap-2 hover:bg-[#222] disabled:opacity-50"
+                className="flex min-w-[140px] items-center justify-center gap-2 rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-[#222] disabled:opacity-60"
               >
                 {uploading ? "Uploading…" : <><Check size={14} /> Use This Crop</>}
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Add button */}

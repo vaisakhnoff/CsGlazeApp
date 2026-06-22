@@ -24,6 +24,11 @@ function FieldError({ errors, field }: { errors?: Record<string, string[]>; fiel
   );
 }
 
+const inputCls = (errors?: Record<string, string[]>, field?: string) =>
+  `w-full bg-[#f6f6f6] border rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all ${
+    field && errors?.[field]?.length ? "border-red-400" : "border-[#c7c7c7]"
+  }`;
+
 type EditProjectFormProps = {
   project: Project & { images: PrismaImage[] };
 };
@@ -68,7 +73,7 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
             <input
               type="text" name="title" required
               defaultValue={project.title}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "title")}
               placeholder="e.g. Skyline Glass Tower"
             />
             <FieldError errors={state.errors} field="title" />
@@ -82,7 +87,7 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
                 name="category" required
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all appearance-none cursor-pointer"
+                className={inputCls(state.errors, "category") + " appearance-none cursor-pointer"}
               >
                 <option value="" disabled>Select a category…</option>
                 {PRESET_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}

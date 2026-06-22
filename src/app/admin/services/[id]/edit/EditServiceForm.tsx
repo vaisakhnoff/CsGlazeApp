@@ -18,6 +18,11 @@ function FieldError({ errors, field }: { errors?: Record<string, string[]>; fiel
   );
 }
 
+const inputCls = (errors?: Record<string, string[]>, field?: string) =>
+  `w-full bg-[#f6f6f6] border rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all ${
+    field && errors?.[field]?.length ? "border-red-400" : "border-[#c7c7c7]"
+  }`;
+
 export default function EditServiceForm({ service }: { service: Service }) {
   const updateWithId = updateServiceAction.bind(null, service.id);
   const [state, formAction, isPending] = useActionState(updateWithId, {} as ServiceFormState);
@@ -25,10 +30,19 @@ export default function EditServiceForm({ service }: { service: Service }) {
   // Create an initial image state if service has an image URL
   const [imageUrls, setImageUrls] = useState<string[]>(service.imageUrl ? [service.imageUrl] : []);
 
-  // Parse JSON arrays back to strings for the form
-  const defaultSpecs = JSON.parse(service.specs).join(", ");
-  const defaultFeatures = JSON.parse(service.features).join(", ");
-  const defaultApplications = JSON.parse(service.applications).join(", ");
+  // Parse JSON arrays back to strings for the form, with fallback for invalid JSON
+  const parseJsonArray = (str: string, fallback: string = "") => {
+    try {
+      const parsed = JSON.parse(str);
+      return Array.isArray(parsed) ? parsed.join(", ") : fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const defaultSpecs = parseJsonArray(service.specs);
+  const defaultFeatures = parseJsonArray(service.features);
+  const defaultApplications = parseJsonArray(service.applications);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -58,7 +72,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Service Title <span className="text-red-400">*</span></label>
             <input
               type="text" name="title" required defaultValue={service.title}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "title")}
             />
             <FieldError errors={state.errors} field="title" />
           </div>
@@ -68,7 +82,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Card Description <span className="text-red-400">*</span></label>
             <textarea
               name="description" required rows={2} defaultValue={service.description}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all resize-none"
+              className={inputCls(state.errors, "description") + " resize-none"}
             />
             <FieldError errors={state.errors} field="description" />
           </div>
@@ -79,7 +93,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
               <label className="text-sm font-medium text-black">Icon Name <span className="text-red-400">*</span></label>
               <input
                 type="text" name="icon" required defaultValue={service.icon}
-                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+                className={inputCls(state.errors, "icon")}
               />
               <p className="text-[10px] text-[#888]">Use <a href="https://lucide.dev/icons" target="_blank" className="underline">Lucide React</a> icon names.</p>
               <FieldError errors={state.errors} field="icon" />
@@ -113,7 +127,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Detailed Overview <span className="text-red-400">*</span></label>
             <textarea
               name="overview" required rows={3} defaultValue={service.overview}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all resize-none"
+              className={inputCls(state.errors, "overview") + " resize-none"}
             />
             <FieldError errors={state.errors} field="overview" />
           </div>
@@ -123,7 +137,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Specs (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="specs" required defaultValue={defaultSpecs}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "specs")}
             />
             <FieldError errors={state.errors} field="specs" />
           </div>
@@ -133,7 +147,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Features (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="features" required defaultValue={defaultFeatures}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "features")}
             />
             <FieldError errors={state.errors} field="features" />
           </div>
@@ -143,7 +157,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             <label className="text-sm font-medium text-black">Applications (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="applications" required defaultValue={defaultApplications}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "applications")}
             />
             <FieldError errors={state.errors} field="applications" />
           </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
+import { requireAdminSession } from "@/lib/session";
 import Link from "next/link";
 import { Plus, Edit2 } from "lucide-react";
 import { deleteProjectAction } from "./actions";
@@ -8,6 +9,8 @@ import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
+  await requireAdminSession();
+
   const projects = await prisma.project.findMany({
     orderBy: { createdAt: "desc" },
     include: { images: true },

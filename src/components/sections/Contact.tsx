@@ -39,6 +39,13 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
     }
   }, [state.status]);
 
+  // Show all field errors when server responds (catches submit-without-touch)
+  useEffect(() => {
+    if (state.status === "error" && state.errors) {
+      setTouched({ name: true, email: true, phone: true, message: true });
+    }
+  }, [state.status, state.errors]);
+
   const blur = (k: string) => () => setTouched((t) => ({ ...t, [k]: true }));
 
   const displayLocation = location || "Kerala, India";
@@ -161,16 +168,18 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
               <div className="line-corner-br" />
 
               {state.status === "success" ? (
-                <div className="flex flex-col items-center justify-center min-h-[360px] gap-4 text-center">
+                <div className="flex flex-col items-center justify-center min-h-[360px] gap-3 text-center w-full">
                   <div className="w-14 h-14 rounded-full bg-success-light flex items-center justify-center mb-1">
                     <CheckCircle2 size={28} className="text-success" />
                   </div>
-                  <h3 className="text-2xl font-heading font-bold text-primary">
-                    Proposal Request Sent
-                  </h3>
-                  <p className="text-text-secondary text-sm max-w-xs">
-                    Our engineering team will reach out within 1 business day. We&apos;ve received your enquiry!
-                  </p>
+                  <div className="w-full">
+                    <h3 className="text-2xl font-heading font-bold text-primary">
+                      Proposal Request Sent
+                    </h3>
+                    <p className="text-text-secondary text-sm mt-1">
+                      Our engineering team will reach out within 1 business day. We&apos;ve received your enquiry!
+                    </p>
+                  </div>
                   <button
                     onClick={() => window.location.reload()}
                     className="mt-3 text-sm font-medium text-accent hover:text-accent-hover transition-colors"
@@ -241,9 +250,15 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                       id="contact-phone"
                       name="phone"
                       placeholder=" "
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-primary focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm"
+                      onBlur={blur("phone")}
+                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                        touched.phone && state.errors?.phone
+                          ? "border-error focus:ring-error/20"
+                          : "border-border focus:ring-accent/20 focus:border-accent"
+                      }`}
                     />
                     <label htmlFor="contact-phone">Phone Number</label>
+                    {touched.phone && <FieldErr msg={state.errors?.phone} />}
                   </div>
 
                   {/* Message — floating label */}

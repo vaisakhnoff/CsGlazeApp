@@ -27,13 +27,14 @@ model Project {
 }
 
 model Image {
-  id        String   @id @default(cuid())
-  url       String
-  altText   String?
-  category  String?  // For gallery categorization
-  projectId String?
-  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id                 String   @id @default(cuid())
+  url                String
+  cloudinaryPublicId String?
+  altText            String?
+  category           String?  // For gallery categorization
+  projectId          String?
+  project            Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt          DateTime @default(now())
 }
 
 model Testimonial {

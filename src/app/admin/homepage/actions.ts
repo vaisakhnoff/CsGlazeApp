@@ -1,35 +1,76 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { verifySession } from "@/lib/session";
-import { cookies } from "next/headers";
+import { requireAdminSession } from "@/lib/session";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-async function checkAuth() {
-  const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("admin_session")?.value;
-  const session = await verifySession(sessionCookie);
-  if (!session?.auth) {
-    throw new Error("Unauthorized");
+const ContentSchema = z.object({
+  hero_heading: z.string().min(2, "Main heading is required."),
+  hero_cta: z.string().min(1, "CTA button text is required."),
+  about_heading: z.string().min(2, "About heading is required."),
+  hero_subheading: z.string().optional(),
+  about_story: z.string().optional(),
+  contact_phone: z
+    .string()
+    .regex(/^[+\d][\d\s\-().]{6,19}$/, "Enter a valid phone number.")
+    .optional()
+    .or(z.literal("")),
+  contact_whatsapp: z
+    .string()
+    .regex(/^[+\d][\d\s\-().]{6,19}$/, "Enter a valid WhatsApp number.")
+    .optional()
+    .or(z.literal("")),
+  contact_email: z
+    .string()
+    .email("Enter a valid email address.")
+    .optional()
+    .or(z.literal("")),
+  contact_location: z.string().optional(),
+});
+
+export type ContentFormState = {
+  status: "idle" | "success" | "error";
+  message?: string;
+  errors?: Partial<Record<keyof z.infer<typeof ContentSchema>, string>>;
+};
+
+export async function saveContentAction(
+  _prev: ContentFormState,
+  formData: FormData
+): Promise<ContentFormState> {
+  await requireAdminSession();
+
+  const raw = Object.fromEntries(
+    Array.from(formData.entries()).filter(([, v]) => typeof v === "string")
+  ) as Record<string, string>;
+
+  const result = ContentSchema.safeParse(raw);
+  if (!result.success) {
+    const fe = result.error.flatten().fieldErrors;
+    return {
+      status: "error",
+      errors: Object.fromEntries(
+        Object.entries(fe).map(([k, v]) => [k, v?.[0]])
+      ) as ContentFormState["errors"],
+    };
   }
-}
 
-export async function saveContentAction(formData: FormData) {
-  await checkAuth();
+  const entries = Object.entries(result.data).filter(([, v]) => v !== undefined) as [string, string][];
 
-  const entries = Array.from(formData.entries());
-  
-  // Use a transaction to upsert all keys
-  await prisma.$transaction(
-    entries.map(([key, value]) => {
-      return prisma.pageContent.upsert({
-        where: { key },
-        update: { value: value as string },
-        create: { key, value: value as string },
-      });
-    })
-  );
-
-  // Revalidate the main homepage so it fetches new content
-  revalidatePath("/");
+  try {
+    await prisma.$transaction(
+      entries.map(([key, value]) =>
+        prisma.pageContent.upsert({
+          where: { key },
+          update: { value },
+          create: { key, value },
+        })
+      )
+    );
+    revalidatePath("/");
+    return { status: "success", message: "Changes saved successfully." };
+  } catch {
+    return { status: "error", message: "Failed to save. Please try again." };
+  }
 }

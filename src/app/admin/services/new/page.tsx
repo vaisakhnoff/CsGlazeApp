@@ -17,6 +17,11 @@ function FieldError({ errors, field }: { errors?: Record<string, string[]>; fiel
   );
 }
 
+const inputCls = (errors?: Record<string, string[]>, field?: string) =>
+  `w-full bg-[#f6f6f6] border rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all ${
+    field && errors?.[field]?.length ? "border-red-400" : "border-[#c7c7c7]"
+  }`;
+
 export default function NewServicePage() {
   const [state, formAction, isPending] = useActionState(createServiceAction, {} as ServiceFormState);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -49,7 +54,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Service Title <span className="text-red-400">*</span></label>
             <input
               type="text" name="title" required
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "title")}
               placeholder="e.g. Structural Glazing"
             />
             <FieldError errors={state.errors} field="title" />
@@ -60,7 +65,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Card Description <span className="text-red-400">*</span></label>
             <textarea
               name="description" required rows={2}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all resize-none"
+              className={inputCls(state.errors, "description") + " resize-none"}
               placeholder="Short description for the card."
             />
             <FieldError errors={state.errors} field="description" />
@@ -72,7 +77,7 @@ export default function NewServicePage() {
               <label className="text-sm font-medium text-black">Icon Name <span className="text-red-400">*</span></label>
               <input
                 type="text" name="icon" required
-                className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+                className={inputCls(state.errors, "icon")}
                 placeholder="e.g. Layers (Lucide icon)"
               />
               <p className="text-[10px] text-[#888]">Use <a href="https://lucide.dev/icons" target="_blank" className="underline">Lucide React</a> icon names.</p>
@@ -107,7 +112,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Detailed Overview <span className="text-red-400">*</span></label>
             <textarea
               name="overview" required rows={3}
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all resize-none"
+              className={inputCls(state.errors, "overview") + " resize-none"}
               placeholder="Long overview shown in modal."
             />
             <FieldError errors={state.errors} field="overview" />
@@ -118,7 +123,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Specs (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="specs" required
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "specs")}
               placeholder="e.g. Thermal Insulation, Wind Load Resistance"
             />
             <FieldError errors={state.errors} field="specs" />
@@ -129,7 +134,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Features (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="features" required
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "features")}
               placeholder="e.g. Point-fixed systems, Double IGU options"
             />
             <FieldError errors={state.errors} field="features" />
@@ -140,7 +145,7 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Applications (comma separated) <span className="text-red-400">*</span></label>
             <input
               type="text" name="applications" required
-              className="w-full bg-[#f6f6f6] border border-[#c7c7c7] rounded-lg px-4 py-2.5 text-black focus:outline-none focus:border-black transition-all"
+              className={inputCls(state.errors, "applications")}
               placeholder="e.g. Commercial towers, Retail facades"
             />
             <FieldError errors={state.errors} field="applications" />

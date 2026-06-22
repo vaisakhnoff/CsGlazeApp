@@ -1,14 +1,25 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { sendQuoteEnquiryEmail } from "@/lib/mailer";
 import { z } from "zod";
 
 const ContactSchema = z.object({
-  name: z.string().min(2, "Full name must be at least 2 characters."),
-  company: z.string().optional(),
+  name: z
+    .string()
+    .min(2, "Full name must be at least 2 characters.")
+    .max(100, "Name is too long."),
+  company: z.string().max(100, "Company name is too long.").optional(),
   email: z.string().email("Enter a valid email address."),
-  phone: z.string().optional(),
-  message: z.string().min(10, "Message must be at least 10 characters."),
+  phone: z
+    .string()
+    .regex(/^[+\d][\d\s\-().]{6,19}$/, "Enter a valid phone number.")
+    .optional()
+    .or(z.literal("")),
+  message: z
+    .string()
+    .min(10, "Please describe your project in at least 10 characters.")
+    .max(2000, "Message is too long (max 2000 characters)."),
 });
 
 export type ContactFormState = {
@@ -37,6 +48,7 @@ export async function submitContactAction(
       errors: {
         name: fieldErrors.name?.[0],
         email: fieldErrors.email?.[0],
+        phone: fieldErrors.phone?.[0],
         message: fieldErrors.message?.[0],
       },
     };
@@ -51,6 +63,14 @@ export async function submitContactAction(
         phone: result.data.phone || null,
         message: result.data.message,
       },
+    });
+
+    await sendQuoteEnquiryEmail({
+      name: result.data.name,
+      company: result.data.company,
+      email: result.data.email,
+      phone: result.data.phone,
+      message: result.data.message,
     });
 
     return { status: "success" };

@@ -48,7 +48,7 @@ export function DetailModal({ open, onClose, children }: DetailModalProps) {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           >
             <div
-              className="relative w-full sm:max-w-3xl max-h-[92dvh] sm:max-h-[85vh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-lg"
+              className="relative w-full sm:max-w-3xl max-h-[92dvh] sm:max-h-[88dvh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}

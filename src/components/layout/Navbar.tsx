@@ -52,7 +52,9 @@ export const Navbar = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? "glass-strong shadow-md py-3" : "py-4"
+        isScrolled
+          ? "bg-white/70 backdrop-blur-2xl border-b border-white/60 shadow-sm py-2 md:glass-strong md:shadow-md md:py-3"
+          : "py-3 md:py-4"
       }`}
     >
       {/* Animated bottom accent line (visible when scrolled) */}
@@ -66,12 +68,19 @@ export const Navbar = () => {
       )}
 
       <div className="container-premium">
-        <div className="flex items-center justify-between h-[88px]">
+        <div
+          className={`flex items-center justify-between transition-[height] duration-500 ${
+            isScrolled ? "h-12 md:h-[88px]" : "h-16 md:h-[88px]"
+          }`}
+        >
           {/* Logo — morphs on scroll */}
           <Link href="/" className="relative z-50 flex items-center group">
             <div
-              className="relative transition-all duration-500 ease-out"
-              style={{ height: isScrolled ? 56 : 78, width: isScrolled ? 100 : 140 }}
+              className={`relative transition-all duration-500 ease-out ${
+                isScrolled
+                  ? "h-10 w-[74px] md:h-14 md:w-[100px]"
+                  : "h-[58px] w-[104px] md:h-[78px] md:w-[140px]"
+              }`}
             >
               <Image
                 src="/cs-glaze-logo.png"
@@ -119,15 +128,15 @@ export const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden z-50 p-2 rounded-lg hover:bg-border-light transition-colors"
+            className="md:hidden z-50 flex h-9 w-9 items-center justify-center rounded-lg hover:bg-white/70 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? (
-              <X size={22} className="text-primary" />
+              <X size={20} strokeWidth={1.6} className="text-primary" />
             ) : (
-              <Menu size={22} className="text-primary" />
+              <Menu size={20} strokeWidth={1.6} className="text-primary" />
             )}
           </button>
         </div>
@@ -141,7 +150,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="md:hidden glass-strong border-t border-border mt-2 overflow-hidden"
+            className="md:hidden bg-white/80 backdrop-blur-2xl border-t border-white/70 mt-2 overflow-hidden"
           >
             {/* Mobile accent line */}
             <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />

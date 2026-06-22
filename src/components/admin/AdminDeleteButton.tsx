@@ -61,7 +61,7 @@ export function AdminDeleteButton({ action, label, variant = "icon" }: Props) {
           />
 
           {/* Dialog */}
-          <div className="relative z-10 w-full max-w-sm mx-4 bg-white rounded-2xl shadow-xl border border-[#d6d6d6] p-6 animate-in zoom-in-95 duration-200">
+          <div className="relative z-10 w-full max-w-sm mx-4 max-h-[90dvh] overflow-y-auto bg-white rounded-2xl shadow-xl border border-[#d6d6d6] p-6 animate-in zoom-in-95 duration-200">
             {done ? (
               <div className="flex flex-col items-center gap-3 py-2">
                 <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
