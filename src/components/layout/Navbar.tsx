@@ -51,18 +51,18 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "py-2 md:py-3"
-          : "py-3 md:py-4"
+          ? "py-1.5 sm:py-2 md:py-3"
+          : "py-2 sm:py-3 md:py-4"
       }`}
     >
       {/* Spatial floating navbar container */}
-      <div className={`container-premium transition-all duration-700 ${isScrolled ? "px-4 md:px-8" : ""}`}>
+      <div className={`container-premium transition-all duration-500 ${isScrolled ? "px-3 sm:px-4 md:px-8" : ""}`}>
         <div
-          className={`transition-all duration-700 relative ${
+          className={`transition-all duration-500 relative ${
             isScrolled
-              ? "glass-strong rounded-2xl px-5 md:px-6"
+              ? "glass-strong rounded-2xl px-3 sm:px-5 md:px-6"
               : "px-0"
           }`}
           style={isScrolled ? {
@@ -81,7 +81,7 @@ export const Navbar = () => {
 
           <div
             className={`flex items-center justify-between transition-[height] duration-500 ${
-              isScrolled ? "h-14 md:h-[72px]" : "h-16 md:h-[88px]"
+              isScrolled ? "h-12 sm:h-14 md:h-[72px]" : "h-14 sm:h-16 md:h-[88px]"
             }`}
           >
             {/* Logo — morphs on scroll */}
@@ -139,9 +139,9 @@ export const Navbar = () => {
               Get Quote
             </a>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button — large touch target */}
             <button
-              className="md:hidden z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-white/60 backdrop-blur-sm border border-white/50 shadow-sm hover:bg-white/80 transition-all"
+              className="md:hidden z-50 flex h-11 w-11 items-center justify-center rounded-xl bg-white/70 backdrop-blur-sm border border-white/50 shadow-sm active:scale-95 transition-all"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
               aria-expanded={mobileMenuOpen}
@@ -156,32 +156,33 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation — floating glass panel */}
+      {/* Mobile Navigation — floating glass panel with proper touch targets */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -8, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden mx-4 mt-2 rounded-2xl glass-strong shadow-lg overflow-hidden"
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden mx-3 sm:mx-4 mt-2 rounded-2xl glass-strong overflow-hidden"
+            style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}
           >
-            <nav className="p-4 flex flex-col gap-1" aria-label="Mobile navigation">
+            <nav className="p-3 sm:p-4 flex flex-col gap-0.5" aria-label="Mobile navigation">
               {navLinks.map((link, i) => {
                 const isActive = activeSection === link.id;
                 return (
                   <motion.div
                     key={link.name}
-                    initial={{ opacity: 0, x: -16 }}
+                    initial={{ opacity: 0, x: -12 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.25 }}
+                    transition={{ delay: i * 0.04, duration: 0.2 }}
                   >
                     <Link
                       href={link.href}
-                      className={`block px-4 py-3 text-[15px] font-medium rounded-xl transition-all ${
+                      className={`block px-4 py-3.5 text-[15px] font-medium rounded-xl transition-all active:scale-[0.98] ${
                         isActive
-                          ? "text-primary bg-white shadow-sm"
-                          : "text-text-primary hover:bg-white/60"
+                          ? "text-primary bg-white shadow-[0_1px_3px_rgba(0,0,0,0.05),0_4px_12px_rgba(0,0,0,0.04)]"
+                          : "text-text-primary active:bg-white/60"
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -191,14 +192,14 @@ export const Navbar = () => {
                 );
               })}
               <motion.div
-                initial={{ opacity: 0, x: -16 }}
+                initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navLinks.length * 0.05, duration: 0.25 }}
-                className="mt-2"
+                transition={{ delay: navLinks.length * 0.04, duration: 0.2 }}
+                className="mt-2 pt-2 border-t border-border-light/50"
               >
                 <a
                   href="#contact"
-                  className="block text-center px-5 py-3 font-heading font-semibold text-[14px] text-on-accent gradient-accent rounded-xl shadow-[0_4px_16px_rgba(252,163,17,0.2)]"
+                  className="block text-center px-5 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl shadow-[0_4px_16px_rgba(252,163,17,0.2)] active:scale-[0.97]"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Get Quote

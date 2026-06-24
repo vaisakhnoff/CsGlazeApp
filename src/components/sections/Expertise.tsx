@@ -94,8 +94,8 @@ export const Expertise = () => {
             </p>
           </motion.div>
 
-          {/* Right: Stats Grid — spatial floating cards */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Right: Stats Grid — responsive spacing */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {stats.map((stat, idx) => (
               <motion.div
                 key={stat.label}
@@ -103,7 +103,7 @@ export const Expertise = () => {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="card-spatial p-6 lg:p-8 text-center group relative overflow-hidden"
+                className="card-spatial p-5 sm:p-6 lg:p-8 text-center group relative overflow-hidden active:scale-[0.97] transition-transform duration-200"
               >
                 {/* Subtle top glow on hover */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-20 bg-accent/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -112,12 +112,12 @@ export const Expertise = () => {
                 <div className="line-corner-tl" />
 
                 <div
-                  className="font-heading font-bold text-gradient-accent mb-2 tabular-nums relative z-10"
-                  style={{ fontSize: "clamp(32px, 3.5vw, 48px)" }}
+                  className="font-heading font-bold text-gradient-accent mb-1 sm:mb-2 tabular-nums relative z-10"
+                  style={{ fontSize: "clamp(28px, 6vw, 48px)" }}
                 >
                   <Counter target={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm text-text-secondary font-medium relative z-10">{stat.label}</div>
+                <div className="text-xs sm:text-sm text-text-secondary font-medium relative z-10">{stat.label}</div>
               </motion.div>
             ))}
           </div>

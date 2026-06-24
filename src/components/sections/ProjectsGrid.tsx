@@ -163,7 +163,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5"
         >
           {visibleProjects.map((project, idx) => {
             const imageUrl = getImage(project);
@@ -177,7 +177,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 className={hiddenOnMobile ? "hidden sm:block" : "block"}
               >
                 <div
-                  className="card-spatial overflow-hidden cursor-pointer group h-full flex flex-col"
+                  className="card-spatial overflow-hidden cursor-pointer group h-full flex flex-col active:scale-[0.98] transition-transform duration-200"
                   onClick={() => setSelected(project)}
                   role="button"
                   tabIndex={0}

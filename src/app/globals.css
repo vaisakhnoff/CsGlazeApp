@@ -307,14 +307,20 @@ html { overflow-x: hidden; }
     max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  @media (min-width: 640px) {
+    .container-premium { padding-left: 24px; padding-right: 24px; }
   }
   @media (min-width: 1024px) {
     .container-premium { padding-left: 80px; padding-right: 80px; }
   }
 
-  .section-spacing { padding-top: 80px; padding-bottom: 80px; }
+  .section-spacing { padding-top: 56px; padding-bottom: 56px; }
+  @media (min-width: 640px) {
+    .section-spacing { padding-top: 80px; padding-bottom: 80px; }
+  }
   @media (min-width: 1024px) {
     .section-spacing { padding-top: 120px; padding-bottom: 120px; }
   }
@@ -498,5 +504,26 @@ html { overflow-x: hidden; }
     .animate-spatial-float-slow, .animate-glow-pulse { animation: none; }
     .reveal-clip { clip-path: none; }
     .hover-lift:hover, .hover-float:hover { transform: none; }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     TOUCH DEVICE OPTIMIZATIONS
+     Disable hover-only effects on touch, use active states instead
+     ═══════════════════════════════════════════════════ */
+  @media (hover: none) {
+    .card-spatial:hover,
+    .card-premium:hover {
+      transform: none;
+      box-shadow: inherit;
+    }
+    .hover-lift:hover,
+    .hover-float:hover {
+      transform: none;
+    }
+  }
+
+  /* Mobile smooth scrolling & tap highlight */
+  @media (max-width: 768px) {
+    * { -webkit-tap-highlight-color: rgba(252, 163, 17, 0.1); }
   }
 }

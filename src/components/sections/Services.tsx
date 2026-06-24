@@ -117,16 +117,16 @@ export const Services = ({ initialServices }: Props) => {
           </div>
         </motion.div>
 
-        {/* Services Grid — spatial cards with depth */}
+        {/* Services Grid — responsive: 1 col mobile, 2 col sm, 4 col lg */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6"
+          viewport={{ once: true, margin: "-60px" }}
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6"
         >
           {parsedServices.length === 0 ? (
-            <div className="col-span-2 lg:col-span-4 py-16 text-center text-text-secondary">
+            <div className="col-span-1 sm:col-span-2 lg:col-span-4 py-16 text-center text-text-secondary">
               <p className="text-sm">No services available at the moment.</p>
             </div>
           ) : parsedServices.map((service, idx) => {
@@ -141,23 +141,25 @@ export const Services = ({ initialServices }: Props) => {
                 className={hiddenOnMobile ? "hidden sm:block" : "block"}
               >
                 <div
-                  className="relative h-full rounded-[28px] overflow-hidden cursor-pointer group"
+                  className="relative h-full rounded-2xl sm:rounded-[28px] overflow-hidden cursor-pointer group active:scale-[0.98] transition-transform duration-200"
                   onClick={() => setSelectedId(service.id)}
                   onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width - 0.5;
-                    const y = (e.clientY - rect.top) / rect.height - 0.5;
-                    e.currentTarget.style.transform = `perspective(1000px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg) translateY(-8px) scale(1.02)`;
-                    e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02), 0 12px 28px rgba(0,0,0,0.08), 0 36px 90px rgba(0,0,0,0.07)";
+                    // Only 3D tilt on non-touch devices
+                    if (window.matchMedia("(hover: hover)").matches) {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = (e.clientX - rect.left) / rect.width - 0.5;
+                      const y = (e.clientY - rect.top) / rect.height - 0.5;
+                      e.currentTarget.style.transform = `perspective(1000px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg) translateY(-8px) scale(1.02)`;
+                      e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.02), 0 12px 28px rgba(0,0,0,0.08), 0 36px 90px rgba(0,0,0,0.07)";
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px) scale(1)";
+                    e.currentTarget.style.transform = "";
                     e.currentTarget.style.boxShadow = "";
                   }}
                   style={{
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 6px 16px rgba(0,0,0,0.04), 0 18px 52px rgba(0,0,0,0.04)",
-                    transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-                    border: "1px solid rgba(255,255,255,0.15)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.05), 0 16px 44px rgba(0,0,0,0.04)",
+                    border: "1px solid rgba(255,255,255,0.12)",
                   }}
                   role="button"
                   tabIndex={0}
@@ -168,39 +170,35 @@ export const Services = ({ initialServices }: Props) => {
                       <img
                         src={service.imageUrl}
                         alt={service.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                       />
                     </div>
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-[#1a2d52] to-[#14213d]" />
                   )}
 
-                  {/* Dark gradient overlay for text legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 group-hover:from-black/85 group-hover:via-black/40 transition-all duration-500" />
+                  {/* Gradient overlay — stronger for legibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/15 sm:from-black/80 sm:via-black/30 sm:to-black/10 group-hover:from-black/85 group-hover:via-black/40 transition-all duration-500" />
 
-                  {/* Ambient top glow on hover */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ background: `radial-gradient(ellipse at 50% 0%, ${service.glow || "rgba(252,163,17,0.12)"}, transparent 60%)` }}
-                  />
-
-                  {/* Content — layered on top */}
-                  <div className="relative z-10 h-full min-h-[240px] sm:min-h-[280px] flex flex-col justify-between p-5 lg:p-6">
+                  {/* Content */}
+                  <div className="relative z-10 h-full min-h-[200px] sm:min-h-[260px] flex flex-col justify-between p-4 sm:p-5 lg:p-6">
                     {/* Top: Icon badge */}
                     <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-lg group-hover:scale-110 group-hover:-translate-y-0.5 transition-all duration-300"
+                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-lg"
                       style={{ background: "rgba(255,255,255,0.15)" }}
                     >
-                      <Icon size={20} style={{ color: "#ffffff" }} />
+                      <Icon size={18} className="sm:hidden" style={{ color: "#ffffff" }} />
+                      <Icon size={20} className="hidden sm:block" style={{ color: "#ffffff" }} />
                     </div>
 
                     {/* Bottom: Title + CTA */}
                     <div>
-                      <h3 className="text-[17px] lg:text-lg font-heading font-bold text-white leading-snug mb-3 drop-shadow-sm">
+                      <h3 className="text-[15px] sm:text-[17px] lg:text-lg font-heading font-bold text-white leading-snug mb-2 sm:mb-3 drop-shadow-sm">
                         {service.title}
                       </h3>
-                      <div className="inline-flex items-center gap-2 text-white/90 font-medium text-sm group-hover:text-accent group-hover:gap-3 transition-all duration-300">
+                      <div className="inline-flex items-center gap-2 text-white/90 font-medium text-[13px] sm:text-sm group-hover:text-accent transition-all duration-300">
                         Learn more
-                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform duration-300" />
                       </div>
                     </div>
                   </div>
