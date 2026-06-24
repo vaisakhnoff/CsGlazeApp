@@ -19,7 +19,6 @@ export function ScrollProgress() {
     return () => window.removeEventListener("scroll", handler);
   }, [scaleX]);
 
-  // Hide when at top
   if (progress < 0.01) return null;
 
   return (
@@ -28,7 +27,7 @@ export function ScrollProgress() {
       style={{
         scaleX,
         background: "linear-gradient(90deg, #fca311 0%, #ffb938 50%, #fca311 100%)",
-        boxShadow: "0 0 10px rgba(252, 163, 17, 0.5)",
+        boxShadow: "0 0 12px rgba(252, 163, 17, 0.4), 0 0 4px rgba(252, 163, 17, 0.6)",
       }}
     />
   );

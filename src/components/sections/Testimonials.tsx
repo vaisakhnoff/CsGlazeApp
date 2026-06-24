@@ -21,8 +21,8 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const } },
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export function Testimonials({ testimonials }: Props) {
@@ -39,7 +39,7 @@ export function Testimonials({ testimonials }: Props) {
       {/* Top line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
 
-      {/* Subtle grid texture */}
+      {/* Spatial grid texture — subtle depth */}
       <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
@@ -49,8 +49,10 @@ export function Testimonials({ testimonials }: Props) {
         }}
       />
 
-      {/* Glow blob */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent opacity-[0.06] rounded-full blur-3xl pointer-events-none" />
+      {/* Spatial glow orbs */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent opacity-[0.06] rounded-full blur-3xl pointer-events-none animate-glow-pulse" />
+      <div className="absolute top-[10%] left-[10%] w-32 h-32 rounded-full bg-white/[0.03] blur-2xl pointer-events-none animate-spatial-float-slow" />
+      <div className="absolute bottom-[15%] right-[10%] w-24 h-24 rounded-full bg-accent/[0.05] blur-xl pointer-events-none animate-spatial-float" style={{ animationDelay: "-3s" }} />
 
       <div className="container-premium relative z-10">
         {/* Section Header */}
@@ -78,7 +80,7 @@ export function Testimonials({ testimonials }: Props) {
           </ClipReveal>
         </motion.div>
 
-        {/* Featured Testimonial (carousel) — shown when ≥1 */}
+        {/* Featured Testimonial — spatial glass card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -86,10 +88,12 @@ export function Testimonials({ testimonials }: Props) {
           transition={{ duration: 0.7 }}
           className="max-w-3xl mx-auto mb-12"
         >
-          <div className="relative card-premium bg-white/5 border border-white/10 p-8 md:p-12 rounded-3xl text-center">
-            {/* Large quote icon */}
+          <div className="relative glass-dark p-8 md:p-12 rounded-3xl text-center"
+            style={{ boxShadow: "0 16px 56px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05)" }}
+          >
+            {/* Large quote icon — floating */}
             <div className="flex justify-center mb-6">
-              <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center shadow-[0_4px_16px_rgba(252,163,17,0.15)]">
                 <Quote size={22} className="text-accent" />
               </div>
             </div>
@@ -117,12 +121,12 @@ export function Testimonials({ testimonials }: Props) {
               </motion.div>
             </AnimatePresence>
 
-            {/* Navigation arrows — only show if multiple */}
+            {/* Navigation arrows — spatial buttons */}
             {testimonials.length > 1 && (
               <div className="flex items-center justify-center gap-4 mt-8">
                 <button
                   onClick={prev}
-                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 hover:border-white/30 hover:shadow-[0_4px_16px_rgba(255,255,255,0.05)] transition-all duration-300"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft size={18} />
@@ -135,7 +139,7 @@ export function Testimonials({ testimonials }: Props) {
                       key={i}
                       onClick={() => setActiveIdx(i)}
                       className={`h-1.5 rounded-full transition-all duration-300 ${
-                        i === activeIdx ? "bg-accent w-6" : "bg-white/30 w-1.5"
+                        i === activeIdx ? "bg-accent w-6 shadow-[0_0_8px_rgba(252,163,17,0.4)]" : "bg-white/30 w-1.5"
                       }`}
                       aria-label={`Go to testimonial ${i + 1}`}
                     />
@@ -144,7 +148,7 @@ export function Testimonials({ testimonials }: Props) {
 
                 <button
                   onClick={next}
-                  className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-all"
+                  className="w-10 h-10 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 hover:border-white/30 hover:shadow-[0_4px_16px_rgba(255,255,255,0.05)] transition-all duration-300"
                   aria-label="Next testimonial"
                 >
                   <ChevronRight size={18} />
@@ -154,7 +158,7 @@ export function Testimonials({ testimonials }: Props) {
           </div>
         </motion.div>
 
-        {/* Grid of remaining cards — only show if >1 */}
+        {/* Grid of cards — spatial glass surfaces */}
         {testimonials.length > 1 && (
           <motion.div
             variants={containerVariants}
@@ -168,10 +172,10 @@ export function Testimonials({ testimonials }: Props) {
                 key={t.id}
                 variants={cardVariants}
                 onClick={() => setActiveIdx(i)}
-                className={`p-5 rounded-2xl border cursor-pointer transition-all duration-300 ${
+                className={`p-5 rounded-2xl border cursor-pointer transition-all duration-400 hover:-translate-y-1 ${
                   i === activeIdx
-                    ? "border-accent/40 bg-accent/10"
-                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8"
+                    ? "border-accent/40 bg-accent/10 shadow-[0_8px_24px_rgba(252,163,17,0.1)]"
+                    : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8 hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]"
                 }`}
               >
                 <p className="text-white/70 text-sm leading-relaxed italic line-clamp-3 mb-4">

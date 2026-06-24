@@ -19,7 +19,6 @@ function FieldErr({ msg }: { msg?: string }) {
 }
 
 interface ContactProps {
-  /** Loaded from PageContent DB by the server parent */
   location?: string;
   email?: string;
   phone?: string;
@@ -31,7 +30,6 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Reset form on success
   useEffect(() => {
     if (state.status === "success") {
       formRef.current?.reset();
@@ -39,7 +37,6 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
     }
   }, [state.status]);
 
-  // Show all field errors when server responds (catches submit-without-touch)
   useEffect(() => {
     if (state.status === "error" && state.errors) {
       setTouched({ name: true, email: true, phone: true, message: true });
@@ -57,9 +54,9 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
       {/* Top line */}
       <div className="line-h absolute top-0 left-0 right-0 opacity-25" />
 
-      {/* Background glows */}
-      <div className="absolute top-20 right-0 w-96 h-96 bg-primary opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
+      {/* Spatial background depth */}
+      <div className="absolute top-20 right-0 w-96 h-96 bg-primary opacity-[0.03] rounded-full blur-3xl pointer-events-none animate-glow-pulse" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none animate-glow-pulse" style={{ animationDelay: "-2s" }} />
 
       <div className="container-premium relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-[45%_55%] gap-12 lg:gap-16 items-start">
@@ -101,11 +98,11 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
               Connect with our engineering team to discuss structural requirements, materiality, and project timelines.
             </p>
 
-            {/* Contact Info */}
-            <div className="space-y-5">
-              <div className="flex items-start gap-4 group">
-                <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <MapPin size={18} className="text-accent" />
+            {/* Contact Info — spatial glass cards */}
+            <div className="space-y-4">
+              <div className="flex items-start gap-4 group p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/70 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 shadow-[0_2px_6px_rgba(252,163,17,0.1)] group-hover:shadow-[0_4px_12px_rgba(252,163,17,0.15)] transition-shadow">
+                  <MapPin size={17} className="text-accent" />
                 </div>
                 <div>
                   <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Location</h3>
@@ -113,9 +110,9 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 group">
-                <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <Mail size={18} className="text-accent" />
+              <div className="flex items-start gap-4 group p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/70 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 shadow-[0_2px_6px_rgba(252,163,17,0.1)] group-hover:shadow-[0_4px_12px_rgba(252,163,17,0.15)] transition-shadow">
+                  <Mail size={17} className="text-accent" />
                 </div>
                 <div>
                   <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Direct Inquiry</h3>
@@ -129,9 +126,9 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
               </div>
 
               {displayPhone && (
-                <div className="flex items-start gap-4 group">
-                  <div className="w-11 h-11 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                    <Phone size={18} className="text-accent" />
+                <div className="flex items-start gap-4 group p-4 rounded-2xl bg-white/90 backdrop-blur-sm border border-white/70 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_2px_6px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.05)] hover:-translate-y-1 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-xl bg-accent-light flex items-center justify-center flex-shrink-0 shadow-[0_2px_6px_rgba(252,163,17,0.1)] group-hover:shadow-[0_4px_12px_rgba(252,163,17,0.15)] transition-shadow">
+                    <Phone size={17} className="text-accent" />
                   </div>
                   <div>
                     <h3 className="font-heading font-semibold text-primary text-sm mb-0.5">Phone</h3>
@@ -155,21 +152,23 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
             </div>
           </motion.div>
 
-          {/* ── RIGHT: Form ── */}
+          {/* ── RIGHT: Form — spatial elevated card ── */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="card-premium p-7 lg:p-10 relative overflow-hidden">
+            <div className="card-spatial p-7 lg:p-10 relative overflow-hidden"
+              style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.02), 0 8px 20px rgba(0,0,0,0.05), 0 24px 64px rgba(0,0,0,0.06), inset 0 1.5px 0 rgba(255,255,255,1)" }}
+            >
               {/* Corner line accents */}
               <div className="line-corner-tl" />
               <div className="line-corner-br" />
 
               {state.status === "success" ? (
                 <div className="flex flex-col items-center justify-center min-h-[360px] gap-3 text-center w-full">
-                  <div className="w-14 h-14 rounded-full bg-success-light flex items-center justify-center mb-1">
+                  <div className="w-14 h-14 rounded-full bg-success-light flex items-center justify-center mb-1 shadow-[0_4px_16px_rgba(34,197,94,0.15)]">
                     <CheckCircle2 size={28} className="text-success" />
                   </div>
                   <div className="w-full">
@@ -190,7 +189,7 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
               ) : (
                 <form ref={formRef} className="space-y-5" action={formAction} noValidate>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Name — floating label */}
+                    {/* Name */}
                     <div className="floating-field">
                       <input
                         type="text"
@@ -198,10 +197,10 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                         name="name"
                         placeholder=" "
                         onBlur={blur("name")}
-                        className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                        className={`w-full px-4 py-3 rounded-xl border bg-[#f5f6f8] text-primary focus:outline-none focus:ring-2 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.04),inset_0_0_0_1px_rgba(0,0,0,0.02)] focus:bg-white focus:shadow-none ${
                           touched.name && state.errors?.name
                             ? "border-error focus:ring-error/20"
-                            : "border-border focus:ring-accent/20 focus:border-accent"
+                            : "border-border/40 focus:ring-accent/20 focus:border-accent"
                         }`}
                       />
                       <label htmlFor="contact-name">
@@ -210,20 +209,20 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                       {touched.name && <FieldErr msg={state.errors?.name} />}
                     </div>
 
-                    {/* Company — floating label */}
+                    {/* Company */}
                     <div className="floating-field">
                       <input
                         type="text"
                         id="contact-company"
                         name="company"
                         placeholder=" "
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-primary focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent transition-all text-sm"
+                        className="w-full px-4 py-3 rounded-xl border border-border/40 bg-[#f5f6f8] text-primary focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent focus:bg-white focus:shadow-none transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.04),inset_0_0_0_1px_rgba(0,0,0,0.02)]"
                       />
                       <label htmlFor="contact-company">Company</label>
                     </div>
                   </div>
 
-                  {/* Email — floating label */}
+                  {/* Email */}
                   <div className="floating-field">
                     <input
                       type="email"
@@ -231,10 +230,10 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                       name="email"
                       placeholder=" "
                       onBlur={blur("email")}
-                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                      className={`w-full px-4 py-3 rounded-xl border bg-[#f5f6f8] text-primary focus:outline-none focus:ring-2 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.04),inset_0_0_0_1px_rgba(0,0,0,0.02)] focus:bg-white focus:shadow-none ${
                         touched.email && state.errors?.email
                           ? "border-error focus:ring-error/20"
-                          : "border-border focus:ring-accent/20 focus:border-accent"
+                          : "border-border/40 focus:ring-accent/20 focus:border-accent"
                       }`}
                     />
                     <label htmlFor="contact-email">
@@ -243,7 +242,7 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                     {touched.email && <FieldErr msg={state.errors?.email} />}
                   </div>
 
-                  {/* Phone — floating label */}
+                  {/* Phone */}
                   <div className="floating-field">
                     <input
                       type="tel"
@@ -251,17 +250,17 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                       name="phone"
                       placeholder=" "
                       onBlur={blur("phone")}
-                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all text-sm ${
+                      className={`w-full px-4 py-3 rounded-xl border bg-[#f5f6f8] text-primary focus:outline-none focus:ring-2 transition-all text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.04),inset_0_0_0_1px_rgba(0,0,0,0.02)] focus:bg-white focus:shadow-none ${
                         touched.phone && state.errors?.phone
                           ? "border-error focus:ring-error/20"
-                          : "border-border focus:ring-accent/20 focus:border-accent"
+                          : "border-border/60 focus:ring-accent/20 focus:border-accent"
                       }`}
                     />
                     <label htmlFor="contact-phone">Phone Number</label>
                     {touched.phone && <FieldErr msg={state.errors?.phone} />}
                   </div>
 
-                  {/* Message — floating label */}
+                  {/* Message */}
                   <div className="floating-field">
                     <textarea
                       id="contact-message"
@@ -269,10 +268,10 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                       rows={4}
                       placeholder=" "
                       onBlur={blur("message")}
-                      className={`w-full px-4 py-3 rounded-xl border bg-white text-primary focus:outline-none focus:ring-2 transition-all resize-none text-sm ${
+                      className={`w-full px-4 py-3 rounded-xl border bg-[#f5f6f8] text-primary focus:outline-none focus:ring-2 transition-all resize-none text-sm shadow-[inset_0_2px_4px_rgba(0,0,0,0.04),inset_0_0_0_1px_rgba(0,0,0,0.02)] focus:bg-white focus:shadow-none ${
                         touched.message && state.errors?.message
                           ? "border-error focus:ring-error/20"
-                          : "border-border focus:ring-accent/20 focus:border-accent"
+                          : "border-border/60 focus:ring-accent/20 focus:border-accent"
                       }`}
                     />
                     <label htmlFor="contact-message">
@@ -281,7 +280,7 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                     {touched.message && <FieldErr msg={state.errors?.message} />}
                   </div>
 
-                  {/* Server-level error message */}
+                  {/* Server-level error */}
                   {state.status === "error" && state.message && (
                     <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-error-light border border-error/20 text-error text-sm">
                       <AlertCircle size={16} className="flex-shrink-0" />
@@ -292,7 +291,7 @@ export const Contact = ({ location, email, phone, whatsapp }: ContactProps) => {
                   <button
                     type="submit"
                     disabled={isPending}
-                    className="w-full px-8 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl hover:shadow-accent transition-all duration-300 hover-lift disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full px-8 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl shadow-[0_4px_16px_rgba(252,163,17,0.2)] hover:shadow-[0_8px_24px_rgba(252,163,17,0.35)] hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isPending ? "Sending…" : "Submit Specifications"}
                   </button>

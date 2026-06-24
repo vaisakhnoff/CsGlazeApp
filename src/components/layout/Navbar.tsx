@@ -31,7 +31,7 @@ export const Navbar = () => {
           if (entry.isIntersecting) setActiveSection(id);
         },
         {
-          rootMargin: "-40% 0px -55% 0px", // fire when section is ~middle of viewport
+          rootMargin: "-40% 0px -55% 0px",
           threshold: 0,
         }
       );
@@ -51,110 +51,122 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
         isScrolled
-          ? "bg-white/70 backdrop-blur-2xl border-b border-white/60 shadow-sm py-2 md:glass-strong md:shadow-md md:py-3"
+          ? "py-2 md:py-3"
           : "py-3 md:py-4"
       }`}
     >
-      {/* Animated bottom accent line (visible when scrolled) */}
-      {isScrolled && (
+      {/* Spatial floating navbar container */}
+      <div className={`container-premium transition-all duration-700 ${isScrolled ? "px-4 md:px-8" : ""}`}>
         <div
-          className="absolute bottom-0 left-0 right-0 h-px"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(252,163,17,0.4) 50%, transparent 100%)",
-          }}
-        />
-      )}
-
-      <div className="container-premium">
-        <div
-          className={`flex items-center justify-between transition-[height] duration-500 ${
-            isScrolled ? "h-12 md:h-[88px]" : "h-16 md:h-[88px]"
+          className={`transition-all duration-700 relative ${
+            isScrolled
+              ? "glass-strong rounded-2xl px-5 md:px-6"
+              : "px-0"
           }`}
+          style={isScrolled ? {
+            boxShadow: "0 2px 4px rgba(0,0,0,0.02), 0 8px 20px rgba(0,0,0,0.05), 0 20px 56px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.95)"
+          } : undefined}
         >
-          {/* Logo — morphs on scroll */}
-          <Link href="/" className="relative z-50 flex items-center group">
+          {/* Animated bottom accent line (visible when scrolled) */}
+          {isScrolled && (
             <div
-              className={`relative transition-all duration-500 ease-out ${
-                isScrolled
-                  ? "h-10 w-[74px] md:h-14 md:w-[100px]"
-                  : "h-[58px] w-[104px] md:h-[78px] md:w-[140px]"
-              }`}
-            >
-              <Image
-                src="/cs-glaze-logo.png"
-                alt="CS Glaze"
-                fill
-                priority
-                className="object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-          </Link>
+              className="absolute bottom-0 left-4 right-4 h-px rounded-full"
+              style={{
+                background: "linear-gradient(90deg, transparent 0%, rgba(252,163,17,0.3) 50%, transparent 100%)",
+              }}
+            />
+          )}
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`relative px-4 py-2 text-[14px] font-medium transition-colors duration-200 rounded-xl group ${
-                    isActive
-                      ? "text-primary bg-primary-light"
-                      : "text-text-secondary hover:text-primary hover:bg-primary-light"
-                  }`}
-                >
-                  {link.name}
-                  {/* Active / hover underline */}
-                  <span
-                    className={`absolute bottom-1 left-4 right-4 h-px bg-accent transition-transform duration-300 origin-left ${
-                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          <div
+            className={`flex items-center justify-between transition-[height] duration-500 ${
+              isScrolled ? "h-14 md:h-[72px]" : "h-16 md:h-[88px]"
+            }`}
+          >
+            {/* Logo — morphs on scroll */}
+            <Link href="/" className="relative z-50 flex items-center group">
+              <div
+                className={`relative transition-all duration-500 ease-out ${
+                  isScrolled
+                    ? "h-10 w-[74px] md:h-12 md:w-[96px]"
+                    : "h-[58px] w-[104px] md:h-[78px] md:w-[140px]"
+                }`}
+              >
+                <Image
+                  src="/cs-glaze-logo.png"
+                  alt="CS Glaze"
+                  fill
+                  priority
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            </Link>
+
+            {/* Desktop Navigation — floating pill style */}
+            <nav className="hidden md:flex items-center gap-1 rounded-xl bg-white/40 backdrop-blur-md border border-white/50 px-1.5 py-1.5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]" aria-label="Main navigation">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`relative px-4 py-2 text-[13px] font-medium transition-all duration-300 rounded-lg group ${
+                      isActive
+                        ? "text-primary bg-white shadow-sm"
+                        : "text-text-secondary hover:text-primary hover:bg-white/60"
                     }`}
-                  />
-                </Link>
-              );
-            })}
-          </nav>
+                  >
+                    {link.name}
+                    {/* Active indicator dot */}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-indicator"
+                        className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
 
-          {/* CTA Button */}
-          <a
-            href="#contact"
-            className="hidden md:inline-flex items-center justify-center px-5 py-2.5 font-heading font-semibold text-[14px] text-on-accent gradient-accent rounded-xl hover:shadow-accent transition-all duration-300 hover-lift"
-          >
-            Get Quote
-          </a>
+            {/* CTA Button — floating with depth */}
+            <a
+              href="#contact"
+              className="hidden md:inline-flex items-center justify-center px-5 py-2.5 font-heading font-semibold text-[13px] text-on-accent gradient-accent rounded-xl shadow-[0_4px_16px_rgba(252,163,17,0.25)] hover:shadow-[0_8px_24px_rgba(252,163,17,0.35)] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              Get Quote
+            </a>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden z-50 flex h-9 w-9 items-center justify-center rounded-lg hover:bg-white/70 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? (
-              <X size={20} strokeWidth={1.6} className="text-primary" />
-            ) : (
-              <Menu size={20} strokeWidth={1.6} className="text-primary" />
-            )}
-          </button>
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden z-50 flex h-10 w-10 items-center justify-center rounded-xl bg-white/60 backdrop-blur-sm border border-white/50 shadow-sm hover:bg-white/80 transition-all"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? (
+                <X size={18} strokeWidth={1.6} className="text-primary" />
+              ) : (
+                <Menu size={18} strokeWidth={1.6} className="text-primary" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Navigation — floating glass panel */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-            className="md:hidden bg-white/80 backdrop-blur-2xl border-t border-white/70 mt-2 overflow-hidden"
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden mx-4 mt-2 rounded-2xl glass-strong shadow-lg overflow-hidden"
           >
-            {/* Mobile accent line */}
-            <div className="h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
-            <nav className="container-premium py-5 flex flex-col gap-1" aria-label="Mobile navigation">
+            <nav className="p-4 flex flex-col gap-1" aria-label="Mobile navigation">
               {navLinks.map((link, i) => {
                 const isActive = activeSection === link.id;
                 return (
@@ -166,10 +178,10 @@ export const Navbar = () => {
                   >
                     <Link
                       href={link.href}
-                      className={`block px-4 py-2.5 text-[15px] font-medium rounded-xl transition-colors ${
+                      className={`block px-4 py-3 text-[15px] font-medium rounded-xl transition-all ${
                         isActive
-                          ? "text-primary bg-primary-light"
-                          : "text-text-primary hover:bg-primary-light"
+                          ? "text-primary bg-white shadow-sm"
+                          : "text-text-primary hover:bg-white/60"
                       }`}
                       onClick={() => setMobileMenuOpen(false)}
                     >
@@ -182,11 +194,11 @@ export const Navbar = () => {
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navLinks.length * 0.05, duration: 0.25 }}
-                className="mt-3"
+                className="mt-2"
               >
                 <a
                   href="#contact"
-                  className="block text-center px-5 py-3 font-heading font-semibold text-[14px] text-on-accent gradient-accent rounded-xl"
+                  className="block text-center px-5 py-3 font-heading font-semibold text-[14px] text-on-accent gradient-accent rounded-xl shadow-[0_4px_16px_rgba(252,163,17,0.2)]"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Get Quote

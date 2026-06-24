@@ -11,9 +11,11 @@ export const Footer = () => {
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />
 
-      {/* Decorative vertical lines */}
-      <div className="absolute left-1/4 top-0 bottom-0 w-px bg-white/5 hidden lg:block" />
-      <div className="absolute right-1/4 top-0 bottom-0 w-px bg-white/5 hidden lg:block" />
+      {/* Spatial depth layers */}
+      <div className="absolute left-1/4 top-0 bottom-0 w-px bg-white/[0.03] hidden lg:block" />
+      <div className="absolute right-1/4 top-0 bottom-0 w-px bg-white/[0.03] hidden lg:block" />
+      <div className="absolute top-[20%] left-[10%] w-48 h-48 bg-accent/[0.04] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[10%] w-40 h-40 bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
 
       <div className="container-premium py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-10">
@@ -57,7 +59,7 @@ export const Footer = () => {
             <ul className="flex flex-col gap-2.5">
               {["Façades", "ACP Cladding", "Unitized Systems", "Spider Glazing"].map((item) => (
                 <li key={item}>
-                  <Link href="#services" className="text-sm text-white/60 hover:text-white transition-colors hover:translate-x-1 inline-block duration-200">
+                  <Link href="#services" className="text-sm text-white/60 hover:text-white transition-all hover:translate-x-1 inline-block duration-200">
                     {item}
                   </Link>
                 </li>
@@ -83,7 +85,7 @@ export const Footer = () => {
                 { name: "Careers", href: "#contact" },
               ].map((item) => (
                 <li key={item.name}>
-                  <Link href={item.href} className="text-sm text-white/60 hover:text-white transition-colors hover:translate-x-1 inline-block duration-200">
+                  <Link href={item.href} className="text-sm text-white/60 hover:text-white transition-all hover:translate-x-1 inline-block duration-200">
                     {item.name}
                   </Link>
                 </li>
@@ -92,14 +94,14 @@ export const Footer = () => {
           </motion.div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-7 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-white/50">
+        {/* Bottom Bar — spatial glass separator */}
+        <div className="pt-7 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-white/40">
             © {new Date().getFullYear()} CS Glaze. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             {["Privacy Policy", "Terms of Service"].map((item) => (
-              <Link key={item} href="#contact" className="text-xs text-white/50 hover:text-white transition-colors">
+              <Link key={item} href="#contact" className="text-xs text-white/40 hover:text-white/80 transition-colors">
                 {item}
               </Link>
             ))}

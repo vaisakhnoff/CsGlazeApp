@@ -16,7 +16,7 @@ function ImageCarousel({ images, fallback }: { images: string[]; fallback: strin
   };
 
   return (
-    <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-7 bg-border-light">
+    <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-7 bg-border-light shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div
           key={idx}
@@ -34,13 +34,13 @@ function ImageCarousel({ images, fallback }: { images: string[]; fallback: strin
         <>
           <button
             onClick={() => go(idx - 1, -1)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-border flex items-center justify-center text-primary hover:bg-white transition-all shadow-md"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-white/60 flex items-center justify-center text-primary hover:bg-white hover:shadow-md transition-all shadow-sm"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => go(idx + 1, 1)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-border flex items-center justify-center text-primary hover:bg-white transition-all shadow-md"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-white/60 flex items-center justify-center text-primary hover:bg-white hover:shadow-md transition-all shadow-sm"
           >
             <ChevronRight size={18} />
           </button>
@@ -49,7 +49,7 @@ function ImageCarousel({ images, fallback }: { images: string[]; fallback: strin
               <button
                 key={i}
                 onClick={() => go(i, i > idx ? 1 : -1)}
-                className={`h-1 rounded-full transition-all ${i === idx ? "bg-accent w-6" : "bg-white/60 w-1.5"}`}
+                className={`h-1 rounded-full transition-all ${i === idx ? "bg-accent w-6 shadow-[0_0_6px_rgba(252,163,17,0.4)]" : "bg-white/60 w-1.5"}`}
               />
             ))}
           </div>
@@ -83,25 +83,24 @@ const DEMO_PROJECTS: Project[] = [
   { id: "demo-3", title: "Meridian Glass Canopy", category: "Spider Glazing", location: "Sharjah, UAE", completionYear: "2023", featured: false, shortDescription: "Architecturally exposed spider-glazed entrance canopy spanning 18 m with minimal structural steel and back-painted laminated glass.", images: [] },
 ];
 
-const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.07 } } };
+const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
 const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const } },
+  hidden: { opacity: 0, y: 28, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export function ProjectsGrid({ projects }: { projects: Project[] }) {
   const displayProjects = projects.length > 0 ? projects : DEMO_PROJECTS;
   const [showAll, setShowAll] = useState(false);
   const [selected, setSelected] = useState<Project | null>(null);
-  const DESKTOP_INITIAL = 6; // 2 rows of 3
-  const MOBILE_INITIAL = 6;  // fills 3 rows of 2
+  const DESKTOP_INITIAL = 6;
+  const MOBILE_INITIAL = 6;
 
   const visibleProjects = showAll ? displayProjects : displayProjects.slice(0, DESKTOP_INITIAL);
 
   const getImage = (p: Project) =>
     p.images[0]?.url ?? FALLBACK_IMAGE[p.category] ?? FALLBACK_IMAGE.default;
 
-  // Close modal on Escape key
   useEffect(() => {
     if (!selected) return;
     const handler = (e: KeyboardEvent) => {
@@ -116,14 +115,18 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
       {/* Section entry line */}
       <div className="line-h absolute top-0 left-0 right-0 opacity-25" />
 
-      <div className="container-premium">
+      {/* Spatial depth layers */}
+      <div className="absolute top-[10%] left-[5%] w-72 h-72 bg-accent/[0.03] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[5%] w-60 h-60 bg-primary/[0.03] rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container-premium relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12"
+          className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-14"
         >
           <div className="w-full max-w-[700px] flex-1">
             <div className="flex items-center gap-3 mb-4">
@@ -147,14 +150,14 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           <a
             href="#contact"
             onClick={(e) => { e.preventDefault(); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="flex items-center gap-2 text-sm font-medium text-accent cursor-pointer group whitespace-nowrap"
+            className="flex items-center gap-2 text-sm font-medium text-accent cursor-pointer group whitespace-nowrap px-4 py-2 rounded-xl bg-accent-light/50 hover:bg-accent-light transition-colors"
           >
             Enquire
             <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
           </a>
         </motion.div>
 
-        {/* Projects Grid — 2-col mobile, 2-col tablet, 3-col desktop */}
+        {/* Projects Grid — spatial cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -165,7 +168,6 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           {visibleProjects.map((project, idx) => {
             const imageUrl = getImage(project);
             const hiddenOnMobile = !showAll && idx >= MOBILE_INITIAL;
-            // Alternate aspect ratios between 4:3 and 3:4
             const aspectClass = idx % 2 === 0 ? "aspect-[4/3]" : "aspect-[3/4]";
 
             return (
@@ -175,54 +177,50 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 className={hiddenOnMobile ? "hidden sm:block" : "block"}
               >
                 <div
-                  className="card-premium overflow-hidden cursor-pointer group h-full flex flex-col line-hover-bottom interactive-click"
+                  className="card-spatial overflow-hidden cursor-pointer group h-full flex flex-col"
                   onClick={() => setSelected(project)}
                   role="button"
                   tabIndex={0}
                 >
-                  {/* Image */}
+                  {/* Image — with spatial depth on hover */}
                   <div className={`relative ${aspectClass} overflow-hidden bg-border-light flex-shrink-0`}>
-                    {/* Shimmer skeleton — visible while image loads */}
                     <div className="absolute inset-0 skeleton-shimmer" />
                     <motion.div
-                      className="absolute inset-0 bg-cover bg-center"
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
                       style={{ backgroundImage: `url(${imageUrl})` }}
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.04 }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
-                    {/* Category Badge */}
+                    {/* Category Badge — floating glass chip */}
                     <div className="absolute top-3 left-3">
-                      <span className="px-2 py-1 bg-white/95 backdrop-blur-sm rounded-md text-[11px] font-medium text-primary shadow-sm">
+                      <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm rounded-lg text-[11px] font-medium text-primary shadow-sm border border-white/60">
                         {project.category}
                       </span>
                     </div>
 
                     {project.featured && (
                       <div className="absolute top-3 right-3">
-                        <span className="px-2 py-1 bg-accent text-white rounded-md text-[11px] font-semibold shadow-sm">
+                        <span className="px-2.5 py-1 bg-accent text-white rounded-lg text-[11px] font-semibold shadow-[0_4px_12px_rgba(252,163,17,0.3)]">
                           Featured
                         </span>
                       </div>
                     )}
 
-                    {/* Hover arrow */}
+                    {/* Hover arrow — floating */}
                     <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                      <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-lg">
+                      <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md">
                         <ArrowRight size={15} className="text-primary" />
                       </div>
                     </div>
                   </div>
 
-                  {/* Content — compact */}
+                  {/* Content */}
                   <div className="p-4 flex-grow flex flex-col">
                     <h3 className="text-sm lg:text-base font-heading font-semibold text-primary mb-2 group-hover:text-accent transition-colors leading-snug">
                       {project.title}
                     </h3>
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-text-secondary mt-auto pt-3 border-t border-border-light">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-text-secondary mt-auto pt-3 border-t border-border-light/50">
                       {project.location && (
                         <div className="flex items-center gap-1">
                           <MapPin size={12} className="text-accent" />
@@ -248,22 +246,21 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           <div className="mt-8 flex justify-center">
             <button
               onClick={() => setShowAll((v) => !v)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 font-heading font-semibold text-sm text-primary bg-primary-light border border-border rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-2.5 font-heading font-semibold text-sm text-primary bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300"
             >
               {showAll ? "View Less" : `View All ${displayProjects.length} Projects`}
               <ArrowRight
                 size={16}
-                className={`transition-transform duration-300 ${showAll ? "rotate-180 -translate-x-0.5" : "group-hover:translate-x-1"}`}
+                className={`transition-transform duration-300 ${showAll ? "rotate-180 -translate-x-0.5" : ""}`}
               />
             </button>
           </div>
         )}
-        {/* Show More (mobile) */}
         {!showAll && displayProjects.length > MOBILE_INITIAL && (
           <div className="mt-4 flex justify-center sm:hidden">
             <button
               onClick={() => setShowAll(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 font-heading font-semibold text-sm text-primary bg-primary-light rounded-xl hover:bg-primary hover:text-white transition-all duration-300"
+              className="inline-flex items-center gap-2 px-5 py-2.5 font-heading font-semibold text-sm text-primary bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
             >
               View More Projects
               <ArrowRight size={16} />
@@ -275,7 +272,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
       {/* Bottom line */}
       <div className="line-h absolute bottom-0 left-0 right-0 opacity-20" />
 
-      {/* Project Detail Modal */}
+      {/* Project Detail Modal — spatial overlay */}
       <AnimatePresence>
         {selected && (
           <>
@@ -283,15 +280,16 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-primary/20 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-primary/30 backdrop-blur-md z-50"
               onClick={() => setSelected(null)}
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 16 }}
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.96, y: 16 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[768px] md:max-w-[90vw] md:max-h-[88dvh] bg-white rounded-none md:rounded-3xl shadow-lg z-50 overflow-hidden flex flex-col"
+              exit={{ opacity: 0, scale: 0.94, y: 20 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[768px] md:max-w-[90vw] md:max-h-[88dvh] bg-white rounded-none md:rounded-3xl z-50 overflow-hidden flex flex-col md:border md:border-white/80"
+              style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.06)" }}
             >
               <div className="flex-1 overflow-y-auto p-7 md:p-10 w-full">
                 {/* Header */}
@@ -302,7 +300,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                         {selected.category}
                       </span>
                       {selected.featured && (
-                        <span className="px-2.5 py-1 bg-accent text-white rounded-lg text-xs font-semibold">
+                        <span className="px-2.5 py-1 bg-accent text-white rounded-lg text-xs font-semibold shadow-sm">
                           Featured
                         </span>
                       )}
@@ -327,9 +325,9 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   </div>
                   <button
                     onClick={() => setSelected(null)}
-                    className="w-9 h-9 rounded-lg hover:bg-border-light flex items-center justify-center transition-colors flex-shrink-0"
+                    className="w-9 h-9 rounded-xl bg-background hover:bg-border-light flex items-center justify-center transition-all flex-shrink-0 shadow-sm"
                   >
-                    <X size={18} className="text-text-secondary" />
+                    <X size={16} className="text-text-secondary" />
                   </button>
                 </div>
 
@@ -352,7 +350,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 <a
                   href="#contact"
                   onClick={() => setSelected(null)}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl hover:shadow-accent transition-all duration-300 hover-lift w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl shadow-[0_8px_24px_rgba(252,163,17,0.25)] hover:shadow-[0_12px_32px_rgba(252,163,17,0.35)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto"
                 >
                   Enquire About This Project
                   <ArrowRight size={17} />

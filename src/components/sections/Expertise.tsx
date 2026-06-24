@@ -35,13 +35,17 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
 
 export const Expertise = () => {
   return (
-    <section id="expertise" className="section-spacing bg-white relative overflow-hidden">
+    <section id="expertise" className="section-spacing relative overflow-hidden" style={{ background: "#f5f6f9" }}>
       {/* Top line */}
       <div className="line-h absolute top-0 left-0 right-0 opacity-25" />
 
-      {/* Background glow */}
-      <div className="absolute top-20 left-10 w-80 h-80 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary opacity-[0.04] rounded-full blur-3xl pointer-events-none" />
+      {/* Spatial background depth layers */}
+      <div className="absolute top-20 left-10 w-80 h-80 bg-accent opacity-[0.04] rounded-full blur-3xl pointer-events-none animate-glow-pulse" />
+      <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary opacity-[0.04] rounded-full blur-3xl pointer-events-none animate-glow-pulse" style={{ animationDelay: "-2s" }} />
+
+      {/* Floating decorative shapes */}
+      <div className="absolute top-[15%] right-[15%] w-20 h-20 rounded-2xl bg-accent/[0.04] rotate-12 blur-sm pointer-events-none hidden lg:block animate-spatial-float-slow" />
+      <div className="absolute bottom-[20%] left-[8%] w-14 h-14 rounded-full bg-primary/[0.03] blur-sm pointer-events-none hidden lg:block animate-spatial-float" style={{ animationDelay: "-4s" }} />
 
       <div className="container-premium relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -90,27 +94,30 @@ export const Expertise = () => {
             </p>
           </motion.div>
 
-          {/* Right: Stats Grid */}
+          {/* Right: Stats Grid — spatial floating cards */}
           <div className="grid grid-cols-2 gap-4">
             {stats.map((stat, idx) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="card-premium p-6 lg:p-8 text-center group line-hover-bottom relative overflow-hidden"
+                transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="card-spatial p-6 lg:p-8 text-center group relative overflow-hidden"
               >
+                {/* Subtle top glow on hover */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-20 bg-accent/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
                 {/* Corner accent */}
                 <div className="line-corner-tl" />
 
                 <div
-                  className="font-heading font-bold text-gradient-accent mb-2 tabular-nums"
+                  className="font-heading font-bold text-gradient-accent mb-2 tabular-nums relative z-10"
                   style={{ fontSize: "clamp(32px, 3.5vw, 48px)" }}
                 >
                   <Counter target={stat.value} suffix={stat.suffix} />
                 </div>
-                <div className="text-sm text-text-secondary font-medium">{stat.label}</div>
+                <div className="text-sm text-text-secondary font-medium relative z-10">{stat.label}</div>
               </motion.div>
             ))}
           </div>

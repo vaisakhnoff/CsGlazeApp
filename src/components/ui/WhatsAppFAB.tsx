@@ -12,13 +12,11 @@ export function WhatsAppFAB({ phone }: Props) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  // Show after 2s page load so it doesn't compete with hero
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 2000);
     return () => clearTimeout(t);
   }, []);
 
-  // Auto-show tooltip after 5s, once
   useEffect(() => {
     if (!visible) return;
     const t = setTimeout(() => setShowTooltip(true), 3000);
@@ -40,7 +38,7 @@ export function WhatsAppFAB({ phone }: Props) {
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           className="fixed bottom-6 right-6 z-40 flex items-end gap-3"
         >
-          {/* Tooltip bubble */}
+          {/* Tooltip bubble — spatial glass */}
           <AnimatePresence>
             {showTooltip && (
               <motion.div
@@ -48,11 +46,12 @@ export function WhatsAppFAB({ phone }: Props) {
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 10, scale: 0.9 }}
                 transition={{ duration: 0.25 }}
-                className="relative bg-white rounded-2xl shadow-lg px-4 py-3 max-w-[200px] border border-border"
+                className="relative glass-strong rounded-2xl px-4 py-3 max-w-[200px]"
+                style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)" }}
               >
                 <button
                   onClick={() => setShowTooltip(false)}
-                  className="absolute -top-2 -right-2 w-5 h-5 bg-white border border-border rounded-full flex items-center justify-center shadow-sm hover:bg-border-light transition-colors"
+                  className="absolute -top-2 -right-2 w-5 h-5 bg-white border border-border/50 rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-all"
                   aria-label="Close tooltip"
                 >
                   <X size={10} className="text-text-secondary" />
@@ -62,18 +61,21 @@ export function WhatsAppFAB({ phone }: Props) {
                   <span className="text-text-secondary font-normal">Chat with us on WhatsApp!</span>
                 </p>
                 {/* Bubble tail */}
-                <div className="absolute right-[-6px] bottom-4 w-3 h-3 bg-white border-r border-b border-border rotate-[-45deg]" />
+                <div className="absolute right-[-6px] bottom-4 w-3 h-3 bg-white/92 border-r border-b border-white/60 rotate-[-45deg]" />
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* FAB button */}
+          {/* FAB button — spatial floating with depth */}
           <a
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex items-center justify-center w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
-            style={{ background: "#25D366" }}
+            className="group relative flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            style={{
+              background: "#25D366",
+              boxShadow: "0 8px 24px rgba(37, 211, 102, 0.3), 0 4px 8px rgba(37, 211, 102, 0.15)",
+            }}
             aria-label="Chat on WhatsApp"
           >
             {/* Pulse ring */}
