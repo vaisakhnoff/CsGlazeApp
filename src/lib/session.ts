@@ -12,20 +12,21 @@ if (!process.env.SESSION_SECRET) {
 const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 export const ADMIN_SESSION_COOKIE = "admin_session";
-export const ADMIN_SESSION_DURATION_SECONDS = 7 * 24 * 60 * 60;
+export const ADMIN_SESSION_DURATION_SECONDS = 2 * 60 * 60; // 2 hours
 
 export async function createSession() {
   const session = await new SignJWT({ auth: true })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime("2h") // JWT hard-expires after 2 hours
     .sign(encodedKey);
 
   const cookieStore = await cookies();
   cookieStore.set(ADMIN_SESSION_COOKIE, session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: ADMIN_SESSION_DURATION_SECONDS,
+    // No maxAge = session cookie — dies when browser fully closes.
+    // JWT expiration handles time-based expiry (2h) even if browser stays open.
     sameSite: "lax",
     path: "/",
   });
@@ -43,6 +44,7 @@ export async function verifySession(session: string | undefined = "") {
     });
     return payload;
   } catch {
+    // JWT expired, tampered, or missing — all treated as invalid
     return null;
   }
 }
@@ -50,9 +52,18 @@ export async function verifySession(session: string | undefined = "") {
 export async function getAdminSession() {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
+
+  if (!sessionCookie) return null;
+
   const session = await verifySession(sessionCookie);
 
-  return session?.auth === true ? session : null;
+  // If JWT is expired/invalid, clean up the stale cookie
+  if (!session || session.auth !== true) {
+    cookieStore.delete(ADMIN_SESSION_COOKIE);
+    return null;
+  }
+
+  return session;
 }
 
 export async function requireAdminSession() {
