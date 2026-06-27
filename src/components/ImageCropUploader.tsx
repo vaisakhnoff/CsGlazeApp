@@ -9,10 +9,10 @@ import ReactCrop, {
   makeAspectCrop,
 } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { X, Upload, Crop as CropIcon, Check, ImagePlus } from "lucide-react";
+import { X, Upload, Crop as CropIcon, Check, ImagePlus, RectangleHorizontal, RectangleVertical, Maximize } from "lucide-react";
 
 interface UploadedImage {
-  id: string;   // DB Image id
+  id: string;
   url: string;
 }
 
@@ -21,17 +21,32 @@ interface Props {
   initialImages?: UploadedImage[];
 }
 
-function centerAspectCrop(w: number, h: number): PercentCrop {
-  return centerCrop(makeAspectCrop({ unit: "%", width: 90 }, 16 / 9, w, h), w, h);
+type AspectOption = "free" | "landscape" | "portrait" | "square";
+
+const ASPECT_VALUES: Record<AspectOption, number | undefined> = {
+  free: undefined,
+  landscape: 16 / 9,
+  portrait: 3 / 4,
+  square: 1,
+};
+
+function makeCenteredCrop(w: number, h: number, aspect: number | undefined): PercentCrop {
+  if (!aspect) {
+    // Free crop — select 90% of image
+    return { unit: "%", x: 5, y: 5, width: 90, height: 90 };
+  }
+  return centerCrop(makeAspectCrop({ unit: "%", width: 90 }, aspect, w, h), w, h);
 }
 
 export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props) {
   const [uploaded, setUploaded]         = useState<UploadedImage[]>(initialImages);
-  const [cropSrc, setCropSrc]           = useState<string | null>(null);   // data URL of pending file
+  const [cropSrc, setCropSrc]           = useState<string | null>(null);
   const [pendingFile, setPendingFile]   = useState<File | null>(null);
   const [crop, setCrop]                 = useState<PercentCrop>();
+  const [aspectMode, setAspectMode]     = useState<AspectOption>("free");
   const [uploading, setUploading]       = useState(false);
   const [error, setError]               = useState<string | null>(null);
+  const [imgDimensions, setImgDimensions] = useState<{ w: number; h: number } | null>(null);
   const imgRef                          = useRef<HTMLImageElement>(null);
   const fileInputRef                    = useRef<HTMLInputElement>(null);
 
@@ -48,6 +63,7 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
     if (file.size > MAX_MB * 1024 * 1024) { setError(`Image must be under ${MAX_MB} MB.`); return; }
     setError(null);
     setPendingFile(file);
+    setAspectMode("free");
     const reader = new FileReader();
     reader.onload = () => setCropSrc(reader.result as string);
     reader.readAsDataURL(file);
@@ -55,7 +71,15 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
 
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
-    setCrop(centerAspectCrop(w, h));
+    setImgDimensions({ w, h });
+    setCrop(makeCenteredCrop(w, h, ASPECT_VALUES[aspectMode]));
+  };
+
+  const switchAspect = (mode: AspectOption) => {
+    setAspectMode(mode);
+    if (imgDimensions) {
+      setCrop(makeCenteredCrop(imgDimensions.w, imgDimensions.h, ASPECT_VALUES[mode]));
+    }
   };
 
   const getCroppedBlob = useCallback((): Promise<Blob> => {
@@ -77,7 +101,7 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
       canvas.width,
       canvas.height
     );
-    return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej("canvas empty"), "image/jpeg", 0.9));
+    return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej("canvas empty"), "image/webp", 0.9));
   }, [crop]);
 
   const confirmCrop = async () => {
@@ -87,7 +111,7 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
     try {
       const blob = await getCroppedBlob();
       const fd   = new FormData();
-      fd.append("file", blob, pendingFile.name);
+      fd.append("file", blob, pendingFile.name.replace(/\.\w+$/, ".webp"));
       const res  = await fetch("/api/upload", { method: "POST", body: fd });
       if (!res.ok) throw new Error("Upload failed");
       const data: { image: UploadedImage } = await res.json();
@@ -133,30 +157,57 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
         </div>
       )}
 
-      {/* Crop modal — rendered in document.body to escape overflow-hidden parents */}
+      {/* Crop modal */}
       {cropSrc && createPortal(
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-8">
-          <div className="flex max-h-[90dvh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-[#c7c7c7] bg-[#f6f6f6] shadow-2xl">
-            <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[#d6d6d6] px-4 sm:px-6">
-              <span className="flex min-w-0 items-center gap-2 text-sm font-medium text-black">
+        <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.85)", padding: "1rem", backdropFilter: "blur(4px)" }}>
+          <div className="flex max-h-[90dvh] w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-[#444] bg-[#1a1a1a] shadow-2xl">
+            {/* Header */}
+            <div className="flex h-14 flex-shrink-0 items-center justify-between border-b border-[#333] px-4 sm:px-6">
+              <span className="flex min-w-0 items-center gap-2 text-sm font-medium text-white">
                 <CropIcon size={15} /> Crop Image
               </span>
               <button
                 type="button"
                 onClick={() => { setCropSrc(null); setPendingFile(null); }}
-                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md text-[#888] hover:bg-[#eeeeee] hover:text-black"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md text-[#888] hover:bg-[#333] hover:text-white"
                 aria-label="Close crop dialog"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-[#222] p-4 sm:p-6">
+            {/* Aspect Ratio Selector */}
+            <div className="flex items-center gap-2 px-4 sm:px-6 py-3 border-b border-[#333] bg-[#222] overflow-x-auto">
+              <span className="text-xs text-[#888] flex-shrink-0 mr-1">Ratio:</span>
+              {([
+                { mode: "free" as const, label: "Free", icon: Maximize },
+                { mode: "landscape" as const, label: "16:9", icon: RectangleHorizontal },
+                { mode: "portrait" as const, label: "3:4", icon: RectangleVertical },
+                { mode: "square" as const, label: "1:1", icon: CropIcon },
+              ]).map(({ mode, label, icon: Icon }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => switchAspect(mode)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors flex-shrink-0 ${
+                    aspectMode === mode
+                      ? "bg-white text-black"
+                      : "bg-[#333] text-[#aaa] hover:text-white hover:bg-[#444]"
+                  }`}
+                >
+                  <Icon size={13} />
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Crop Area */}
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-[#111] p-4 sm:p-6">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
-                aspect={16 / 9}
-                className="max-h-[70dvh] max-w-full"
+                aspect={ASPECT_VALUES[aspectMode]}
+                className="max-h-[60dvh] max-w-full"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -164,28 +215,34 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
                   src={cropSrc}
                   onLoad={onImageLoad}
                   alt="crop-preview"
-                  className="block max-h-[70dvh] max-w-full object-contain"
+                  className="block max-h-[60dvh] max-w-full object-contain"
                 />
               </ReactCrop>
             </div>
 
-            <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-[#d6d6d6] bg-white px-4 py-3 sm:px-6">
-              <button
-                type="button"
-                onClick={() => { setCropSrc(null); setPendingFile(null); }}
-                disabled={uploading}
-                className="px-4 py-2 text-sm text-[#666] transition-colors hover:text-black disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={confirmCrop}
-                disabled={uploading}
-                className="flex min-w-[140px] items-center justify-center gap-2 rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-[#222] disabled:opacity-60"
-              >
-                {uploading ? "Uploading…" : <><Check size={14} /> Use This Crop</>}
-              </button>
+            {/* Footer */}
+            <div className="flex flex-shrink-0 items-center justify-between gap-3 border-t border-[#333] bg-[#1a1a1a] px-4 py-3 sm:px-6">
+              <span className="text-xs text-[#666] hidden sm:block">
+                {aspectMode === "free" ? "Free crop — keeps original proportions" : `Locked to ${aspectMode}`}
+              </span>
+              <div className="flex items-center gap-3 ml-auto">
+                <button
+                  type="button"
+                  onClick={() => { setCropSrc(null); setPendingFile(null); }}
+                  disabled={uploading}
+                  className="px-4 py-2 text-sm text-[#aaa] transition-colors hover:text-white disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={confirmCrop}
+                  disabled={uploading}
+                  className="flex min-w-[120px] items-center justify-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-black hover:bg-[#eee] disabled:opacity-60 transition-colors"
+                >
+                  {uploading ? "Uploading…" : <><Check size={14} /> Crop & Upload</>}
+                </button>
+              </div>
             </div>
           </div>
         </div>,
