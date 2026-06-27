@@ -38,15 +38,15 @@ export function AdminDeleteButton({ action, label, variant = "icon" }: Props) {
   };
 
   const modal = open ? (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div style={{ position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/30 backdrop-blur-[2px]"
+        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.3)", backdropFilter: "blur(2px)" }}
         onClick={() => !isPending && setOpen(false)}
       />
 
       {/* Dialog */}
-      <div className="relative z-10 w-full max-w-sm bg-white rounded-2xl shadow-xl border border-[#d6d6d6] p-6 animate-in zoom-in-95 duration-200">
+      <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "400px", background: "#fff", borderRadius: "1rem", border: "1px solid #d6d6d6", padding: "1.5rem", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}>
         {done ? (
           <div className="flex flex-col items-center gap-3 py-2">
             <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
@@ -64,7 +64,7 @@ export function AdminDeleteButton({ action, label, variant = "icon" }: Props) {
                 <h3 className="font-semibold text-black text-sm mb-1">Confirm Deletion</h3>
                 <p className="text-[#666] text-sm leading-relaxed">
                   Are you sure you want to delete{" "}
-                  <span className="font-medium text-black break-words">&ldquo;{label}&rdquo;</span>? This
+                  <span className="font-medium text-black">&ldquo;{label}&rdquo;</span>? This
                   action cannot be undone.
                 </p>
               </div>
