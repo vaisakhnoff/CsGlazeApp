@@ -8,52 +8,71 @@ import { ClipReveal } from "@/components/ui/ClipReveal";
 function ImageCarousel({ images, fallback }: { images: string[]; fallback: string }) {
   const [idx, setIdx] = useState(0);
   const [dir, setDir] = useState(1);
+  const [zoomed, setZoomed] = useState(false);
   const all = images.length > 0 ? images : [fallback];
 
   const go = (next: number, direction: number) => {
     setDir(direction);
     setIdx((next + all.length) % all.length);
+    setZoomed(false);
   };
 
   return (
-    <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-7 bg-border-light shadow-[0_4px_20px_rgba(0,0,0,0.06)]">
+    <div className="relative w-full rounded-xl overflow-hidden bg-black/5">
+      {/* Image — full width, natural height, tap to zoom */}
       <AnimatePresence mode="wait" custom={dir}>
         <motion.div
           key={idx}
           custom={dir}
-          initial={{ x: dir * 60, opacity: 0 }}
+          initial={{ x: dir * 40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          exit={{ x: -dir * 60, opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${all[idx]})` }}
-        />
+          exit={{ x: -dir * 40, opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          className="relative w-full"
+        >
+          <div
+            className={`w-full overflow-auto transition-transform duration-300 ${zoomed ? "cursor-zoom-out" : "cursor-zoom-in"}`}
+            onClick={() => setZoomed((z) => !z)}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={all[idx]}
+              alt={`Project image ${idx + 1}`}
+              className={`w-full h-auto block transition-transform duration-300 select-none ${zoomed ? "scale-[2] origin-center" : "scale-100"}`}
+              draggable={false}
+              style={{ touchAction: zoomed ? "pan-x pan-y" : "auto" }}
+            />
+          </div>
+        </motion.div>
       </AnimatePresence>
 
+      {/* Navigation arrows */}
       {all.length > 1 && (
         <>
           <button
-            onClick={() => go(idx - 1, -1)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-white/60 flex items-center justify-center text-primary hover:bg-white hover:shadow-md transition-all shadow-sm"
+            onClick={(e) => { e.stopPropagation(); go(idx - 1, -1); }}
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary shadow-md active:scale-95"
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
           <button
-            onClick={() => go(idx + 1, 1)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm border border-white/60 flex items-center justify-center text-primary hover:bg-white hover:shadow-md transition-all shadow-sm"
+            onClick={(e) => { e.stopPropagation(); go(idx + 1, 1); }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary shadow-md active:scale-95"
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-            {all.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => go(i, i > idx ? 1 : -1)}
-                className={`h-1 rounded-full transition-all ${i === idx ? "bg-accent w-6 shadow-[0_0_6px_rgba(252,163,17,0.4)]" : "bg-white/60 w-1.5"}`}
-              />
-            ))}
+          {/* Image counter */}
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[11px] font-medium">
+            {idx + 1} / {all.length}
           </div>
         </>
+      )}
+
+      {/* Zoom hint */}
+      {!zoomed && (
+        <div className="absolute top-2 right-2 px-2 py-1 rounded-md bg-black/40 backdrop-blur-sm text-white/80 text-[10px]">
+          Tap to zoom
+        </div>
       )}
     </div>
   );
@@ -272,46 +291,46 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 20 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[768px] md:max-w-[90vw] md:max-h-[88dvh] bg-white rounded-none md:rounded-3xl z-50 overflow-hidden flex flex-col md:border md:border-white/80"
-              style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.06)" }}
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full max-h-[100dvh] md:h-auto md:w-[768px] md:max-w-[92vw] md:max-h-[90dvh] bg-white rounded-none md:rounded-2xl z-50 overflow-hidden flex flex-col md:border md:border-white/80"
+              style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.15), 0 8px 24px rgba(0,0,0,0.08)" }}
             >
-              <div className="flex-1 overflow-y-auto p-7 md:p-10 w-full">
-                {/* Header */}
-                <div className="flex items-start justify-between gap-4 mb-7 w-full">
+              <div className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-6 w-full">
+                {/* Header — compact */}
+                <div className="flex items-start justify-between gap-3 mb-4 w-full">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <span className="px-2.5 py-1 bg-accent-light text-accent rounded-lg text-xs font-semibold">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="px-2 py-0.5 bg-accent-light text-accent rounded-md text-[11px] font-semibold">
                         {selected.category}
                       </span>
                       {selected.featured && (
-                        <span className="px-2.5 py-1 bg-accent text-white rounded-lg text-xs font-semibold shadow-sm">
+                        <span className="px-2 py-0.5 bg-accent text-white rounded-md text-[11px] font-semibold">
                           Featured
                         </span>
                       )}
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary mb-3">
+                    <h2 className="text-xl sm:text-2xl font-heading font-bold text-primary mb-1">
                       {selected.title}
                     </h2>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs text-text-secondary">
                       {selected.location && (
-                        <div className="flex items-center gap-1.5">
-                          <MapPin size={14} className="text-accent" />
+                        <div className="flex items-center gap-1">
+                          <MapPin size={12} className="text-accent" />
                           <span>{selected.location}</span>
                         </div>
                       )}
                       {selected.completionYear && (
-                        <div className="flex items-center gap-1.5">
-                          <Calendar size={14} className="text-accent" />
-                          <span>Completed {selected.completionYear}</span>
+                        <div className="flex items-center gap-1">
+                          <Calendar size={12} className="text-accent" />
+                          <span>{selected.completionYear}</span>
                         </div>
                       )}
                     </div>
                   </div>
                   <button
                     onClick={() => setSelected(null)}
-                    className="w-9 h-9 rounded-xl bg-background hover:bg-border-light flex items-center justify-center transition-all flex-shrink-0 shadow-sm"
+                    className="w-8 h-8 rounded-full bg-background hover:bg-border-light flex items-center justify-center transition-all flex-shrink-0"
                   >
-                    <X size={16} className="text-text-secondary" />
+                    <X size={15} className="text-text-secondary" />
                   </button>
                 </div>
 
@@ -319,26 +338,6 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                   images={selected.images.map((i) => i.url)}
                   fallback={FALLBACK_IMAGE[selected.category] ?? FALLBACK_IMAGE.default}
                 />
-
-                {selected.shortDescription ? (
-                  <p className="text-text-secondary leading-relaxed mb-7 text-sm w-full break-words">
-                    {selected.shortDescription}
-                  </p>
-                ) : (
-                  <p className="text-text-secondary leading-relaxed mb-7 text-sm w-full break-words">
-                    Precision-engineered {selected.category.toLowerCase()} facade solution — balancing
-                    structural integrity, thermal performance, and architectural vision.
-                  </p>
-                )}
-
-                <a
-                  href="#contact"
-                  onClick={() => setSelected(null)}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 font-heading font-semibold text-[15px] text-on-accent gradient-accent rounded-xl shadow-[0_8px_24px_rgba(252,163,17,0.25)] hover:shadow-[0_12px_32px_rgba(252,163,17,0.35)] hover:-translate-y-0.5 transition-all duration-300 w-full sm:w-auto"
-                >
-                  Enquire About This Project
-                  <ArrowRight size={17} />
-                </a>
               </div>
             </motion.div>
           </>
