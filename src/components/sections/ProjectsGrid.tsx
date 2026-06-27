@@ -157,37 +157,32 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
           </a>
         </motion.div>
 
-        {/* Projects Grid — spatial cards */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5"
+        {/* Projects Grid — masonry layout, cards fit image size */}
+        <div
+          className="columns-2 lg:columns-3 gap-3 sm:gap-4 lg:gap-5"
         >
           {visibleProjects.map((project, idx) => {
             const imageUrl = getImage(project);
-            const hiddenOnMobile = !showAll && idx >= MOBILE_INITIAL;
-            const aspectClass = idx % 2 === 0 ? "aspect-[4/3]" : "aspect-[3/4]";
 
             return (
-              <motion.div
+              <div
                 key={project.id}
-                variants={cardVariants}
-                className={hiddenOnMobile ? "hidden sm:block" : "block"}
+                className="break-inside-avoid mb-3 sm:mb-4 lg:mb-5"
               >
                 <div
-                  className="card-spatial overflow-hidden cursor-pointer group h-full flex flex-col active:scale-[0.98] transition-transform duration-200"
+                  className="card-spatial overflow-hidden cursor-pointer group flex flex-col active:scale-[0.98] transition-transform duration-200"
                   onClick={() => setSelected(project)}
                   role="button"
                   tabIndex={0}
                 >
-                  {/* Image — with spatial depth on hover */}
-                  <div className={`relative ${aspectClass} overflow-hidden bg-border-light flex-shrink-0`}>
+                  {/* Image — natural aspect ratio, no forced height */}
+                  <div className="relative overflow-hidden bg-border-light">
                     <div className="absolute inset-0 skeleton-shimmer" />
-                    <motion.div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
-                      style={{ backgroundImage: `url(${imageUrl})` }}
+                    <img
+                      src={imageUrl}
+                      alt={project.title}
+                      className="w-full h-auto block relative z-[1] group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/50 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
@@ -236,10 +231,10 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Show More / Less */}
         {displayProjects.length > DESKTOP_INITIAL && (
@@ -253,17 +248,6 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
                 size={16}
                 className={`transition-transform duration-300 ${showAll ? "rotate-180 -translate-x-0.5" : ""}`}
               />
-            </button>
-          </div>
-        )}
-        {!showAll && displayProjects.length > MOBILE_INITIAL && (
-          <div className="mt-4 flex justify-center sm:hidden">
-            <button
-              onClick={() => setShowAll(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 font-heading font-semibold text-sm text-primary bg-white border border-border/50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
-            >
-              View More Projects
-              <ArrowRight size={16} />
             </button>
           </div>
         )}
