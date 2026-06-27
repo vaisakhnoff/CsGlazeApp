@@ -33,7 +33,7 @@ export default function SettingsPage() {
       {/* Database Info */}
       <div className="p-6 rounded-xl border border-[#d6d6d6] bg-white space-y-4">
         <h2 className="text-lg font-medium text-black border-b border-[#d6d6d6] pb-2">Database</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="p-4 bg-[#f6f6f6] rounded-lg border border-[#c7c7c7]">
             <div className="text-xs text-[#666] mb-1">Provider</div>
             <div className="text-black font-medium">SQLite</div>

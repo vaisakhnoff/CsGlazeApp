@@ -115,13 +115,13 @@ export default function MediaLibraryPage() {
         ))}
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-black tracking-tight">Media Library</h1>
-          <p className="text-[#888] mt-2">Manage all your uploaded images and assets.</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-black tracking-tight">Media Library</h1>
+          <p className="text-[#888] mt-1 text-sm">Manage all your uploaded images and assets.</p>
         </div>
 
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <input
             type="file"
             accept="image/*"
@@ -129,9 +129,10 @@ export default function MediaLibraryPage() {
             onChange={handleFileUpload}
             disabled={isUploading}
           />
-          <div className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors">
-            <UploadCloud size={16} />
-            {isUploading ? "Uploading..." : "Upload Image"}
+          <div className="flex items-center gap-2 px-3.5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-[#222] transition-colors">
+            <UploadCloud size={15} />
+            <span className="hidden sm:inline">{isUploading ? "Uploading..." : "Upload Image"}</span>
+            <span className="sm:hidden">{isUploading ? "..." : "Upload"}</span>
           </div>
         </div>
       </div>
@@ -152,7 +153,7 @@ export default function MediaLibraryPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
         {images.length === 0 ? (
           <div className="col-span-full py-12 text-center text-[#666] border border-dashed border-[#c7c7c7] rounded-xl flex flex-col items-center gap-2">
             <ImageIcon size={32} />

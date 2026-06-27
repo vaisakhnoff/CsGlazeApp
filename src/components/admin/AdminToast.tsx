@@ -32,7 +32,7 @@ export function AdminToastContainer() {
   return (
     <div
       aria-live="polite"
-      className="fixed bottom-6 right-6 z-[200] flex flex-col gap-2 pointer-events-none"
+      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-[200] flex flex-col gap-2 pointer-events-none"
     >
       {toasts.map((t) => (
         <div

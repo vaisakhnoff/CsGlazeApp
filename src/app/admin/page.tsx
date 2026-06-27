@@ -34,24 +34,24 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div>
-        <h1 className="text-3xl font-semibold text-black tracking-tight">Dashboard Overview</h1>
-        <p className="text-[#888] mt-2">Welcome back to the CS Glaze OS.</p>
+        <h1 className="text-2xl sm:text-3xl font-semibold text-black tracking-tight">Dashboard Overview</h1>
+        <p className="text-[#888] mt-1 text-sm">Welcome back to the CS Glaze OS.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <Link 
               key={stat.name} 
               href={stat.href}
-              className="p-6 rounded-xl bg-white border border-[#d6d6d6] hover:border-[#999] transition-colors group flex flex-col gap-4"
+              className="p-4 sm:p-6 rounded-xl bg-white border border-[#d6d6d6] hover:border-[#999] transition-colors group flex flex-col gap-3 sm:gap-4"
             >
               <div className="flex items-center justify-between">
                 <span className="text-[#888] text-sm font-medium">{stat.name}</span>
                 <Icon size={18} className="text-[#666] group-hover:text-black transition-colors" />
               </div>
-              <div className="text-4xl font-semibold text-black">
+              <div className="text-2xl sm:text-4xl font-semibold text-black">
                 {stat.value}
               </div>
             </Link>
@@ -59,9 +59,9 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      <div className="p-8 rounded-xl bg-white border border-[#d6d6d6]">
-        <h2 className="text-lg font-medium text-black mb-4">Quick Actions</h2>
-        <div className="flex flex-wrap gap-3">
+      <div className="p-5 sm:p-8 rounded-xl bg-white border border-[#d6d6d6]">
+        <h2 className="text-base sm:text-lg font-medium text-black mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3">
           <Link
             href="/admin/projects/new"
             className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors"

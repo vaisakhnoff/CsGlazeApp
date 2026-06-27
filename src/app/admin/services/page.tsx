@@ -17,22 +17,24 @@ export default async function ServicesPage() {
   });
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-semibold text-black tracking-tight">Services</h1>
-          <p className="text-[#888] mt-2">Manage the services displayed on your site.</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-black tracking-tight">Services</h1>
+          <p className="text-[#888] mt-1 text-sm">Manage the services displayed on your site.</p>
         </div>
         <Link 
           href="/admin/services/new" 
-          className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-[#222] transition-colors"
+          className="flex items-center gap-2 px-3.5 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-[#222] transition-colors flex-shrink-0"
         >
-          <Plus size={16} />
-          New Service
+          <Plus size={15} />
+          <span className="hidden sm:inline">New Service</span>
+          <span className="sm:hidden">New</span>
         </Link>
       </div>
 
-      <div className="rounded-xl border border-[#d6d6d6] bg-white overflow-hidden">
+      {/* Desktop Table */}
+      <div className="rounded-xl border border-[#d6d6d6] bg-white overflow-hidden hidden md:block">
         <table className="w-full text-left text-sm text-[#888]">
           <thead className="bg-[#f6f6f6] text-xs uppercase text-[#666] border-b border-[#d6d6d6]">
             <tr>
@@ -58,13 +60,13 @@ export default async function ServicesPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full border border-black/10" style={{ background: service.glow }} />
-                      {service.glow}
+                      <span className="text-xs">{service.glow}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 rounded-full border border-black/10" style={{ background: service.accent }} />
-                      {service.accent}
+                      <span className="text-xs">{service.accent}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -72,10 +74,7 @@ export default async function ServicesPage() {
                       <Link href={`/admin/services/${service.id}/edit`} className="text-[#888] hover:text-black transition-colors">
                         <Edit2 size={16} />
                       </Link>
-                      <AdminDeleteButton
-                        action={deleteServiceAction.bind(null, service.id)}
-                        label={service.title}
-                      />
+                      <AdminDeleteButton action={deleteServiceAction.bind(null, service.id)} label={service.title} />
                     </div>
                   </td>
                 </tr>
@@ -83,6 +82,42 @@ export default async function ServicesPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {services.length === 0 ? (
+          <div className="py-12 text-center text-[#666] border border-dashed border-[#c7c7c7] rounded-xl">
+            No services found. Create your first service.
+          </div>
+        ) : (
+          services.map((service) => (
+            <div key={service.id} className="p-4 rounded-xl border border-[#d6d6d6] bg-white">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <ServiceIcon name={service.icon} />
+                  <h3 className="font-medium text-black text-sm truncate">{service.title}</h3>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Link href={`/admin/services/${service.id}/edit`} className="p-2 rounded-lg hover:bg-[#f6f6f6] text-[#888]">
+                    <Edit2 size={15} />
+                  </Link>
+                  <AdminDeleteButton action={deleteServiceAction.bind(null, service.id)} label={service.title} />
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-2">
+                <div className="flex items-center gap-1.5 text-xs text-[#888]">
+                  <div className="w-3 h-3 rounded-full border border-black/10" style={{ background: service.glow }} />
+                  Glow
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-[#888]">
+                  <div className="w-3 h-3 rounded-full border border-black/10" style={{ background: service.accent }} />
+                  Accent
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
