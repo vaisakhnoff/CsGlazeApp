@@ -174,7 +174,7 @@ export default function EditServiceForm({ service }: { service: Service }) {
             onImagesChange={setImageUrls} 
             initialImages={service.imageUrl ? [{ id: service.imageUrl, url: service.imageUrl }] : []} 
           />
-          <p className="text-xs text-[#888] mt-2">Note: The uploader returns image IDs. We map this to the URL if needed.</p>
+
           {state.errors?.imageUrl && (
             <div className="flex items-center gap-1.5 mt-1">
               <AlertCircle size={13} className="text-red-400 flex-shrink-0" />

@@ -113,7 +113,19 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
       const fd   = new FormData();
       fd.append("file", blob, pendingFile.name.replace(/\.\w+$/, ".webp"));
       const res  = await fetch("/api/upload", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        // Try to get the real error message from the server
+        let errMsg = "Upload failed";
+        try {
+          const errData = await res.json() as { error?: string };
+          if (res.status === 401) {
+            errMsg = "Session expired — please log out and log back in.";
+          } else if (errData.error) {
+            errMsg = errData.error;
+          }
+        } catch { /* ignore JSON parse failure */ }
+        throw new Error(errMsg);
+      }
       const data: { image: UploadedImage } = await res.json();
       const next = [...uploaded, data.image];
       setUploaded(next);
@@ -145,12 +157,14 @@ export function ImageCropUploader({ onImagesChange, initialImages = [] }: Props)
               {idx === 0 && (
                 <span className="absolute bottom-0 left-0 right-0 text-center text-[9px] bg-black/60 text-white py-0.5">Cover</span>
               )}
+              {/* Always visible on mobile (touch has no hover); desktop gets hover highlight */}
               <button
                 type="button"
                 onClick={() => remove(img.id)}
-                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 text-white flex items-center justify-center transition-opacity md:opacity-0 md:group-hover:opacity-100"
+                aria-label="Remove image"
               >
-                <X size={10} />
+                <X size={11} />
               </button>
             </div>
           ))}

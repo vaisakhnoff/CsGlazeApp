@@ -24,7 +24,8 @@ const inputCls = (errors?: Record<string, string[]>, field?: string) =>
 
 export default function NewServicePage() {
   const [state, formAction, isPending] = useActionState(createServiceAction, {} as ServiceFormState);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  // imageUrls holds the image ID(s) returned from the uploader (resolved to URL by the server action)
+  const [imageIds, setImageIds] = useState<string[]>([]);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -40,8 +41,8 @@ export default function NewServicePage() {
 
       <form
         action={(fd) => {
-          if (imageUrls.length > 0) {
-            fd.append("imageUrl", imageUrls[0]); // store just the ID or URL. Wait, ImageCropUploader returns IDs.
+          if (imageIds.length > 0) {
+            fd.append("imageUrl", imageIds[0]);
           }
           formAction(fd);
         }}
@@ -159,8 +160,8 @@ export default function NewServicePage() {
             <label className="text-sm font-medium text-black">Background Image (Optional)</label>
             <p className="text-xs text-[#666] mt-0.5">Upload an image to display above the service card in low opacity.</p>
           </div>
-          <ImageCropUploader onImagesChange={setImageUrls} />
-          <p className="text-xs text-[#888] mt-2">Note: The uploader returns image IDs. We will map this to the URL if needed, but since our image crop uploader creates an Image record, we will use the ID to lookup the URL later, or we can just save the ID.</p>
+          <ImageCropUploader onImagesChange={setImageIds} />
+
           {state.errors?.imageUrl && (
             <div className="flex items-center gap-1.5 mt-1">
               <AlertCircle size={13} className="text-red-400 flex-shrink-0" />

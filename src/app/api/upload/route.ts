@@ -5,6 +5,15 @@ import { prisma } from "@/lib/prisma";
 import { uploadImageToCloudinary } from "@/lib/cloudinary";
 import { getAdminSession } from "@/lib/session";
 
+// Increase body size limit to 10 MB to handle large mobile photos
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb",
+    },
+  },
+};
+
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 export async function POST(req: Request) {

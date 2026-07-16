@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-[100dvh] bg-white text-black flex overflow-hidden">
+    <div className="min-h-[100dvh] bg-white text-black flex overflow-x-hidden">
       {/* Desktop Sidebar */}
       <aside className="w-64 border-r border-[#d6d6d6] bg-white hidden md:flex flex-col fixed inset-y-0 left-0 z-30">
         <div className="h-16 flex items-center px-6 border-b border-[#d6d6d6]">
@@ -117,9 +117,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       )}
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col h-[100dvh] md:ml-64" style={{ minWidth: 0 }}>
+      <main className="flex-1 flex flex-col min-h-[100dvh] md:ml-64 overflow-x-hidden" style={{ minWidth: 0 }}>
         {/* Header */}
-        <header className="h-14 md:h-16 flex items-center justify-between px-4 md:px-8 border-b border-[#d6d6d6] bg-white flex-shrink-0 z-20">
+        <header className="h-14 md:h-16 flex items-center justify-between px-4 md:px-8 border-b border-[#d6d6d6] bg-white flex-shrink-0 sticky top-0 z-20">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(true)}
@@ -143,7 +143,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-auto p-4 md:p-8">
+        <div className="flex-1 overflow-auto p-4 md:p-8 pb-16 md:pb-8">
           <div className="w-full max-w-5xl mx-auto min-w-0">
             {children}
           </div>

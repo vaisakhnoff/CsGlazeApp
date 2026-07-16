@@ -25,8 +25,9 @@ export async function createSession() {
   cookieStore.set(ADMIN_SESSION_COOKIE, session, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    // No maxAge = session cookie — dies when browser fully closes.
-    // JWT expiration handles time-based expiry (2h) even if browser stays open.
+    // maxAge matches JWT expiry (2h). Without this, mobile browsers kill the
+    // cookie when switching apps/tabs, causing the admin to appear logged out.
+    maxAge: ADMIN_SESSION_DURATION_SECONDS,
     sameSite: "lax",
     path: "/",
   });
